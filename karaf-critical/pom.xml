@@ -44,6 +44,9 @@
 						<Import-Package>
 							*;resolution:=optional
 						</Import-Package>
+						<Private-Package>
+						  org.ehcache.sample
+						</Private-Package>
 						<Service-Component>*</Service-Component>
                         <DynamicImport-Package>*</DynamicImport-Package>
 					</instructions>
@@ -95,6 +98,14 @@
         <dependency>
           <groupId>com.hazelcast</groupId>
           <artifactId>hazelcast-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache-clustered</artifactId>
         </dependency>
 				
 	</dependencies>
