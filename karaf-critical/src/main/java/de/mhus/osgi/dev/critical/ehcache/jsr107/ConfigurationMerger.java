@@ -54,7 +54,7 @@ import static de.mhus.osgi.dev.critical.ehcache.jsr107.CloseUtil.closeAllAfter;
 /**
  * ConfigurationMerger
  */
-class ConfigurationMerger {
+public class ConfigurationMerger {
 
   private static final Logger LOG = LoggerFactory.getLogger(ConfigurationMerger.class);
 
@@ -62,7 +62,7 @@ class ConfigurationMerger {
   private final Jsr107Service jsr107Service;
   private final Eh107CacheLoaderWriterProvider cacheLoaderWriterFactory;
 
-  ConfigurationMerger(org.ehcache.config.Configuration ehConfig, Jsr107Service jsr107Service, Eh107CacheLoaderWriterProvider cacheLoaderWriterFactory) {
+  public ConfigurationMerger(org.ehcache.config.Configuration ehConfig, Jsr107Service jsr107Service, Eh107CacheLoaderWriterProvider cacheLoaderWriterFactory) {
     if (ehConfig instanceof XmlConfiguration) {
       xmlConfiguration = (XmlConfiguration) ehConfig;
     } else {

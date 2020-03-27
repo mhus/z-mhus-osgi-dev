@@ -1,8 +1,11 @@
 package org.ehcache.sample;
 
 import org.ehcache.config.Configuration;
+import org.ehcache.config.FluentConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.core.Ehcache;
 import org.ehcache.core.EhcacheManager;
+import org.ehcache.core.config.DefaultConfiguration;
 import org.ehcache.core.spi.ServiceLocator;
 import org.ehcache.core.spi.service.ServiceUtils;
 import org.ehcache.impl.config.serializer.DefaultSerializationProviderConfiguration;
@@ -72,12 +75,16 @@ public class CreateBasicJCacheProgrammatic extends BaseJCacheTester {
     //     throw new NullPointerException("CachingProvider is null");
     // CachingProvider cachingProvider = Caching.getCachingProvider();
     
-    org.ehcache.CacheManager ehCacheManager = newCacheManagerBuilder()
-            .withCache("basicCache",
-              newCacheConfigurationBuilder(Long.class, String.class, heap(100).offheap(1, MB)))
-            .build(true);
+//    CacheManagerBuilder<org.ehcache.CacheManager> config = newCacheManagerBuilder()
+//            .withCache("basicCache",
+//              newCacheConfigurationBuilder(Long.class, String.class, heap(100).offheap(1, MB)))
+//            ;
+   
+    FluentConfigurationBuilder<?> configBuilder = org.ehcache.config.builders.ConfigurationBuilder.newConfigurationBuilder();
+    Configuration config = configBuilder.build();
     
-    CachingProvider cachingProvider = new DummyCachingProvider(ehCacheManager);
+    @SuppressWarnings("resource")
+    CachingProvider cachingProvider = new DummyCachingProvider(config);
 
     // If there are multiple providers in your classpath, use the fully qualified name to retrieve the Ehcache caching provider.
     //CachingProvider cachingProvider = Caching.getCachingProvider("de.mhus.osgi.dev.critical.ehcache.jsr107.EhcacheCachingProvider");

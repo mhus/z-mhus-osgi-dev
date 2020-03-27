@@ -9,17 +9,12 @@ import static org.ehcache.config.builders.ResourcePoolsBuilder.heap;
 import static org.ehcache.config.units.MemoryUnit.MB;
 
 import java.net.URI;
-import java.util.ServiceLoader;
-
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
 
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
-import org.ehcache.core.Ehcache;
 import org.ehcache.sample.CreateBasicJCacheProgrammatic;
 
 import de.mhus.lib.core.MCast;

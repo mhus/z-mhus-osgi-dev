@@ -56,7 +56,7 @@ import static de.mhus.osgi.dev.critical.ehcache.jsr107.CloseUtil.closeAll;
 /**
  * @author teck
  */
-class Eh107CacheManager implements CacheManager {
+public class Eh107CacheManager implements CacheManager {
 
   private static final Logger LOG = LoggerFactory.getLogger(Eh107CacheManager.class);
 
@@ -72,7 +72,7 @@ class Eh107CacheManager implements CacheManager {
   private final ConfigurationMerger configurationMerger;
   private final StatisticsService statisticsService;
 
-  Eh107CacheManager(EhcacheCachingProvider cachingProvider, org.ehcache.CacheManager ehCacheManager, Jsr107Service jsr107Service,
+  public Eh107CacheManager(EhcacheCachingProvider cachingProvider, org.ehcache.CacheManager ehCacheManager, Jsr107Service jsr107Service,
                     Properties props, ClassLoader classLoader, URI uri, ConfigurationMerger configurationMerger) {
     this.cachingProvider = cachingProvider;
     this.ehCacheManager = ehCacheManager;
@@ -117,6 +117,7 @@ class Eh107CacheManager implements CacheManager {
     boolean storeByValueOnHeap = false;
     for (ServiceConfiguration<?, ?> serviceConfiguration : cache.getRuntimeConfiguration().getServiceConfigurations()) {
       if (serviceConfiguration instanceof DefaultCopierConfiguration) {
+        @SuppressWarnings("rawtypes")
         DefaultCopierConfiguration<?> copierConfig = (DefaultCopierConfiguration) serviceConfiguration;
         if(!copierConfig.getClazz().isAssignableFrom(IdentityCopier.class))
           storeByValueOnHeap = true;
@@ -278,7 +279,6 @@ class Eh107CacheManager implements CacheManager {
     return cache;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <K, V> Cache<K, V> getCache(String cacheName) {
     checkClosed();
