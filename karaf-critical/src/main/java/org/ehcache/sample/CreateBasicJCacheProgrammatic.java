@@ -1,6 +1,18 @@
 package org.ehcache.sample;
 
+import org.ehcache.config.Configuration;
 import org.ehcache.core.Ehcache;
+import org.ehcache.core.EhcacheManager;
+import org.ehcache.core.spi.ServiceLocator;
+import org.ehcache.core.spi.service.ServiceUtils;
+import org.ehcache.impl.config.serializer.DefaultSerializationProviderConfiguration;
+import org.ehcache.impl.serialization.PlainJavaSerializer;
+import de.mhus.osgi.dev.critical.ehcache.jsr107.EhcacheCachingProvider;
+import de.mhus.osgi.dev.critical.ehcache.jsr107.Jsr107Service;
+import de.mhus.osgi.dev.critical.ehcache.jsr107.config.Jsr107Configuration;
+import de.mhus.osgi.dev.critical.ehcache.jsr107.internal.DefaultJsr107Service;
+import de.mhus.osgi.dev.critical.ehcache.jsr107.internal.tck.Eh107MBeanServerBuilder;
+import org.ehcache.spi.service.ServiceCreationConfiguration;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 
@@ -13,11 +25,20 @@ import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
 import javax.cache.spi.CachingProvider;
 
+import java.net.URI;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.concurrent.TimeUnit;
+import java.util.function.UnaryOperator;
 
+import static org.ehcache.config.builders.CacheConfigurationBuilder.newCacheConfigurationBuilder;
+import static org.ehcache.config.builders.CacheManagerBuilder.newCacheManagerBuilder;
+import static org.ehcache.config.builders.ResourcePoolsBuilder.heap;
+import static org.ehcache.config.units.MemoryUnit.MB;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.ehcache.config.builders.CacheManagerBuilder.newCacheManagerBuilder;
 
 /**
  * Created by fabien.sanglier on 10/6/16.
@@ -38,6 +59,7 @@ public class CreateBasicJCacheProgrammatic extends BaseJCacheTester {
     LOGGER.info("Exiting");
   }
 
+
   public void run(int numberOfIteration, int numberOfObjectPerIteration, int sleepTimeMillisBetweenIterations) throws Exception {
     LOGGER.info("JCache testing BEGIN - Creating JCache Programmatically without any XML config");
 
@@ -48,10 +70,17 @@ public class CreateBasicJCacheProgrammatic extends BaseJCacheTester {
     // CachingProvider cachingProvider = first.get();
     // if (cachingProvider == null)
     //     throw new NullPointerException("CachingProvider is null");
-    CachingProvider cachingProvider = Caching.getCachingProvider();
+    // CachingProvider cachingProvider = Caching.getCachingProvider();
+    
+    org.ehcache.CacheManager ehCacheManager = newCacheManagerBuilder()
+            .withCache("basicCache",
+              newCacheConfigurationBuilder(Long.class, String.class, heap(100).offheap(1, MB)))
+            .build(true);
+    
+    CachingProvider cachingProvider = new DummyCachingProvider(ehCacheManager);
 
     // If there are multiple providers in your classpath, use the fully qualified name to retrieve the Ehcache caching provider.
-    //CachingProvider cachingProvider = Caching.getCachingProvider("org.ehcache.jsr107.EhcacheCachingProvider");
+    //CachingProvider cachingProvider = Caching.getCachingProvider("de.mhus.osgi.dev.critical.ehcache.jsr107.EhcacheCachingProvider");
 
     try (CacheManager cacheManager = cachingProvider.getCacheManager()) {
       Cache<Long, String> myJCache = cacheManager.createCache(

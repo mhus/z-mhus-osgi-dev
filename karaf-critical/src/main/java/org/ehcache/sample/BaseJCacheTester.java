@@ -2,7 +2,7 @@ package org.ehcache.sample;
 
 import org.ehcache.config.CacheRuntimeConfiguration;
 import org.ehcache.config.ResourceType;
-import org.ehcache.jsr107.Eh107Configuration;
+import de.mhus.osgi.dev.critical.ehcache.jsr107.Eh107Configuration;
 import org.slf4j.Logger;
 
 import javax.cache.Cache;
