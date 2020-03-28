@@ -52,10 +52,14 @@ mhus:dev -y cp microjms ENV_JMS_SOP_USER=admin ENV_JMS_SOP_PASS=nein ENV_JMS_SER
 ```
 Restart karaf to load new configuration (fully)
 
+```
+shutdown -r -f
+```
 
 Maybe you need to wait until the jms discovery is scheduled or you start it manually
 
 ```
+micro list - show known operation
 micro request
 ```
 

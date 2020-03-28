@@ -9,8 +9,6 @@ docker run -it \
  --name karaf1\
  mhus/apache-karaf:4.2.6_04 debug
 
-docker run -it  -v ~/.m2:/home/user/.m2 --name karaf1 mhus/apache-karaf:4.2.6_04
-
 feature:repo-add mvn:org.apache.karaf.examples/karaf-jpa-example-features/LATEST/xml
 
 feature:install karaf-jpa-example-datasource
@@ -29,6 +27,9 @@ feature:repo-add mvn:de.mhus.osgi/karaf-features/7.0.0-SNAPSHOT/xml/features
 feature:install mhu-dev
 install -s mvn:de.mhus.osgi/dev-jpa/7.0.0-SNAPSHOT
 
+mhus:dev -y cp default
 
 
- dev-jpa .*hiber.* x   
+
+dev-jpa .*hiber.* x
+
