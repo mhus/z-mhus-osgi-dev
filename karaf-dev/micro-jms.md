@@ -56,7 +56,7 @@ Restart karaf to load new configuration (fully)
 Maybe you need to wait until the jms discovery is scheduled or you start it manually
 
 ```
-micro require
+micro request
 ```
 
 And try a ping - login as admin before:

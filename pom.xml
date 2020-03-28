@@ -54,9 +54,23 @@
 		</developer>
 	</developers>
 
-	<modules>
-		<module>karaf-dev</module>
-        <module>karaf-critical</module>
-        <module>osgi-jpa-impl</module>
-	</modules>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+			<modules>
+				<module>karaf-dev</module>
+		        <module>dev-cache</module>
+		        <module>dev-jpa</module>
+			</modules>
+        </profile>
+        <profile>
+            <id>release-mhus</id>
+			<modules>
+				<module>karaf-dev</module>
+			</modules>
+        </profile>
+    </profiles>  
 </project>

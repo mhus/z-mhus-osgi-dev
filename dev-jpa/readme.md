@@ -26,9 +26,8 @@ feature:install karaf-jpa-example-command
 
 feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
 feature:repo-add mvn:de.mhus.osgi/karaf-features/7.0.0-SNAPSHOT/xml/features
-feature:install mhu-base
-
-install -s mvn:de.mhus.osgi/osgi-jpa-impl/7.0.0-SNAPSHOT
+feature:install mhu-dev
+install -s mvn:de.mhus.osgi/dev-jpa/7.0.0-SNAPSHOT
 
 
 

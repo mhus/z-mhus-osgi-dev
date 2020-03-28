@@ -5,7 +5,8 @@ Standalone:
 ```
 install -s mvn:javax.cache/cache-api/1.1.1
 install -s mvn:com.hazelcast/hazelcast-all/4.0
-feature:install mhu-dev-critical
+feature:install mhu-dev
+install -s mvn:de.mhus.osgi/dev-cache/7.0.0-SNAPSHOT
 ```
 
 

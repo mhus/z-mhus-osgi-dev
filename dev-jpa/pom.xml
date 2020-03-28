@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>osgi-jpa-api</artifactId>
+	<artifactId>dev-jpa</artifactId>
 	<packaging>bundle</packaging>
 	<description>Commands to deveop in karaf</description>
     <parent>
@@ -39,7 +39,7 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Export-Package>
-						  de.mhus.osgi.dev.jpa.api.*;version=${project.version}
+						  de.mhus.osgi.dev.jpa.impl.*;version=${project.version}
 						</Export-Package>
 						<Import-Package>
 							*;resolution:=optional
@@ -82,6 +82,53 @@
             <groupId>de.mhus.osgi</groupId>
             <artifactId>karaf-commands</artifactId>
             <version>${mhus-osgi-tools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>javax.transaction-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.interceptor</groupId>
+            <artifactId>javax.interceptor-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+       <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries.jpa</groupId>
+            <artifactId>org.apache.aries.jpa.api</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+        
+        <dependency>
+        	<groupId>org.hibernate.common</groupId>
+        	<artifactId>hibernate-commons-annotations</artifactId>
+        	<version>5.1.0.Final</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-core</artifactId>
+        	<version>5.1.0.Final</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-osgi</artifactId>
+        	<version>5.1.0.Final</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.aries.jpa</groupId>
+        	<artifactId>org.apache.aries.jpa.eclipselink.adapter</artifactId>
+        	<version>2.7.2</version>
         </dependency>
 				
 	</dependencies>
