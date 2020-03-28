@@ -57,5 +57,6 @@
 	<modules>
 		<module>karaf-dev</module>
         <module>karaf-critical</module>
+        <module>osgi-jpa-impl</module>
 	</modules>
 </project>
