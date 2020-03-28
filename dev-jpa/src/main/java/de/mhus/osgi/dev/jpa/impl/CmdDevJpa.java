@@ -76,9 +76,9 @@ public class CmdDevJpa extends AbstractCmd {
     	}
     	
     	HashMap<String, Object> createMap = new HashMap<String, Object>();
-    	
-    	 EntityManagerFactory entityManagerFactory = persistenceProvider
-    			 .createContainerEntityManagerFactory(archiverPersistenceUnitInfo(), createMap);
+    	PersistenceUnitInfo info = archiverPersistenceUnitInfo();
+    	EntityManagerFactory entityManagerFactory = persistenceProvider
+    			 .createContainerEntityManagerFactory(info, createMap);
     	 
 //                ImmutableMap.<String, Object>builder()
 //                        .put(JPA_JDBC_DRIVER, JDBC_DRIVER)
@@ -199,7 +199,9 @@ public class CmdDevJpa extends AbstractCmd {
 
             @Override
             public Properties getProperties() {
-                return new Properties();
+                Properties prop = new Properties();
+                prop.put("hibernate.hbm2ddl.auto","create-drop");
+                return prop;
             }
 
             @Override
