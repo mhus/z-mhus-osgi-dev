@@ -1,0 +1,293 @@
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 15006:5005\
+ -p 18182:8181\
+ --name karaf1\
+ mhus/apache-karaf:4.2.6_04 debug
+
+docker run -it  -v ~/.m2:/home/user/.m2 --name karaf1 mhus/apache-karaf:4.2.6_04
+
+feature:repo-add mvn:org.apache.karaf.examples/karaf-jpa-example-features/LATEST/xml
+
+feature:install karaf-jpa-example-datasource
+
+feature:install karaf-jpa-example-command
+
+feature:install karaf-jpa-example-provider-ds-eclipselink
+
+karaf@20d93258357e()> booking:list
+[EL Info]: 2020-03-28 07:40:44.453--ServerSession(1146963418)--EclipseLink, version: Eclipse Persistence Services - 2.7.4.v20190115-ad5b7c6b2a
+[EL Info]: 2020-03-28 07:40:44.79--ServerSession(1146963418)--/bundle://115.0:1/_booking-eclipselink login successful
+ID │ Flight │ Customer
+───┼────────┼─────────
+karaf@20d93258357e()>                
+
+karaf@20d93258357e()> booking:add Doe AF520                                                                                                                                                                                                   
+karaf@20d93258357e()> booking:list
+ID │ Flight │ Customer
+───┼────────┼─────────
+1  │ AF520  │ Doe
+karaf@20d93258357e()>        
+
+
+watch 'booking:add Doe (date);date'   
+
+
+karaf@20d93258357e()> booking:list
+ID  │ Flight                   │ Customer
+────┼──────────────────────────┼─────────
+1   │ AF520                    │ Doe
+2   │ Mar Sat 28 07:41:35 2020 │ Doe
+3   │ Mar Sat 28 07:41:36 2020 │ Doe
+4   │ Mar Sat 28 07:41:37 2020 │ Doe
+5   │ Mar Sat 28 07:41:38 2020 │ Doe
+6   │ Mar Sat 28 07:41:39 2020 │ Doe
+7   │ Mar Sat 28 07:41:40 2020 │ Doe
+8   │ Mar Sat 28 07:41:41 2020 │ Doe
+9   │ Mar Sat 28 07:41:42 2020 │ Doe
+10  │ Mar Sat 28 07:41:43 2020 │ Doe
+11  │ Mar Sat 28 07:41:44 2020 │ Doe
+12  │ Mar Sat 28 07:41:45 2020 │ Doe
+13  │ Mar Sat 28 07:41:46 2020 │ Doe
+14  │ Mar Sat 28 07:41:47 2020 │ Doe
+15  │ Mar Sat 28 07:41:48 2020 │ Doe
+16  │ Mar Sat 28 07:41:49 2020 │ Doe
+17  │ Mar Sat 28 07:41:50 2020 │ Doe
+18  │ Mar Sat 28 07:41:51 2020 │ Doe
+19  │ Mar Sat 28 07:41:52 2020 │ Doe
+20  │ Mar Sat 28 07:41:53 2020 │ Doe
+21  │ Mar Sat 28 07:41:54 2020 │ Doe
+22  │ Mar Sat 28 07:41:55 2020 │ Doe
+23  │ Mar Sat 28 07:41:58 2020 │ Doe
+24  │ Mar Sat 28 07:41:58 2020 │ Doe
+25  │ Mar Sat 28 07:42:02 2020 │ Doe
+26  │ Mar Sat 28 07:42:02 2020 │ Doe
+27  │ Mar Sat 28 07:42:02 2020 │ Doe
+28  │ Mar Sat 28 07:42:02 2020 │ Doe
+29  │ Mar Sat 28 07:42:02 2020 │ Doe
+30  │ Mar Sat 28 07:42:03 2020 │ Doe
+31  │ Mar Sat 28 07:42:04 2020 │ Doe
+32  │ Mar Sat 28 07:42:05 2020 │ Doe
+33  │ Mar Sat 28 07:42:06 2020 │ Doe
+34  │ Mar Sat 28 07:42:07 2020 │ Doe
+35  │ Mar Sat 28 07:42:08 2020 │ Doe
+36  │ Mar Sat 28 07:42:09 2020 │ Doe
+37  │ Mar Sat 28 07:42:10 2020 │ Doe
+38  │ Mar Sat 28 07:42:11 2020 │ Doe
+39  │ Mar Sat 28 07:42:12 2020 │ Doe
+40  │ Mar Sat 28 07:42:13 2020 │ Doe
+41  │ Mar Sat 28 07:42:14 2020 │ Doe
+42  │ Mar Sat 28 07:42:15 2020 │ Doe
+43  │ Mar Sat 28 07:42:18 2020 │ Doe
+44  │ Mar Sat 28 07:42:18 2020 │ Doe
+45  │ Mar Sat 28 07:42:18 2020 │ Doe
+46  │ Mar Sat 28 07:42:19 2020 │ Doe
+47  │ Mar Sat 28 07:42:20 2020 │ Doe
+48  │ Mar Sat 28 07:42:21 2020 │ Doe
+49  │ Mar Sat 28 07:42:22 2020 │ Doe
+50  │ Mar Sat 28 07:42:23 2020 │ Doe
+51  │ Mar Sat 28 07:42:24 2020 │ Doe
+52  │ Mar Sat 28 07:42:25 2020 │ Doe
+53  │ Mar Sat 28 07:42:26 2020 │ Doe
+54  │ Mar Sat 28 07:42:27 2020 │ Doe
+55  │ Mar Sat 28 07:42:28 2020 │ Doe
+56  │ Mar Sat 28 07:42:29 2020 │ Doe
+57  │ Mar Sat 28 07:42:30 2020 │ Doe
+58  │ Mar Sat 28 07:42:31 2020 │ Doe
+59  │ Mar Sat 28 07:42:32 2020 │ Doe
+60  │ Mar Sat 28 07:42:33 2020 │ Doe
+61  │ Mar Sat 28 07:42:34 2020 │ Doe
+62  │ Mar Sat 28 07:42:35 2020 │ Doe
+63  │ Mar Sat 28 07:42:36 2020 │ Doe
+64  │ Mar Sat 28 07:42:37 2020 │ Doe
+65  │ Mar Sat 28 07:42:38 2020 │ Doe
+66  │ Mar Sat 28 07:42:39 2020 │ Doe
+67  │ Mar Sat 28 07:42:40 2020 │ Doe
+68  │ Mar Sat 28 07:42:41 2020 │ Doe
+69  │ Mar Sat 28 07:42:42 2020 │ Doe
+70  │ Mar Sat 28 07:42:43 2020 │ Doe
+71  │ Mar Sat 28 07:42:44 2020 │ Doe
+72  │ Mar Sat 28 07:42:45 2020 │ Doe
+73  │ Mar Sat 28 07:42:46 2020 │ Doe
+74  │ Mar Sat 28 07:42:47 2020 │ Doe
+75  │ Mar Sat 28 07:42:48 2020 │ Doe
+76  │ Mar Sat 28 07:42:49 2020 │ Doe
+77  │ Mar Sat 28 07:42:50 2020 │ Doe
+78  │ Mar Sat 28 07:42:51 2020 │ Doe
+79  │ Mar Sat 28 07:42:52 2020 │ Doe
+80  │ Mar Sat 28 07:42:55 2020 │ Doe
+81  │ Mar Sat 28 07:42:55 2020 │ Doe
+82  │ Mar Sat 28 07:42:59 2020 │ Doe
+83  │ Mar Sat 28 07:42:59 2020 │ Doe
+84  │ Mar Sat 28 07:42:59 2020 │ Doe
+85  │ Mar Sat 28 07:42:59 2020 │ Doe
+86  │ Mar Sat 28 07:42:59 2020 │ Doe
+87  │ Mar Sat 28 07:43:00 2020 │ Doe
+88  │ Mar Sat 28 07:43:04 2020 │ Doe
+89  │ Mar Sat 28 07:43:04 2020 │ Doe
+90  │ Mar Sat 28 07:43:08 2020 │ Doe
+91  │ Mar Sat 28 07:43:08 2020 │ Doe
+92  │ Mar Sat 28 07:43:08 2020 │ Doe
+93  │ Mar Sat 28 07:43:12 2020 │ Doe
+94  │ Mar Sat 28 07:43:12 2020 │ Doe
+95  │ Mar Sat 28 07:43:12 2020 │ Doe
+96  │ Mar Sat 28 07:43:12 2020 │ Doe
+97  │ Mar Sat 28 07:43:12 2020 │ Doe
+98  │ Mar Sat 28 07:43:12 2020 │ Doe
+99  │ Mar Sat 28 07:43:12 2020 │ Doe
+100 │ Mar Sat 28 07:43:13 2020 │ Doe
+101 │ Mar Sat 28 07:43:14 2020 │ Doe
+102 │ Mar Sat 28 07:43:15 2020 │ Doe
+103 │ Mar Sat 28 07:43:16 2020 │ Doe
+104 │ Mar Sat 28 07:43:17 2020 │ Doe
+105 │ Mar Sat 28 07:43:20 2020 │ Doe
+106 │ Mar Sat 28 07:43:24 2020 │ Doe
+107 │ Mar Sat 28 07:43:24 2020 │ Doe
+108 │ Mar Sat 28 07:43:24 2020 │ Doe
+109 │ Mar Sat 28 07:43:24 2020 │ Doe
+110 │ Mar Sat 28 07:43:28 2020 │ Doe
+111 │ Mar Sat 28 07:43:28 2020 │ Doe
+112 │ Mar Sat 28 07:43:28 2020 │ Doe
+113 │ Mar Sat 28 07:43:28 2020 │ Doe
+114 │ Mar Sat 28 07:43:29 2020 │ Doe
+115 │ Mar Sat 28 07:43:29 2020 │ Doe
+116 │ Mar Sat 28 07:43:29 2020 │ Doe
+117 │ Mar Sat 28 07:43:33 2020 │ Doe
+118 │ Mar Sat 28 07:43:33 2020 │ Doe
+119 │ Mar Sat 28 07:43:33 2020 │ Doe
+120 │ Mar Sat 28 07:43:33 2020 │ Doe
+121 │ Mar Sat 28 07:43:37 2020 │ Doe
+122 │ Mar Sat 28 07:43:37 2020 │ Doe
+123 │ Mar Sat 28 07:43:37 2020 │ Doe
+124 │ Mar Sat 28 07:43:37 2020 │ Doe
+125 │ Mar Sat 28 07:43:41 2020 │ Doe
+126 │ Mar Sat 28 07:43:41 2020 │ Doe
+127 │ Mar Sat 28 07:43:45 2020 │ Doe
+128 │ Mar Sat 28 07:43:45 2020 │ Doe
+129 │ Mar Sat 28 07:43:47 2020 │ Doe
+karaf@20d93258357e()>              
+
+
+uninstall 115 (karaf-jpa-example-provider-ds-eclipselink)
+
+feature:install karaf-jpa-example-provider-ds-hibernate     
+
+karaf@20d93258357e()> booking:list
+[EL Info]: 2020-03-28 07:47:30.989--ServerSession(582838810)--EclipseLink, version: Eclipse Persistence Services - 2.7.4.v20190115-ad5b7c6b2a
+[EL Info]: 2020-03-28 07:47:31.122--ServerSession(582838810)--/bundle://120.0:1/_booking-eclipselink login successful
+ID │ Flight │ Customer
+───┼────────┼─────────
+karaf@20d93258357e()>        
+
+karaf@20d93258357e()> booking:add Doe AF520
+karaf@20d93258357e()> booking:list
+ID │ Flight │ Customer
+───┼────────┼─────────
+1  │ AF520  │ Doe
+karaf@20d93258357e()>       
+
+ watch 'booking:add Doe (date);date'   
+ 
+ karaf@20d93258357e()> booking:list
+ID │ Flight                   │ Customer
+───┼──────────────────────────┼─────────
+1  │ AF520                    │ Doe
+2  │ Mar Sat 28 07:48:14 2020 │ Doe
+3  │ Mar Sat 28 07:48:15 2020 │ Doe
+4  │ Mar Sat 28 07:48:16 2020 │ Doe
+5  │ Mar Sat 28 07:48:17 2020 │ Doe
+6  │ Mar Sat 28 07:48:18 2020 │ Doe
+7  │ Mar Sat 28 07:48:19 2020 │ Doe
+8  │ Mar Sat 28 07:48:20 2020 │ Doe
+9  │ Mar Sat 28 07:48:21 2020 │ Doe
+10 │ Mar Sat 28 07:48:22 2020 │ Doe
+11 │ Mar Sat 28 07:48:25 2020 │ Doe
+12 │ Mar Sat 28 07:48:26 2020 │ Doe
+13 │ Mar Sat 28 07:48:30 2020 │ Doe
+14 │ Mar Sat 28 07:48:34 2020 │ Doe
+15 │ Mar Sat 28 07:48:38 2020 │ Doe
+16 │ Mar Sat 28 07:48:38 2020 │ Doe
+17 │ Mar Sat 28 07:48:38 2020 │ Doe
+18 │ Mar Sat 28 07:48:38 2020 │ Doe
+19 │ Mar Sat 28 07:48:38 2020 │ Doe
+20 │ Mar Sat 28 07:48:38 2020 │ Doe
+21 │ Mar Sat 28 07:48:38 2020 │ Doe
+22 │ Mar Sat 28 07:48:42 2020 │ Doe
+23 │ Mar Sat 28 07:48:42 2020 │ Doe
+24 │ Mar Sat 28 07:48:46 2020 │ Doe
+25 │ Mar Sat 28 07:48:50 2020 │ Doe
+26 │ Mar Sat 28 07:48:50 2020 │ Doe
+27 │ Mar Sat 28 07:48:55 2020 │ Doe
+28 │ Mar Sat 28 07:48:55 2020 │ Doe
+29 │ Mar Sat 28 07:48:55 2020 │ Doe
+30 │ Mar Sat 28 07:48:55 2020 │ Doe
+31 │ Mar Sat 28 07:48:59 2020 │ Doe
+32 │ Mar Sat 28 07:49:03 2020 │ Doe
+33 │ Mar Sat 28 07:49:07 2020 │ Doe
+34 │ Mar Sat 28 07:49:07 2020 │ Doe
+35 │ Mar Sat 28 07:49:07 2020 │ Doe
+36 │ Mar Sat 28 07:49:07 2020 │ Doe
+37 │ Mar Sat 28 07:49:07 2020 │ Doe
+38 │ Mar Sat 28 07:49:07 2020 │ Doe
+39 │ Mar Sat 28 07:49:07 2020 │ Doe
+40 │ Mar Sat 28 07:49:07 2020 │ Doe
+41 │ Mar Sat 28 07:49:07 2020 │ Doe
+42 │ Mar Sat 28 07:49:11 2020 │ Doe
+43 │ Mar Sat 28 07:49:12 2020 │ Doe
+44 │ Mar Sat 28 07:49:12 2020 │ Doe
+45 │ Mar Sat 28 07:49:12 2020 │ Doe
+46 │ Mar Sat 28 07:49:12 2020 │ Doe
+47 │ Mar Sat 28 07:49:12 2020 │ Doe
+48 │ Mar Sat 28 07:49:12 2020 │ Doe
+49 │ Mar Sat 28 07:49:12 2020 │ Doe
+50 │ Mar Sat 28 07:49:12 2020 │ Doe
+51 │ Mar Sat 28 07:49:12 2020 │ Doe
+52 │ Mar Sat 28 07:49:16 2020 │ Doe
+53 │ Mar Sat 28 07:49:16 2020 │ Doe
+54 │ Mar Sat 28 07:49:20 2020 │ Doe
+55 │ Mar Sat 28 07:49:20 2020 │ Doe
+56 │ Mar Sat 28 07:49:20 2020 │ Doe
+57 │ Mar Sat 28 07:49:20 2020 │ Doe
+58 │ Mar Sat 28 07:49:20 2020 │ Doe
+59 │ Mar Sat 28 07:49:20 2020 │ Doe
+60 │ Mar Sat 28 07:49:21 2020 │ Doe
+61 │ Mar Sat 28 07:49:21 2020 │ Doe
+62 │ Mar Sat 28 07:49:21 2020 │ Doe
+63 │ Mar Sat 28 07:49:21 2020 │ Doe
+64 │ Mar Sat 28 07:49:21 2020 │ Doe
+65 │ Mar Sat 28 07:49:21 2020 │ Doe
+66 │ Mar Sat 28 07:49:25 2020 │ Doe
+67 │ Mar Sat 28 07:49:25 2020 │ Doe
+68 │ Mar Sat 28 07:49:25 2020 │ Doe
+69 │ Mar Sat 28 07:49:25 2020 │ Doe
+70 │ Mar Sat 28 07:49:25 2020 │ Doe
+71 │ Mar Sat 28 07:49:25 2020 │ Doe
+72 │ Mar Sat 28 07:49:25 2020 │ Doe
+73 │ Mar Sat 28 07:49:25 2020 │ Doe
+74 │ Mar Sat 28 07:49:26 2020 │ Doe
+75 │ Mar Sat 28 07:49:27 2020 │ Doe
+76 │ Mar Sat 28 07:49:28 2020 │ Doe
+77 │ Mar Sat 28 07:49:29 2020 │ Doe
+78 │ Mar Sat 28 07:49:30 2020 │ Doe
+79 │ Mar Sat 28 07:49:33 2020 │ Doe
+80 │ Mar Sat 28 07:49:38 2020 │ Doe
+81 │ Mar Sat 28 07:49:38 2020 │ Doe
+82 │ Mar Sat 28 07:49:42 2020 │ Doe
+84 │ Mar Sat 28 07:49:44 2020 │ Doe
+karaf@20d93258357e()>                
+
+
+jdbc:execute booking "create table test (s varchar(30))" 
+
+karaf@20d93258357e()> jdbc:query booking "select * from test"                                                                                                                                                                               
+S
+─
+karaf@20d93258357e()>     
+
+karaf@20d93258357e()> jdbc:execute booking "insert into test (s) values ('Doe')"                                                                                                                                                           
+karaf@20d93258357e()> jdbc:query booking "select * from test"                                                                                                        
+S
+───
+Doe
+karaf@20d93258357e()>   
+
