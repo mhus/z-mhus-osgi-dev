@@ -1,4 +1,19 @@
 
+```
+docker run --name karaf-redis -d redis
+```
+
+
+```
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ --link karaf-redis:redisserver\
+ -p 15006:5005\
+ -p 18182:8181\
+ --name karaf1\
+ mhus/apache-karaf:4.2.6_04 debug
+
+```
 
 ```
 
@@ -17,8 +32,17 @@ install -s mvn:org.objenesis/objenesis/2.5.1
 install -s 'wrap:mvn:de.ruedigermoeller/fst/2.57$Import-Package=*;resolution:=optional&overwrite=MERGE'
 install -s 'wrap:mvn:org.redisson/redisson/3.12.3$Import-Package=*;resolution:=optional&overwrite=MERGE'
 
+feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
+feature:repo-add mvn:de.mhus.osgi/karaf-features/7.0.0-SNAPSHOT/xml/features
+feature:install mhu-dev
+
+mhus:dev cp default
 
 install -s mvn:de.mhus.osgi/dev-cache/7.0.0-SNAPSHOT
 
+```
 
+
+```
+dev-redis x
 ```

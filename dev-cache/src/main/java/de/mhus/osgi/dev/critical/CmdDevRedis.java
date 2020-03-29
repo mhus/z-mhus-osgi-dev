@@ -52,9 +52,10 @@ public class CmdDevRedis extends AbstractCmd {
     public Object execute2() throws Exception {
 
     	Config config = new Config();
-    	config.useClusterServers()
+    	config.useSingleServer().setAddress("redis://redisserver:6379");
+    	// .useClusterServers()
     	       // use "rediss://" for SSL connection
-    	      .addNodeAddress("redis://127.0.0.1:7181");
+//    	      .addNodeAddress("redis://redisserver:6379");
 
     	RedissonClient redisson = Redisson.create(config);
     	
@@ -62,7 +63,7 @@ public class CmdDevRedis extends AbstractCmd {
 
     	RedissonRxClient redissonRx = Redisson.createRx(config);
 
-
+    	redisson.shutdown();
         return null;
     }
     
