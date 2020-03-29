@@ -3,8 +3,8 @@ package de.mhus.osgi.dev.jpa.impl;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +14,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.SharedCacheMode;
+import javax.persistence.TypedQuery;
 import javax.persistence.ValidationMode;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.persistence.spi.ClassTransformer;
 import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
@@ -24,7 +28,6 @@ import javax.sql.DataSource;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
-import org.osgi.framework.FrameworkUtil;
 
 import de.mhus.osgi.api.karaf.AbstractCmd;
 import de.mhus.osgi.api.services.MOsgi;
@@ -77,6 +80,10 @@ public class CmdDevJpa extends AbstractCmd {
     	
     	HashMap<String, Object> createMap = new HashMap<String, Object>();
     	PersistenceUnitInfo info = archiverPersistenceUnitInfo();
+//    	PersistenceUnitInfo info = new org.apache.aries.jpa.container.parser.impl.PersistenceUnit(
+//    			
+//    			);
+    	
     	EntityManagerFactory entityManagerFactory = persistenceProvider
     			 .createContainerEntityManagerFactory(info, createMap);
     	 
@@ -104,7 +111,7 @@ public class CmdDevJpa extends AbstractCmd {
     	 try {
 	    	 
 	    	 PageEntry pe = new PageEntry();
-	    	 pe.setLinkName( "Google" );
+	    	 pe.setLinkName( "Google " + new Date() );
 	    	 pe.setLinkDestination( new URL( "http://www.google.com" ) );
 	
 	    	 System.out.println("PageEntry: " + pe);
@@ -115,6 +122,17 @@ public class CmdDevJpa extends AbstractCmd {
 	    	 entTrans.commit();
 	    	 
 	    	 System.out.println("--- Saved");
+	    	 
+	    	 CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+	    	 CriteriaQuery<PageEntry> query = cb.createQuery(PageEntry.class);
+	    	 Root<PageEntry> root = query.from(PageEntry.class);
+	    	 query.select(root);
+	    	 TypedQuery<PageEntry> tq = entityManager.createQuery(query);
+	    	 List<PageEntry> res = tq.getResultList();
+	    	 for (PageEntry item : res) {
+	    		 System.out.println(": " + item.getId() + " " + item.getLinkName());
+	    	 }
+	    	 
     	 } finally {
     		 entityManager.close();
 		 }
@@ -200,7 +218,8 @@ public class CmdDevJpa extends AbstractCmd {
             @Override
             public Properties getProperties() {
                 Properties prop = new Properties();
-                prop.put("hibernate.hbm2ddl.auto","create-drop");
+                // https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl
+                prop.put("hibernate.hbm2ddl.auto","create");
                 return prop;
             }
 

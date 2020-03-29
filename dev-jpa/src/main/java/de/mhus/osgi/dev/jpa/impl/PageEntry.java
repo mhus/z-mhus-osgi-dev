@@ -13,11 +13,11 @@ import javax.persistence.Table;
 public class PageEntry {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public String linkName;
-    public URL linkDestination;
+    private String linkName;
+    private URL linkDestination;
     
 	public String getLinkName() {
 		return linkName;
