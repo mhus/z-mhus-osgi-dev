@@ -19,9 +19,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>dev-cache</artifactId>
+	<artifactId>dev-micro</artifactId>
 	<packaging>bundle</packaging>
-	<description>Commands to try critical stuff in karaf</description>
+	<description>Commands to test micro</description>
     <parent>
         <artifactId>mhus-osgi-dev</artifactId>
         <groupId>de.mhus.osgi</groupId>
@@ -39,7 +39,7 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Export-Package>
-						  de.mhus.osgi.dev.cache.*;version=${project.version}
+						  de.mhus.osgi.dev.micro.*;version=${project.version}
 						</Export-Package>
 						<Import-Package>
 							*;resolution:=optional
@@ -81,37 +81,12 @@
 			<groupId>de.mhus.osgi</groupId>
 			<artifactId>osgi-services</artifactId>
 		</dependency>
-		<!-- 
+        
         <dependency>
-            <groupId>de.mhus.osgi</groupId>
-            <artifactId>osgi-cache-api</artifactId>
-            <version>${mhus-osgi-cache.version}</version>
+            <groupId>de.mhus.micro</groupId>
+            <artifactId>micro-core</artifactId>
+            <version>${mhus-micro.version}</version>
         </dependency>
-		 -->
-        <dependency>
-          <groupId>javax.cache</groupId>
-          <artifactId>cache-api</artifactId>
-          <!-- 
-          <version>1.0.0-PFD</version>
-           -->
-        </dependency>
-        <dependency>
-          <groupId>com.hazelcast</groupId>
-          <artifactId>hazelcast-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache-clustered</artifactId>
-        </dependency>
-		<dependency>
-		   <groupId>org.redisson</groupId>
-		   <artifactId>redisson</artifactId>
-		   <version>3.12.3</version>
-		</dependency> 
 				
 	</dependencies>
 </project>

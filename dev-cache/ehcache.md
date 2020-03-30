@@ -48,9 +48,9 @@ install -s mvn:org.ehcache/ehcache-clustered/3.8.1
 
 install -s mvn:de.mhus.osgi/dev-cache/7.0.0-SNAPSHOT
 
-mhus:dev cp default
+dev-res cp default
 
-# mhus:dev -y cp jms ENV_JMS_SOP_USER=admin ENV_JMS_SOP_PASS=nein ENV_JMS_SERVER=jmsserver:61616
+# dev-res -y cp jms ENV_JMS_SOP_USER=admin ENV_JMS_SOP_PASS=nein ENV_JMS_SERVER=jmsserver:61616
 
 bundle:persistentwatch add .*
 ```

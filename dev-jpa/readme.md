@@ -27,7 +27,7 @@ feature:repo-add mvn:de.mhus.osgi/karaf-features/7.0.0-SNAPSHOT/xml/features
 feature:install mhu-dev
 install -s mvn:de.mhus.osgi/dev-jpa/7.0.0-SNAPSHOT
 
-mhus:dev -y cp default
+dev-res -y cp default
 
 
 

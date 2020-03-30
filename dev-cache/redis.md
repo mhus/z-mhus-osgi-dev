@@ -36,7 +36,7 @@ feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
 feature:repo-add mvn:de.mhus.osgi/karaf-features/7.0.0-SNAPSHOT/xml/features
 feature:install mhu-dev
 
-mhus:dev cp default
+dev-res cp default
 
 install -s mvn:de.mhus.osgi/dev-cache/7.0.0-SNAPSHOT
 

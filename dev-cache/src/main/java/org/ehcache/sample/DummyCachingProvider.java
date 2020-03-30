@@ -17,13 +17,13 @@ import org.ehcache.impl.config.serializer.DefaultSerializationProviderConfigurat
 import org.ehcache.impl.serialization.PlainJavaSerializer;
 import org.ehcache.spi.service.ServiceCreationConfiguration;
 
-import de.mhus.osgi.dev.critical.ehcache.jsr107.ConfigurationMerger;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.Eh107CacheLoaderWriterProvider;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.Eh107CacheManager;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.EhcacheCachingProvider;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.Jsr107Service;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.config.Jsr107Configuration;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.internal.DefaultJsr107Service;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.ConfigurationMerger;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.Eh107CacheLoaderWriterProvider;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.Eh107CacheManager;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.EhcacheCachingProvider;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.Jsr107Service;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.config.Jsr107Configuration;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.DefaultJsr107Service;
 
 public class DummyCachingProvider extends EhcacheCachingProvider {
 

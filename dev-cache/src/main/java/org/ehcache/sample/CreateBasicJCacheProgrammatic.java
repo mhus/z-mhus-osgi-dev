@@ -10,14 +10,15 @@ import org.ehcache.core.spi.ServiceLocator;
 import org.ehcache.core.spi.service.ServiceUtils;
 import org.ehcache.impl.config.serializer.DefaultSerializationProviderConfiguration;
 import org.ehcache.impl.serialization.PlainJavaSerializer;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.EhcacheCachingProvider;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.Jsr107Service;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.config.Jsr107Configuration;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.internal.DefaultJsr107Service;
-import de.mhus.osgi.dev.critical.ehcache.jsr107.internal.tck.Eh107MBeanServerBuilder;
 import org.ehcache.spi.service.ServiceCreationConfiguration;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
+
+import de.mhus.osgi.dev.cache.ehcache.jsr107.EhcacheCachingProvider;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.Jsr107Service;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.config.Jsr107Configuration;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.DefaultJsr107Service;
+import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.tck.Eh107MBeanServerBuilder;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
