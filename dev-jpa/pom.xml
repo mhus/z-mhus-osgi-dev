@@ -74,6 +74,10 @@
 			<groupId>de.mhus.lib</groupId>
 			<artifactId>lib-core</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>de.mhus.osgi</groupId>
+            <artifactId>osgi-api</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>de.mhus.osgi</groupId>
 			<artifactId>osgi-services</artifactId>

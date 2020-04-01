@@ -33,7 +33,7 @@ install -s 'wrap:mvn:de.ruedigermoeller/fst/2.57$Import-Package=*;resolution:=op
 install -s 'wrap:mvn:org.redisson/redisson/3.12.3$Import-Package=*;resolution:=optional&overwrite=MERGE'
 
 feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
-feature:repo-add mvn:de.mhus.osgi/karaf-features/7.0.0-SNAPSHOT/xml/features
+feature:repo-add mvn:de.mhus.osgi/mhus-features/7.0.0-SNAPSHOT/xml/features
 feature:install mhu-dev
 
 dev-res cp default
