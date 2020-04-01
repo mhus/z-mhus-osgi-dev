@@ -6,15 +6,15 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
+import de.mhus.db.osgi.api.adb.AbstractCommonAdbConsumer;
+import de.mhus.db.osgi.api.adb.CommonAdbConsumer;
+import de.mhus.db.osgi.api.adb.ReferenceCollector;
 import de.mhus.lib.adb.Persistable;
 import de.mhus.lib.errors.MException;
 import de.mhus.lib.xdb.XdbService;
-import de.mhus.osgi.api.adb.AbstractDbSchemaService;
-import de.mhus.osgi.api.adb.DbSchemaService;
-import de.mhus.osgi.api.adb.ReferenceCollector;
 
-@Component(service = DbSchemaService.class,immediate = true)
-public class DevAdbSchema extends AbstractDbSchemaService {
+@Component(service = CommonAdbConsumer.class,immediate = true)
+public class DevAdbSchema extends AbstractCommonAdbConsumer {
 
     @Activate
     public void doActivate(ComponentContext ctx) {
@@ -28,7 +28,7 @@ public class DevAdbSchema extends AbstractDbSchemaService {
     }
 
     @Override
-    public void doInitialize(XdbService dbService) {
+    public void doInitialize() {
         System.out.println("AdbDbSchema::doInitialize");
     }
 

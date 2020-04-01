@@ -82,10 +82,20 @@
 			<groupId>de.mhus.osgi</groupId>
 			<artifactId>osgi-services</artifactId>
 		</dependency>
+		<!-- 
         <dependency>
             <groupId>de.mhus.osgi</groupId>
             <artifactId>karaf-commands</artifactId>
             <version>${mhus-osgi-tools.version}</version>
+        </dependency>
+		 -->
+        <dependency>
+            <groupId>de.mhus.db</groupId>
+            <artifactId>db-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.mhus.db</groupId>
+            <artifactId>db-osgi-api</artifactId>
         </dependency>
 
         <dependency>

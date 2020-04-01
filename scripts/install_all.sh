@@ -40,6 +40,7 @@ inst mhus-osgi-crypt
 inst mhus-osgi-servlets
 inst mhus-transform
 inst mhus-vaadin
+inst mhus-persistence
 inst mhus-mongo
 inst mhus-rest
 inst mhus-micro
