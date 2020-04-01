@@ -7,34 +7,49 @@ function inst {
    echo Not exists
    return
  fi
- lastUpdate=$(stat -f "%m" $1)
- cd $1
- lastEntry=$(find . -type f -not -path  "*/target/*" -not -path "*/.*"  -exec stat -f "%m %N" \{\} + | sort -r | head -n 1)
- lastFile=$(echo $lastEntry|cut -d ' ' -f 2)
- lastModify=$(echo $lastEntry|cut -d ' ' -f 1)
- if [ $lastUpdate = $lastModify ]; then
-   echo Not modified
-   cd ..
-   return
+ if [ $doAll = 0 ]; then
+     lastUpdate=$(stat -f "%m" $1)
+     cd $1
+     lastEntry=$(find . -type f -not -path  "*/target/*" -not -path "*/.*"  -exec stat -f "%m %N" \{\} + | sort -r | head -n 1)
+     lastFile=$(echo $lastEntry|cut -d ' ' -f 2)
+     lastModify=$(echo $lastEntry|cut -d ' ' -f 1)
+     if [ $lastUpdate = $lastModify ]; then
+       echo Not modified
+       cd ..
+       return
+     fi
+     echo Modified $lastFile
+ else
+    cd $1
  fi
- echo Modified $lastFile
  echo mvn $opt
  mvn $opt || exit 1
  cd ..
 
+ if [ $doAll = 0 ]; then
   lastDate=$(date -r $lastModify +"%Y%m%d%H%M.%S")
   touch -t $lastDate $1
+ else
+  touch $1
+ fi
 }
+
+export doAll=0
 
 if [ -z "$@" ]; then
   opt="install"
 else
+  if [ "$1" = "all" ]; then
+    doAll=1
+    echo "Compile all"
+    shift
+  fi
   opt="$@"
 fi
 
+
 inst mhus-parent
 inst mhus-lib
-
 inst mhus-osgi-tools
 inst mhus-osgi-crypt
 inst mhus-osgi-servlets
