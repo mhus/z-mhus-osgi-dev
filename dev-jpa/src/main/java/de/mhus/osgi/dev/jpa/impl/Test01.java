@@ -22,6 +22,49 @@ public class Test01 {
 
     public static void test(String provMatch, String[] args) throws MalformedURLException {
         
+         
+         EntityManager entityManager = null;
+         try {
+             
+             entityManager  = createEntityManager(provMatch);
+             
+             PageEntry pe = new PageEntry();
+             pe.setLinkName( "Entry " + new Date() );
+             pe.setLinkDestination( new URL( "http://www.google.com" ) );
+    
+             System.out.println("PageEntry: " + pe.getLinkName());
+             
+             if (TestPersistenceUnitInfo.AUTOCOMMIT) {
+                 entityManager.persist( pe );
+             } else {
+                 EntityTransaction entTrans = entityManager.getTransaction();
+                 entTrans.begin();
+                 entityManager.persist( pe );
+                 entTrans.commit();
+             }
+             
+             System.out.println("--- Saved");
+             
+             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+             CriteriaQuery<PageEntry> query = cb.createQuery(PageEntry.class);
+             Root<PageEntry> root = query.from(PageEntry.class);
+             query.select(root);
+             TypedQuery<PageEntry> tq = entityManager.createQuery(query);
+             List<PageEntry> res = tq.getResultList();
+             for (PageEntry item : res) {
+                 System.out.println(": " + item.getId() + " " + item.getLinkName());
+             }
+             
+         } finally {
+             entityManager.close();
+         }
+     }
+    
+    public static EntityManager createEntityManager(String provMatch) {
+        
+        if (provMatch == null)
+            provMatch = ".*hiber.*";
+        
         PersistenceProvider persistenceProvider = null;
         for (PersistenceProvider pp : MOsgi.getServices(PersistenceProvider.class, null)) {
             System.out.println(">>> " + pp);
@@ -30,7 +73,7 @@ public class Test01 {
         }
         if (persistenceProvider == null) {
             System.out.println("PersistenceProvider not selected");
-            return;
+            return null;
         }
         
         HashMap<String, Object> createMap = new HashMap<String, Object>();
@@ -61,36 +104,8 @@ public class Test01 {
          EntityManager entityManager = entityManagerFactory.createEntityManager();
     
          System.out.println("entityManager: " + entityManager);
-         
-         //entityManager.flush();
-         try {
-             
-             PageEntry pe = new PageEntry();
-             pe.setLinkName( "Entry " + new Date() );
-             pe.setLinkDestination( new URL( "http://www.google.com" ) );
-    
-             System.out.println("PageEntry: " + pe);
-             
-             EntityTransaction entTrans = entityManager.getTransaction();
-             entTrans.begin();
-             entityManager.persist( pe );
-             entTrans.commit();
-             
-             System.out.println("--- Saved");
-             
-             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-             CriteriaQuery<PageEntry> query = cb.createQuery(PageEntry.class);
-             Root<PageEntry> root = query.from(PageEntry.class);
-             query.select(root);
-             TypedQuery<PageEntry> tq = entityManager.createQuery(query);
-             List<PageEntry> res = tq.getResultList();
-             for (PageEntry item : res) {
-                 System.out.println(": " + item.getId() + " " + item.getLinkName());
-             }
-             
-         } finally {
-             entityManager.close();
-         }
-     }
+
+         return entityManager;
+    }
     
 }

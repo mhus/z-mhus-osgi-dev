@@ -1,6 +1,7 @@
 package de.mhus.osgi.dev.jpa.impl;
 
 import java.net.URL;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 public class PageEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String linkName;
@@ -33,9 +34,6 @@ public class PageEntry {
 	}
 	public long getId() {
 		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
 	}
 
     // gets & setters omitted

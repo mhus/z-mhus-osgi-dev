@@ -15,9 +15,12 @@ import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
-import de.mhus.osgi.api.services.MOsgi;
+import de.mhus.osgi.api.util.DataSourceUtil;
 
 public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
+
+    public static boolean AUTOCOMMIT = false;
+    public static String HIBERNATE_DIALECT = null;
 
     @Override
     public String getPersistenceUnitName() {
@@ -36,14 +39,14 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
     @Override
     public DataSource getJtaDataSource() {
-        DataSource ds = MOsgi.getDataSource(CmdDevJpa.DS_NAME);
+        DataSource ds = DataSourceUtil.getDataSource(CmdDevJpa.DS_NAME);
         System.out.println("JtaDataSource: " + ds);
         return ds;
     }
 
     @Override
     public DataSource getNonJtaDataSource() {
-        DataSource ds = MOsgi.getDataSource(CmdDevJpa.DS_NAME);
+        DataSource ds = DataSourceUtil.getDataSource(CmdDevJpa.DS_NAME);
         System.out.println("NonJtaDataSource: " + ds);
         return ds;
     }
@@ -97,6 +100,10 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
         Properties prop = new Properties();
         // https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl
         prop.put("hibernate.hbm2ddl.auto","create-only");
+        if (HIBERNATE_DIALECT != null)
+            prop.put("hibernate.dialect", HIBERNATE_DIALECT);
+        if (AUTOCOMMIT)
+            prop.put("hibernate.connection.autocommit", "true");
         return prop;
     }
 

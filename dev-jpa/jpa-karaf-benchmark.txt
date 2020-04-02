@@ -1,0 +1,20 @@
+
+dev-jpa benchmark 10000 100
+
+Cleanup ADB
+Count: 0
+Cleanup JPA
+Count: 0
+>>> Start
+
+ADB SaveLoad=00 00:00:30.832
+JPA SaveLoad=00 00:02:04.527
+x4.1
+
+ADB Read=00 00:00:23.422
+JPA Read=00 00:03:02.353
+x7.9
+
+10000 ADB Delete=00 00:00:20.693
+10000 JPA Delete=00 00:06:32.783
+x19.6
