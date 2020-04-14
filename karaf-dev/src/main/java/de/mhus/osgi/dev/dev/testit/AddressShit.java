@@ -16,8 +16,6 @@ package de.mhus.osgi.dev.dev.testit;
 import java.util.Locale;
 
 import de.mhus.lib.core.MProperties;
-import de.mhus.lib.core.MXml;
-import de.mhus.lib.core.config.XmlConfig;
 import de.mhus.lib.core.util.Address;
 
 public class AddressShit implements ShitIfc {
@@ -40,7 +38,7 @@ public class AddressShit implements ShitIfc {
             return "OK";
         }
         if (cmd.equals("definition")) {
-            System.out.println(MXml.dump(((XmlConfig) Address.getDefinition()).getXmlElement()));
+            System.out.println( Address.getDefinition() );
             return null;
         }
         if (cmd.equals("parse")) {
