@@ -22,7 +22,7 @@ public class DevAdbSchema extends AbstractCommonAdbConsumer {
     }
     
     @Override
-    public void registerObjectTypes(List<Class<? extends Persistable>> list) {
+    public void registerObjectTypes(List<Class<?>> list) {
         System.out.println("AdbDbSchema::registerObjectTypes");
         list.add(AdbPageEntry.class);
     }
@@ -38,7 +38,7 @@ public class DevAdbSchema extends AbstractCommonAdbConsumer {
     }
 
     @Override
-    public void collectReferences(Persistable object, ReferenceCollector collector) {
+    public void collectReferences(Object object, ReferenceCollector collector) {
         
     }
 
@@ -53,22 +53,22 @@ public class DevAdbSchema extends AbstractCommonAdbConsumer {
     }
 
     @Override
-    public boolean canCreate(Persistable obj) throws MException {
+    public boolean canCreate(Object obj) throws MException {
         return true;
     }
     
     @Override
-    public boolean canRead(Persistable obj) throws MException {
+    public boolean canRead(Object obj) throws MException {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Persistable obj) throws MException {
+    public boolean canUpdate(Object obj) throws MException {
         return true;
     }
 
     @Override
-    public boolean canDelete(Persistable obj) throws MException {
+    public boolean canDelete(Object obj) throws MException {
         return true;
     }
     
