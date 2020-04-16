@@ -9,7 +9,6 @@ import org.osgi.service.component.annotations.Component;
 import de.mhus.db.osgi.api.adb.AbstractCommonAdbConsumer;
 import de.mhus.db.osgi.api.adb.CommonAdbConsumer;
 import de.mhus.db.osgi.api.adb.ReferenceCollector;
-import de.mhus.lib.adb.Persistable;
 import de.mhus.lib.errors.MException;
 import de.mhus.lib.xdb.XdbService;
 
@@ -18,23 +17,23 @@ public class DevAdbSchema extends AbstractCommonAdbConsumer {
 
     @Activate
     public void doActivate(ComponentContext ctx) {
-        System.out.println("Start AdbDbSchema");
+        System.out.println("DevAdbSchema: Start AdbDbSchema");
     }
     
     @Override
     public void registerObjectTypes(List<Class<?>> list) {
-        System.out.println("AdbDbSchema::registerObjectTypes");
+        System.out.println("DevAdbSchema: AdbDbSchema::registerObjectTypes");
         list.add(AdbPageEntry.class);
     }
 
     @Override
     public void doInitialize() {
-        System.out.println("AdbDbSchema::doInitialize");
+        System.out.println("DevAdbSchema: AdbDbSchema::doInitialize");
     }
 
     @Override
     public void doDestroy() {
-        System.out.println("AdbDbSchema::doDestroy");
+        System.out.println("DevAdbSchema: AdbDbSchema::doDestroy");
     }
 
     @Override
