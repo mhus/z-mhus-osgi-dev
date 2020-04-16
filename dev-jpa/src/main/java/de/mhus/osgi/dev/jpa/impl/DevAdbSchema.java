@@ -7,12 +7,12 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
 import de.mhus.db.osgi.api.adb.AbstractCommonAdbConsumer;
-import de.mhus.db.osgi.api.adb.CommonAdbConsumer;
+import de.mhus.db.osgi.api.adb.CommonConsumer;
 import de.mhus.db.osgi.api.adb.ReferenceCollector;
 import de.mhus.lib.errors.MException;
 import de.mhus.lib.xdb.XdbService;
 
-@Component(service = CommonAdbConsumer.class,immediate = true)
+@Component(service = CommonConsumer.class,property = "commonService=adb",immediate = true)
 public class DevAdbSchema extends AbstractCommonAdbConsumer {
 
     @Activate
