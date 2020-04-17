@@ -7,6 +7,8 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import de.mhus.lib.core.MSystem;
+
 public abstract class AbstractTestService implements ITestService {
 
 
@@ -29,7 +31,8 @@ public abstract class AbstractTestService implements ITestService {
 
     @Reference
     public void setConfigurationAdmin(ConfigurationAdmin admin) {
-        System.out.println("AbstractTestService:setConfigurationAdmin");
+        System.out.println("AbstractTestService=" + MSystem.getObjectId(this));
+        System.out.println("AbstractTestService:setConfigurationAdmin: " + admin);
         configurationAdmin = admin;
     }
 

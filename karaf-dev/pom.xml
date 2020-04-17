@@ -46,6 +46,7 @@
 						</Import-Package>
 						<Service-Component>*</Service-Component>
                         <DynamicImport-Package>*</DynamicImport-Package>
+                        <_dsannotations-options>inherit</_dsannotations-options>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -63,7 +64,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.compendium</artifactId>
+			<artifactId>osgi.cmpn</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.karaf.shell</groupId>

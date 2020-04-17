@@ -4,8 +4,8 @@ import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 
-import de.mhus.lib.core.M;
 import de.mhus.osgi.api.karaf.AbstractCmd;
+import de.mhus.osgi.api.services.MOsgi;
 
 @Command(scope = "mhus", name = "dev-testservice", description = "Dev Test Service Tool")
 @Service
@@ -31,7 +31,8 @@ public class CmdDevTestService extends AbstractCmd {
     public Object execute2() throws Exception {
 
         if (cmd.equals("sayso")) {
-            TestService service = M.l(TestService.class);
+            ITestService service = MOsgi.getService(ITestService.class);
+            //TestService service = M.l(ITestService.class);
             String res = service.saySo();
             System.out.println("Answer: " + res);
         }
