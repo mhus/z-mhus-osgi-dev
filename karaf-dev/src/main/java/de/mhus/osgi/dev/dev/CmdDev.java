@@ -15,7 +15,7 @@ public class CmdDev extends AbstractCmd {
 
     @Argument(
             index = 0,
-            name = "file",
+            name = "cmd",
             required = true,
             description = "updateall, stopstartall",
             multiValued = false)
