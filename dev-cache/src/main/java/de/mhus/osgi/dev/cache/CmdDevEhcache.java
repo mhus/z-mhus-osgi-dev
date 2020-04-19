@@ -16,6 +16,7 @@ import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.sample.CreateBasicJCacheProgrammatic;
+import org.ehcache.sample.OnHeapStoreByValueTest;
 
 import de.mhus.lib.core.MCast;
 import de.mhus.osgi.api.karaf.AbstractCmd;
@@ -46,9 +47,15 @@ public class CmdDevEhcache extends AbstractCmd {
             multiValued = true)
     String[] parameters;
     
+    @SuppressWarnings("deprecation")
     @Override
     public Object execute2() throws Exception {
 
+
+        if (cmd.equals("copier")) {
+            OnHeapStoreByValueTest.main(parameters);
+            return null;
+        }
 
         if (cmd.equals("jsr107.base")) {
             if (parameters == null) parameters = new String[0];
@@ -89,8 +96,8 @@ public class CmdDevEhcache extends AbstractCmd {
               log().i("Closing cache manager");
             }
 
-            log().i("Exiting");        }
-        
+            log().i("Exiting");        
+        }
         
         if (cmd.equals("basic")) {
             
