@@ -52,7 +52,7 @@ public class ThreadLocalShit extends MLog implements ShitIfc, Runnable {
                 close = true;
             }
         } else if (cmd.equals("interval")) {
-            interval = M.c(parameters[0], 10000);
+            interval = M.to(parameters[0], 10000);
             System.out.println("Interval: " + interval);
         } else if (cmd.equals("msg")) {
             msg = parameters[0];

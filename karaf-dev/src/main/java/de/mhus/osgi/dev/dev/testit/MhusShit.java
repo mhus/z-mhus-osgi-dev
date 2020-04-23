@@ -87,7 +87,7 @@ public class MhusShit implements ShitIfc {
             Lock lock = M.l(LockManager.class).getLock(parameters[0]);
             System.out.println("Created " + lock.hashCode());
         } else if (cmd.equals("setlock")) {
-            int id = M.c(parameters[0], 0);
+            int id = M.to(parameters[0], 0);
             for (Lock lock : M.l(LockManager.class).getRegisteredLocks())
                 if (id == lock.hashCode()) {
                     System.out.println("Set " + id);
@@ -102,7 +102,7 @@ public class MhusShit implements ShitIfc {
                 }
             System.out.println("Not found");
         } else if (cmd.equals("releaselock")) {
-            int id = M.c(parameters[0], 0);
+            int id = M.to(parameters[0], 0);
             for (Lock lock : M.l(LockManager.class).getRegisteredLocks())
                 if (id == lock.hashCode()) {
                     System.out.println("Unlock " + id);

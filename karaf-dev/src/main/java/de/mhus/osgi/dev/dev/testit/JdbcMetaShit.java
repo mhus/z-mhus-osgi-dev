@@ -91,7 +91,7 @@ public class JdbcMetaShit implements ShitIfc {
     }
 
     private boolean bool(String string) {
-        return M.c(string, false);
+        return M.to(string, false);
     }
 
     private void out(ResultSet res) throws SQLException {
