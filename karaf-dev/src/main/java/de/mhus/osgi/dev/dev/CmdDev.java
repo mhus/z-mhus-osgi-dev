@@ -2,7 +2,6 @@ package de.mhus.osgi.dev.dev;
 
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
-import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.osgi.framework.Bundle;
 
@@ -17,50 +16,19 @@ public class CmdDev extends AbstractCmd {
             index = 0,
             name = "cmd",
             required = true,
-            description = "updateall, stopstartall",
+            description = "updateall\n"
+                    + "stopstartall\n",
             multiValued = false)
     String cmd;
     
     @Argument(
             index = 1,
-            name = "file",
-            required = false,
-            description = "file name to copy or 'list'",
-            multiValued = false)
-    String file;
-
-    @Argument(
-            index = 2,
             name = "paramteters",
             required = false,
             description = "Parameters",
             multiValued = true)
     String[] parameters;
 
-    @Option(
-            name = "-o",
-            aliases = "--output",
-            required = false,
-            description = "Change target",
-            multiValued = false)
-    String target;
-
-    @Option(
-            name = "-t",
-            aliases = "--try",
-            required = false,
-            description = "try run",
-            multiValued = false)
-    boolean test;
-    
-    @Option(
-            name = "-y",
-            aliases = "--yes-overwrite",
-            required = false,
-            description = "Overwrite files",
-            multiValued = false)
-    boolean overwrite;
-    
     @Override
     public Object execute2() throws Exception {
 

@@ -354,14 +354,14 @@ public class StressShit implements ShitIfc {
             }
 
         } else if (cmd.equals("datasource")) {
-            DataSource ds = new DataSourceUtil().getDataSource(parameters[0]);
+            DataSource ds = DataSourceUtil.getDataSource(parameters[0]);
             if (ds == null) {
                 System.out.println("Data source not found");
             } else {
                 System.out.println("Data source: " + ds);
             }
         } else if (cmd.equals("datasources")) {
-            for (ServiceReference<DataSource> dsRef : new DataSourceUtil().getDataSources()) {
+            for (ServiceReference<DataSource> dsRef : DataSourceUtil.getDataSources()) {
                 System.out.println(dsRef);
                 for (String key : dsRef.getPropertyKeys())
                     System.out.println(" " + key + "=" + dsRef.getProperty(key));
