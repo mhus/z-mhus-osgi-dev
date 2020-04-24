@@ -15,6 +15,7 @@ package de.mhus.osgi.dev.dev.testit;
 
 import java.util.Locale;
 
+import de.mhus.lib.core.IProperties;
 import de.mhus.lib.core.MProperties;
 import de.mhus.lib.core.util.Address;
 
@@ -49,7 +50,7 @@ public class AddressShit implements ShitIfc {
             return Address.toSalutationString(Address.toSalutation(parameters[0]), l);
         }
         if (cmd.equals("name")) {
-            MProperties attr = MProperties.explodeToMProperties(parameters);
+            MProperties attr = IProperties.explodeToMProperties(parameters);
             Address addr = new Address(attr);
             Locale l =
                     attr.isProperty("locale")
@@ -58,7 +59,7 @@ public class AddressShit implements ShitIfc {
             return addr.getFullName(l);
         }
         if (cmd.equals("letter")) {
-            MProperties attr = MProperties.explodeToMProperties(parameters);
+            MProperties attr = IProperties.explodeToMProperties(parameters);
             Address addr = new Address(attr);
             Locale l =
                     attr.isProperty("locale")

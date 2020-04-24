@@ -13,6 +13,7 @@ import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.osgi.framework.Bundle;
 
+import de.mhus.lib.core.IProperties;
 import de.mhus.lib.core.MFile;
 import de.mhus.lib.core.MProperties;
 import de.mhus.lib.core.MString;
@@ -148,7 +149,7 @@ public class CmdDevResources extends AbstractCmd {
                         }
                     }
                 } else {
-                    MProperties p = MProperties.explodeToMProperties(parameters);
+                    MProperties p = IProperties.explodeToMProperties(parameters);
                     String content = MFile.readFile(is);
                     int pos = 0;
                     while (true) {

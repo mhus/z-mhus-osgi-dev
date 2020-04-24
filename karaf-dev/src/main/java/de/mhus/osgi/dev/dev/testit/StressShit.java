@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 
 import org.osgi.framework.ServiceReference;
 
+import de.mhus.lib.core.IProperties;
 import de.mhus.lib.core.MCast;
 import de.mhus.lib.core.MPeriod;
 import de.mhus.lib.core.MProperties;
@@ -60,7 +61,7 @@ public class StressShit implements ShitIfc {
     @Override
     public Object doExecute(CmdShitYo base, String cmd, String[] parameters) throws Exception {
         if (cmd.equals("threads")) {
-            MProperties p = MProperties.explodeToMProperties(parameters);
+            MProperties p = IProperties.explodeToMProperties(parameters);
             final long next = p.getLong("next", 100);
             final long sleep = p.getLong("sleep", 10000);
             long nextOutput = System.currentTimeMillis();
@@ -85,7 +86,7 @@ public class StressShit implements ShitIfc {
             }
         }
         if (cmd.equals("ctrl-c")) {
-            MProperties p = MProperties.explodeToMProperties(parameters);
+            MProperties p = IProperties.explodeToMProperties(parameters);
             int cnt = p.getInt("iterations", 3);
             long sleep = p.getLong("sleep", 3000);
             int scenario = p.getInt("scenario", 0);
@@ -202,7 +203,7 @@ public class StressShit implements ShitIfc {
             return null;
         }
         if (cmd.equals("memkill")) {
-            MProperties p = MProperties.explodeToMProperties(parameters);
+            MProperties p = IProperties.explodeToMProperties(parameters);
             String kill = "killkill";
             String small = null;
             int len = kill.length();
@@ -250,7 +251,7 @@ public class StressShit implements ShitIfc {
             }
             System.out.println("Depth: " + cnt);
         } else if (cmd.equals("stress")) {
-            MProperties p = MProperties.explodeToMProperties(parameters);
+            MProperties p = IProperties.explodeToMProperties(parameters);
             int sec = (int) (p.getDouble("seconds", 1d) * 1000d); // to milliseconds
             int iter = p.getInt("iterations", 0);
             int thr = p.getInt("threads", -1);
@@ -329,7 +330,7 @@ public class StressShit implements ShitIfc {
             }
 
         } else if (cmd.equals("parallel")) {
-            MProperties p = MProperties.explodeToMProperties(parameters);
+            MProperties p = IProperties.explodeToMProperties(parameters);
             int lifetime = p.getInt("lifetime", 10);
             int interval = (int) (p.getDouble("interval", 1d) * 1000d); // to milliseconds
             boolean silent = p.getBoolean("silent", true);
