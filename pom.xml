@@ -65,6 +65,7 @@
 		        <module>dev-cache</module>
 		        <module>dev-jpa</module>
 		        <module>dev-micro</module>
+                <module>dev-cxf</module>
 		        
                 <module>dev-features</module>
 			</modules>
