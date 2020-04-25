@@ -12,7 +12,8 @@ public class PrintEventHandler implements EventHandler{
         TreeMap<String,Object> m = new TreeMap<>();
         for (String name: event.getPropertyNames())
             m.put(name, event.getProperty(name));
-        System.out.println("EVENT: " + event.getTopic() + " " + m);
+        if (!event.getTopic().startsWith("org/osgi/service/log/LogEntry")) // ignore ... too much useless events
+            System.out.println("EVENT: " + event.getTopic() + " " + m);
     }
 
 }

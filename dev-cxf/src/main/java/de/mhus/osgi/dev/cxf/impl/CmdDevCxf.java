@@ -24,6 +24,8 @@ import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.jaxrs.runtime.dto.ResourceDTO;
+import org.osgi.service.jaxrs.runtime.dto.ResourceMethodInfoDTO;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
@@ -72,6 +74,18 @@ public class CmdDevCxf extends AbstractCmd {
     public Object execute2() throws Exception {
         
 
+        if (cmd.equals("runtime")) {
+            for (org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime runtime : MOsgi.getServices(org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime.class, null)) {
+                System.out.println(runtime.getClass() +": ");
+                for (ResourceDTO res : runtime.getRuntimeDTO().defaultApplication.resourceDTOs) {
+                    System.out.println("  " + res.name);
+                    for (ResourceMethodInfoDTO meth : res.resourceMethods)
+                        System.out.println("    " + meth.method + " " + meth.path);
+                }
+                
+            }
+                
+        }
         if (cmd.equals("Extension")) {
             if (extensionRegistration == null) {
                 BundleContext context = FrameworkUtil.getBundle(CmdDevCxf.class).getBundleContext();
