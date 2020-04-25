@@ -6,19 +6,29 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.ReaderInterceptor;
+import javax.ws.rs.ext.WriterInterceptor;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import de.mhus.osgi.api.karaf.AbstractCmd;
+import de.mhus.osgi.api.services.MOsgi;
 
 @Command(scope = "mhus", name = "dev-cxf", description = "Cxf tests")
 @Service
@@ -30,6 +40,11 @@ public class CmdDevCxf extends AbstractCmd {
             required = true,
             description =
                     "Command to execute\n"
+                    + " BookingService\n"
+                    + " Extension\n"
+                    + " cxf.list\n"
+                    + " http.list\n"
+                    + " http.add"
                     + ""
             ,
             multiValued = false)
@@ -45,10 +60,52 @@ public class CmdDevCxf extends AbstractCmd {
     
     @Option(name = "--url", description = "Location of the REST service", required = false, multiValued = false)
     String restLocation = "http://localhost:8181/cxf/booking/";
+
+    private static ServiceRegistration<?> extensionRegistration;
+    private static ServiceRegistration<BookingService> bookingServiceRegistration;
     
+    // https://access.redhat.com/documentation/en-us/red_hat_fuse/7.5/html/apache_cxf_development_guide/jaxrs20filters
+    // https://osgi.org/specification/osgi.cmpn/7.0.0/service.jaxrs.html#service.jaxrs.common.properties
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public Object execute2() throws Exception {
         
+
+        if (cmd.equals("Extension")) {
+            if (extensionRegistration == null) {
+                BundleContext context = FrameworkUtil.getBundle(CmdDevCxf.class).getBundleContext();
+                Dictionary<String, Object> properties = new Hashtable<>();
+                properties.put("osgi.jaxrs.extension", true);
+                properties.put(MOsgi.COMPONENT_NAME, RsExtension.class.getCanonicalName());
+                System.out.println("Register RsExtension");
+                extensionRegistration = context.registerService(
+                        new String[] {
+                        WriterInterceptor.class.getCanonicalName(),
+                        ReaderInterceptor.class.getCanonicalName(),
+                        ContainerRequestFilter.class.getCanonicalName(),
+                        ContainerResponseFilter.class.getCanonicalName()
+                        }, new RsExtension(), properties);
+            } else {
+                System.out.println("Unregister RsExtension");
+                extensionRegistration.unregister();
+                extensionRegistration = null;
+            }
+        } else
+        if (cmd.equals("BookingService")) {
+            if (bookingServiceRegistration == null) {
+                BundleContext context = FrameworkUtil.getBundle(CmdDevCxf.class).getBundleContext();
+                Dictionary<String, Object> properties = new Hashtable<>();
+                properties.put(MOsgi.COMPONENT_NAME, BookingService.class.getCanonicalName());
+                properties.put("osgi.jaxrs.resource", true);
+                System.out.println("Register SecondBookingServiceRest");
+                bookingServiceRegistration = context.registerService(BookingService.class, new SecondBookingServiceRest(), properties);
+            } else {
+                System.out.println("Unregister SecondBookingServiceRest");
+                bookingServiceRegistration.unregister();
+                bookingServiceRegistration = null;
+            }
+        } else
         if (cmd.equals("cxf.list")) {
             
             List providers = new ArrayList();

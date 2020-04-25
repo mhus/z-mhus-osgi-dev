@@ -16,9 +16,9 @@
  */
 package de.mhus.osgi.dev.cxf.impl;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -28,13 +28,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-@Path("/booking")
-@Component(service = BookingService.class, property = { "osgi.jaxrs.resource=true" }, immediate = true)
-public class BookingServiceRest implements BookingService {
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Deactivate;
+
+@Path("/booking2")
+//@Component(service = BookingService.class, property = { "osgi.jaxrs.resource=true" }, immediate = true)
+public class SecondBookingServiceRest implements BookingService {
     
     private final Map<Long, Booking> bookings = new HashMap<>();
     {
