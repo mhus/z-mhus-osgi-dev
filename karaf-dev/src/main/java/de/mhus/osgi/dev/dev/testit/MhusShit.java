@@ -31,9 +31,9 @@ import de.mhus.lib.core.base.service.LockManager;
 import de.mhus.lib.core.concurrent.Lock;
 import de.mhus.lib.core.console.Console;
 import de.mhus.lib.core.console.ConsoleTable;
-import de.mhus.lib.core.lang.ValueProvider;
-import de.mhus.lib.core.system.DefaultHousekeeper;
+import de.mhus.lib.core.mapi.DefaultHousekeeper;
 import de.mhus.lib.core.util.AtomicClockUtil;
+import de.mhus.lib.core.util.ValueProvider;
 import de.mhus.osgi.api.karaf.CmdInterceptor;
 import de.mhus.osgi.api.karaf.CmdInterceptorUtil;
 
