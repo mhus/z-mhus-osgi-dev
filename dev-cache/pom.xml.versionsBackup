@@ -19,13 +19,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>dev-cxf</artifactId>
+	<artifactId>dev-cache</artifactId>
 	<packaging>bundle</packaging>
-	<description>Commands to deveop in karaf</description>
+	<description>Commands to try critical stuff in karaf</description>
     <parent>
         <artifactId>mhus-osgi-dev</artifactId>
         <groupId>de.mhus.osgi</groupId>
-        <version>7.0.0</version>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
 
 	<build>
@@ -39,11 +39,14 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Export-Package>
-						  de.mhus.osgi.dev.cxf.impl.*;version=${project.version}
+						  de.mhus.osgi.dev.cache.*;version=${project.version}
 						</Export-Package>
 						<Import-Package>
 							*;resolution:=optional
 						</Import-Package>
+						<Private-Package>
+						  org.ehcache.sample
+						</Private-Package>
 						<Service-Component>*</Service-Component>
                         <DynamicImport-Package>*</DynamicImport-Package>
 					</instructions>
@@ -74,10 +77,6 @@
 			<groupId>de.mhus.lib</groupId>
 			<artifactId>lib-core</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>de.mhus.osgi</groupId>
-            <artifactId>osgi-api</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>de.mhus.osgi</groupId>
 			<artifactId>osgi-services</artifactId>
@@ -85,49 +84,34 @@
 		<!-- 
         <dependency>
             <groupId>de.mhus.osgi</groupId>
-            <artifactId>karaf-commands</artifactId>
-            <version>${mhus-osgi-tools.version}</version>
+            <artifactId>osgi-cache-api</artifactId>
+            <version>${mhus-osgi-cache.version}</version>
         </dependency>
 		 -->
         <dependency>
-            <groupId>de.mhus.db</groupId>
-            <artifactId>db-core</artifactId>
+          <groupId>javax.cache</groupId>
+          <artifactId>cache-api</artifactId>
+          <!-- 
+          <version>1.0.0-PFD</version>
+           -->
         </dependency>
         <dependency>
-            <groupId>de.mhus.db</groupId>
-            <artifactId>db-osgi-api</artifactId>
-        </dependency>
-
-       <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <version>6.0.0</version>
-        </dependency>
-        
-        
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>${cxf.version}</version>
+          <groupId>com.hazelcast</groupId>
+          <artifactId>hazelcast-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-            <artifactId>jackson-jaxrs-json-provider</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
         </dependency>
-        
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-rs-client</artifactId>
-            <version>${cxf.version}</version>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache-clustered</artifactId>
         </dependency>
-		<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.service.jaxrs -->
 		<dependency>
-		    <groupId>org.osgi</groupId>
-		    <artifactId>org.osgi.service.jaxrs</artifactId>
-		    <version>1.0.0</version>
-		</dependency>
-		
-        
+		   <groupId>org.redisson</groupId>
+		   <artifactId>redisson</artifactId>
+		   <version>3.12.3</version>
+		</dependency> 
+				
 	</dependencies>
 </project>
