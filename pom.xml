@@ -61,8 +61,11 @@
 				<module>karaf-dev</module>
 		        <module>dev-cache</module>
 		        <module>dev-jpa</module>
+		        <!-- 
 		        <module>dev-micro</module>
+		         -->
                 <module>dev-cxf</module>
+                <module>dev-grpc</module>
 		        
                 <module>dev-features</module>
 			</modules>
