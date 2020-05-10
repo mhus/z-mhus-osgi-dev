@@ -13,7 +13,6 @@ import de.mhus.osgi.dev.grpc.impl.api.HelloRequest;
 import de.mhus.osgi.dev.grpc.impl.api.HelloResponse;
 import de.mhus.osgi.dev.grpc.impl.api.Sentiment;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 
 // https://github.com/saturnism/grpc-by-example-java

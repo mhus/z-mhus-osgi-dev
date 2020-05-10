@@ -56,7 +56,8 @@
 						  de.mhus.osgi.dev.grpc.impl.*;version=${project.version}
 						</Export-Package>
 						<Import-Package>
-							*;resolution:=optional
+						com.google.common.*;version=28.2,
+							*
 						</Import-Package>
 						<Service-Component>*</Service-Component>
                         <DynamicImport-Package>*</DynamicImport-Package>

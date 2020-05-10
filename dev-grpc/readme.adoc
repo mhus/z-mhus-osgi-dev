@@ -21,6 +21,6 @@ feature:install dev-grpc
 
 dev-grpc start
 
-dev-grpc client Ray
+dev-grpc --host localhost client Ray
  
 ----

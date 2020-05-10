@@ -32,7 +32,7 @@
 	   <mhus-osgi-cache.version>${project.version}</mhus-osgi-cache.version>
 
 		<!-- gRPC -->
-		<grpc.version>1.21.1</grpc.version>
+		<grpc.version>1.29.0</grpc.version>
         <os.plugin.version>1.6.2</os.plugin.version>
         <protobuf.plugin.version>0.6.1</protobuf.plugin.version> <!-- 0.6.1 -->
         <protoc.version>3.7.1</protoc.version> <!-- 3.5.1 -->
