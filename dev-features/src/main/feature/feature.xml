@@ -62,4 +62,50 @@
         <bundle>mvn:de.mhus.osgi/dev-cxf/${project.version}</bundle>
     </feature>
 
+    <feature name="dev-grpc">
+        <feature>mhu-dev</feature>
+        <feature>http-whiteboard</feature>
+        
+        <feature>scr</feature>
+        <bundle>mvn:com.google.code.gson/gson/2.3</bundle>
+        <bundle>mvn:com.google.guava/guava/18.0</bundle>
+        <!-- 
+        <bundle>mvn:com.google.guava/guava/19.0</bundle>
+         -->
+        <bundle>wrap:mvn:commons-codec/commons-codec/1.3</bundle>
+        <bundle>wrap:mvn:commons-logging/commons-logging/1.1.1</bundle>
+        <bundle>wrap:mvn:com.google.auth/google-auth-library-credentials/0.3.0</bundle>
+        <bundle>wrap:mvn:com.google.auth/google-auth-library-oauth2-http/0.3.0</bundle>
+        <bundle>wrap:mvn:com.google.http-client/google-http-client/1.19.0</bundle>
+        <bundle>wrap:mvn:com.google.http-client/google-http-client-jackson2/1.19.0</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-auth/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-core/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-netty/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-okhttp/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-protobuf/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-protobuf-lite/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-protobuf-nano/${grpc.version}</bundle>
+        <bundle>wrap:mvn:io.grpc/grpc-stub/${grpc.version}</bundle>
+        <bundle>wrap:mvn:org.apache.httpcomponents/httpclient/4.0.1</bundle>
+        <bundle>wrap:mvn:org.apache.httpcomponents/httpcore/4.0.1</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.1.3</bundle>
+        <bundle>wrap:mvn:com.google.code.findbugs/jsr305/3.0.0</bundle>
+        <bundle>mvn:io.netty/netty-buffer/${netty.version}</bundle>
+        <bundle>mvn:io.netty/netty-codec/${netty.version}</bundle>
+        <bundle>mvn:io.netty/netty-codec-http/${netty.version}</bundle>
+        <bundle>mvn:io.netty/netty-codec-http2/${netty.version}</bundle>
+        <bundle>mvn:io.netty/netty-common/${netty.version}</bundle>
+        <bundle>mvn:io.netty/netty-handler/${netty.version}</bundle>
+        <bundle>wrap:mvn:commons-logging/commons-logging/1.1.1</bundle>
+        <bundle>mvn:io.netty/netty-resolver/${netty.version}</bundle>
+        <bundle>mvn:io.netty/netty-transport/${netty.version}</bundle>
+        <bundle>wrap:mvn:com.squareup.okhttp/okhttp/2.5.0</bundle>
+        <bundle>wrap:mvn:com.squareup.okio/okio/1.6.0</bundle>
+        <bundle>mvn:com.google.protobuf/protobuf-java/3.0.0-beta-2</bundle>
+        <bundle>mvn:com.google.protobuf/protobuf-java-util/3.0.0-beta-2</bundle>
+        <bundle>mvn:com.google.protobuf.nano/protobuf-javanano/3.0.0-alpha-5</bundle>        
+        
+        <bundle>mvn:de.mhus.osgi/dev-grpc/${project.version}</bundle>
+    </feature>
+    
 </features>

@@ -14,8 +14,10 @@ import de.mhus.osgi.dev.grpc.impl.api.HelloResponse;
 import de.mhus.osgi.dev.grpc.impl.api.Sentiment;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.okhttp.OkHttpChannelBuilder;
 
 // https://github.com/saturnism/grpc-by-example-java
+// https://github.com/stackleader/karaf-grpc
 
 @Command(scope = "mhus", name = "dev-grpc", description = "gRPC tests")
 @Service
@@ -66,9 +68,13 @@ public class CmdDevGrpc extends AbstractCmd {
     }
 
 	private void doClientCall() {
-		ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
-		        .usePlaintext()
-		        .build();
+		ManagedChannel channel = OkHttpChannelBuilder.forAddress(host, port)
+                .usePlaintext()
+                .build();
+		
+//		ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
+//		        .usePlaintext()
+//		        .build();
 
 		    GreetingServiceGrpc.GreetingServiceBlockingStub stub =
 		        GreetingServiceGrpc.newBlockingStub(channel);

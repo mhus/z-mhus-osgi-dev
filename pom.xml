@@ -30,7 +30,15 @@
 	<url>http://www.mhus.de</url>
 	<properties>
 	   <mhus-osgi-cache.version>${project.version}</mhus-osgi-cache.version>
-	</properties>
+
+		<!-- gRPC -->
+		<grpc.version>1.21.1</grpc.version>
+        <os.plugin.version>1.6.2</os.plugin.version>
+        <protobuf.plugin.version>0.6.1</protobuf.plugin.version> <!-- 0.6.1 -->
+        <protoc.version>3.7.1</protoc.version> <!-- 3.5.1 -->
+        <netty.version>4.1.48.Final</netty.version><!-- 4.1.0.CR7 3.7.0.Final -->
+        
+    </properties>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -59,8 +67,10 @@
             </activation>
 			<modules>
 				<module>karaf-dev</module>
+				<!-- 
 		        <module>dev-cache</module>
 		        <module>dev-jpa</module>
+				 -->
 		        <!-- 
 		        <module>dev-micro</module>
 		         -->

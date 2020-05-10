@@ -16,8 +16,8 @@ Install
 
 ```
 feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
-feature:repo-add mvn:de.mhus.osgi/mhus-features/7.0.0-SNAPSHOT/xml/features
-feature:repo-add mvn:de.mhus.osgi/dev-features/7.0.0-SNAPSHOT/xml/features
+feature:repo-add mvn:de.mhus.osgi/mhus-features/7.1.0-SNAPSHOT/xml/features
+feature:repo-add mvn:de.mhus.osgi/dev-features/7.1.0-SNAPSHOT/xml/features
 
 feature:install dev-ds-h2
 feature:install dev-jpa
