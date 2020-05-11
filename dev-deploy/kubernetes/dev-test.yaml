@@ -35,8 +35,8 @@ spec:
   type: LoadBalancer
   sessionAffinity: ClientIP
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 8181
+      targetPort: 8181
   selector:
     app: dev-server
 
@@ -54,7 +54,7 @@ spec:
   sessionAffinity: ClientIP
   ports:
     - port: 8080
-      targetPort: 8085
+      targetPort: 8181
   selector:
     app: dev-server
 
@@ -69,12 +69,14 @@ spec:
   selector:
     matchLabels:
       app: dev-server
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
         app: dev-server
         update: "1"
+      annotations:
+        linkerd.io/inject: enabled
     spec:
       hostname: devserver
       containers:
@@ -144,6 +146,8 @@ spec:
       labels:
         app: dev-client
         update: "1"
+      annotations:
+        linkerd.io/inject: enabled
     spec:
       hostname: devclient
       containers:
