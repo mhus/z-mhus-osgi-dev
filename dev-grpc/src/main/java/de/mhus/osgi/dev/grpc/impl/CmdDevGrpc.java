@@ -30,7 +30,8 @@ public class CmdDevGrpc extends AbstractCmd {
                     "Command to execute\n"
                     + "  start <port>\n"
                     + "  shutdown\n"
-                    + "  client <name>"
+                    + "  client <name>\n"
+                    + "  list"
             ,
             multiValued = false)
     String cmd;
@@ -53,8 +54,9 @@ public class CmdDevGrpc extends AbstractCmd {
     public Object execute2() throws Exception {
         
     	if (cmd.equals("start")) {
-    		M.l(DevGrpcAdmin.class).doStart(parameters == null ? port : MCast.toint(parameters[0], port));
-    		System.out.println("OK");
+    		int p = parameters == null ? port : MCast.toint(parameters[0], port);
+    		M.l(DevGrpcAdmin.class).doStart(p);
+    		System.out.println("Started on " + p);
     	} else
     	if (cmd.equals("shutdown")) {
     		M.l(DevGrpcAdmin.class).doShutdown();
@@ -62,6 +64,11 @@ public class CmdDevGrpc extends AbstractCmd {
     	} else
     	if (cmd.equals("client")) {
     		doClientCall();
+    	} else
+    	if (cmd.equals("list")) {
+    		for (GrpcServer inst : M.l(DevGrpcAdmin.class).list()) {
+    			System.out.println(inst.getServer());
+    		}
     	}
         return null;
     }

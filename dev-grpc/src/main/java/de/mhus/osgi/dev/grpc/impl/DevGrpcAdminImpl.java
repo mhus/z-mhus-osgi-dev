@@ -3,6 +3,7 @@ package de.mhus.osgi.dev.grpc.impl;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -33,8 +34,10 @@ public class DevGrpcAdminImpl implements DevGrpcAdmin {
 	}
 
 	@Override
-	public void doStart(int port) {
+	public void doStart(int port) throws Exception {
 		GrpcServerImpl service = new GrpcServerImpl();
+		service.start(port);
+		
 		BundleContext ctx = FrameworkUtil.getBundle(DevGrpcAdminImpl.class).getBundleContext();
 		
 		Dictionary<String, Object> properties = new Hashtable<>();
@@ -43,6 +46,17 @@ public class DevGrpcAdminImpl implements DevGrpcAdmin {
 		
 		list.add(reg);
 		
+	}
+
+	@Override
+	public List<GrpcServer> list() {
+		LinkedList<GrpcServer> out = new LinkedList<>();
+		BundleContext ctx = FrameworkUtil.getBundle(DevGrpcAdminImpl.class).getBundleContext();
+		
+		for (ServiceRegistration<GrpcServer> reg : list)
+			out.add(ctx.getService(reg.getReference()));
+		
+		return out;
 	}
 	
 	

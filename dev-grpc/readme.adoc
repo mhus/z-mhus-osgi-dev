@@ -22,5 +22,10 @@ feature:install dev-grpc
 dev-grpc start
 
 dev-grpc --host localhost client Ray
+
+dev-grpc list
+
+dev-grpc shutdown
+
  
 ----

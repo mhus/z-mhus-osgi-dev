@@ -22,4 +22,9 @@ public class GrpcServerImpl implements GrpcServer {
 		    System.out.println("Server started!");
 	}
 
+	@Override
+	public Server getServer() {
+		return server;
+	}
+
 }
