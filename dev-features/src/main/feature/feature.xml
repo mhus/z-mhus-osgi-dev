@@ -97,8 +97,8 @@
         <!-- 
         <bundle>wrap:mvn:io.grpc/grpc-protobuf-nano/1.21.1</bundle>
          -->
-        <bundle>wrap:mvn:io.grpc/grpc-stub/${grpc.version}</bundle>
         <!-- 
+        <bundle>wrap:mvn:io.grpc/grpc-stub/${grpc.version}</bundle>
         <bundle>wrap:mvn:org.apache.httpcomponents/httpclient/4.0.1</bundle>
         <bundle>wrap:mvn:org.apache.httpcomponents/httpcore/4.0.1</bundle>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.1.3</bundle>

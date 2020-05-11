@@ -92,7 +92,7 @@ public class CmdDevGrpc extends AbstractCmd {
 		            .setSentiment(Sentiment.HAPPY)
 		            .build());
 
-		    System.out.println(helloResponse);
+		    System.out.println("Client: " + helloResponse);
 
 		    channel.shutdown();		
 	}

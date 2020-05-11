@@ -79,11 +79,6 @@
 			<groupId>de.mhus.osgi</groupId>
 			<artifactId>osgi-services</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>de.mhus.osgi</groupId>
-            <artifactId>karaf-commands</artifactId>
-            <version>${mhus-osgi-tools.version}</version>
-        </dependency>
 				
 	</dependencies>
 </project>

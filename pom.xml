@@ -78,6 +78,7 @@
                 <module>dev-grpc</module>
 		        
                 <module>dev-features</module>
+                <module>dev-deploy</module>
 			</modules>
         </profile>
         <profile>

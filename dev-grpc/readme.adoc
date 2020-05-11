@@ -18,6 +18,7 @@ feature:repo-add mvn:de.mhus.osgi/dev-features/7.1.0-SNAPSHOT/xml/features
 feature:install dev-grpc
 
 
+bundle:refresh ports-grpc
 
 dev-grpc start
 

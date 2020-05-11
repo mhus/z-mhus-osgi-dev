@@ -23,8 +23,8 @@ import org.apache.karaf.jaas.boot.principal.GroupPrincipal;
 import org.apache.karaf.jaas.boot.principal.UserPrincipal;
 import org.apache.karaf.jaas.config.JaasRealm;
 
-import de.mhus.karaf.commands.utils.KarafJaasUtil;
 import de.mhus.lib.core.util.EnumerationIterator;
+import de.mhus.osgi.api.util.KarafJaasUtil;
 
 public class JaasShit implements ShitIfc {
 

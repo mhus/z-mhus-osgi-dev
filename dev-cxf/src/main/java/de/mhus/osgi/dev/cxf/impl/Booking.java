@@ -16,6 +16,10 @@
  */
 package de.mhus.osgi.dev.cxf.impl;
 
+import java.util.Date;
+
+import de.mhus.lib.core.service.IdentUtil;
+
 /**
  * A regular POJO.
  */
@@ -24,7 +28,19 @@ public class Booking {
     private Long id;
     private String customer;
     private String flight;
+    private String ident;
+    private Date created;
 
+    public Booking() {
+        this.ident = "X" + IdentUtil.getServerIdent();
+        created = new Date();
+    }
+    
+    public Booking(String ident) {
+        this.ident = ident;
+        created = new Date();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -47,5 +63,21 @@ public class Booking {
 
     public void setFlight(String flight) {
         this.flight = flight;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

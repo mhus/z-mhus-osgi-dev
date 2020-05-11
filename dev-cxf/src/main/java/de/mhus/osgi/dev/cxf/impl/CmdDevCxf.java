@@ -46,7 +46,7 @@ public class CmdDevCxf extends AbstractCmd {
                     + " Extension\n"
                     + " cxf.list\n"
                     + " http.list\n"
-                    + " http.add"
+                    + " http.add <id> <flight> <customer>"
                     + ""
             ,
             multiValued = false)
@@ -61,7 +61,7 @@ public class CmdDevCxf extends AbstractCmd {
     String[] parameters;
     
     @Option(name = "--url", description = "Location of the REST service", required = false, multiValued = false)
-    String restLocation = "http://localhost:8181/cxf/booking/";
+    String restLocation = "http://localhost:8181/booking/";
 
     private static ServiceRegistration<?> extensionRegistration;
     private static ServiceRegistration<BookingService> bookingServiceRegistration;

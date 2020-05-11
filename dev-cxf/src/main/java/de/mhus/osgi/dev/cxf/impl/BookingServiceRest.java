@@ -20,6 +20,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 
+import de.mhus.lib.core.service.IdentUtil;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -38,7 +40,7 @@ public class BookingServiceRest implements BookingService {
     
     private final Map<Long, Booking> bookings = new HashMap<>();
     {
-        bookings.put(1l,new Booking());
+        bookings.put(1l,new Booking(IdentUtil.getServerIdent()));
     }
 
     @Activate

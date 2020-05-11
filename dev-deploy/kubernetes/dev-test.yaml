@@ -1,0 +1,197 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-test
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: reactive
+  name: dev-operation1
+  namespace: dev-test
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  ports:
+    - port: 8181
+      targetPort: 8181
+  selector:
+    app: dev-server
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: reactive
+  name: dev-operation2
+  namespace: dev-test
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: dev-server
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: reactive
+  name: dev-operation3
+  namespace: dev-test
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  ports:
+    - port: 8080
+      targetPort: 8085
+  selector:
+    app: dev-server
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-server
+  namespace: dev-test
+spec:
+  selector:
+    matchLabels:
+      app: dev-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dev-server
+        update: "1"
+    spec:
+      hostname: devserver
+      containers:
+      - name: dev
+        image: mhus/dev-playground:7.1.0
+        ports:
+        - containerPort: 8181
+          name: http
+#        - containerPort: 5005
+#          name: debug
+#        args: ["debug"]
+        stdin: true
+        tty: true
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /opt/karaf/data/log
+#        - name: local-m2
+#          mountPath: /home/user/.m2
+        livenessProbe:
+          httpGet:
+             path: /system/health
+             port: 8181
+          timeoutSeconds: 3
+          initialDelaySeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /system/ready
+            port: 8181
+          timeoutSeconds: 3
+          failureThreshold: 1
+      - name: promtail-container
+        image: mhus/promtail-sidecar:1.0.0
+        env:
+        - name: LOG_NS
+          value: "reactive-test"
+        - name: LOG_JOB
+          value: "karaf"
+        - name: LOG_FILE_PATH
+          value: "/home/slog/karaf.log"
+        - name: LOG_URL
+          value: "http://loki.monitoring.svc.cluster.local:3100/api/prom/push"
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /home/slog
+      volumes:
+      - name: shared-logs
+        emptyDir: {}
+#      - name: local-m2
+#        hostPath: 
+#           path: /Users/mikehummel/.m2
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-client
+  namespace: dev-test
+spec:
+  selector:
+    matchLabels:
+      app: dev-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dev-client
+        update: "1"
+    spec:
+      hostname: devclient
+      containers:
+      - name: dev
+        image: mhus/dev-playground:7.1.0
+        ports:
+        - containerPort: 8181
+          name: http
+#        - containerPort: 5005
+#          name: debug
+#        args: ["debug"]
+        stdin: true
+        tty: true
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /opt/karaf/data/log
+#        - name: local-m2
+#          mountPath: /home/user/.m2
+        livenessProbe:
+          httpGet:
+             path: /system/health
+             port: 8181
+          timeoutSeconds: 3
+          initialDelaySeconds: 30
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /system/ready
+            port: 8181
+          timeoutSeconds: 3
+          failureThreshold: 1
+      - name: promtail-container
+        image: mhus/promtail-sidecar:1.0.0
+        env:
+        - name: LOG_NS
+          value: "reactive-test"
+        - name: LOG_JOB
+          value: "karaf"
+        - name: LOG_FILE_PATH
+          value: "/home/slog/karaf.log"
+        - name: LOG_URL
+          value: "http://loki.monitoring.svc.cluster.local:3100/api/prom/push"
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /home/slog
+      volumes:
+      - name: shared-logs
+        emptyDir: {}
+#      - name: local-m2
+#        hostPath: 
+#           path: /Users/mikehummel/.m2
