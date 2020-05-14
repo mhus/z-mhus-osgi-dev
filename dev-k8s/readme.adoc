@@ -17,5 +17,10 @@ feature:repo-add mvn:de.mhus.osgi/dev-features/7.1.0-SNAPSHOT/xml/features
 
 feature:install dev-k8s
 
+# Test with:
+dev-k8s simple
+
+# Install without feature: 
+install -s mvn:de.mhus.osgi/dev-k8s/7.1.0-SNAPSHOT
  
 ----

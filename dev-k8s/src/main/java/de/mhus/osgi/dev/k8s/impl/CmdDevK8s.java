@@ -35,6 +35,14 @@ public class CmdDevK8s extends AbstractCmd {
     @Override
     public Object execute2() throws Exception {
         
+        if (cmd.equals("proto")) {
+            ProtoExample.main(parameters);
+            System.out.println("Done");
+        } else
+        if (cmd.equals("simple")) {
+            SimpleExample.main(parameters);
+            System.out.println("Done");
+        } else
     	if (cmd.equals("controller")) {
     		ControllerExample.main(parameters);
     		System.out.println("Done");

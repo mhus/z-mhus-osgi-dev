@@ -23,19 +23,28 @@ import io.kubernetes.client.openapi.models.V1EventSource;
 import io.kubernetes.client.openapi.models.V1Node;
 import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.util.CallGeneratorParams;
+
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+
+import de.mhus.lib.core.MFile;
 import okhttp3.OkHttpClient;
 
 public class ControllerExample {
   public static void main(String[] args) throws IOException {
 
+      String k8sHost = System.getenv("KUBERNETES_SERVICE_HOST");
+      String k8sPort = System.getenv("KUBERNETES_SERVICE_PORT");
+      String  accessToken = MFile.readFile(new File("/var/run/secrets/kubernetes.io/serviceaccount/token"));
+      
     CoreV1Api coreV1Api = new CoreV1Api();
     ApiClient apiClient = coreV1Api.getApiClient();
     OkHttpClient httpClient =
         apiClient.getHttpClient().newBuilder().readTimeout(0, TimeUnit.SECONDS).build();
     apiClient.setHttpClient(httpClient);
+    apiClient.setAccessToken(accessToken);
 
     // instantiating an informer-factory, and there should be only one informer-factory globally.
     SharedInformerFactory informerFactory = new SharedInformerFactory();
@@ -66,7 +75,7 @@ public class ControllerExample {
         new NodePrintingReconciler(
             nodeInformer,
             eventBroadcaster.newRecorder(
-                new V1EventSource().host("localhost").component("node-printer")));
+                new V1EventSource().host(k8sHost).component("node-printer")));
 
     // Use builder library to construct a default controller.
     Controller controller =

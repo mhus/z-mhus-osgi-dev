@@ -2,6 +2,7 @@ package de.mhus.osgi.dev.dev.testit;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.util.Map.Entry;
 
 import de.mhus.lib.core.M;
 import de.mhus.lib.core.MApi;
@@ -13,6 +14,8 @@ public class SystemShit implements ShitIfc {
     public void printUsage() {
         System.out.println("lookup <ifc> [<def>]");
         System.out.println("myip - Print my Ip and hostname");
+        System.out.println("env");
+        System.out.println("properties");
     }
 
     @Override
@@ -37,6 +40,16 @@ public class SystemShit implements ShitIfc {
                 System.out.println(obj.getClass());
             }
             return obj;
+        } else
+        if (cmd.equals("env")) {
+            for ( Entry<String, String> entry : System.getenv().entrySet())
+                if (parameters == null || parameters.length < 1 || entry.getKey().contains(parameters[0]))
+                System.out.println(entry.getKey() + "=" + entry.getValue());
+        } else
+        if (cmd.equals("properties")) {
+            for ( Entry<Object, Object> entry : System.getProperties().entrySet())
+                if (parameters == null || parameters.length < 1 || String.valueOf(entry.getKey()).contains(parameters[0]))
+                System.out.println(entry.getKey() + "=" + entry.getValue());
         }
         return null;
     }

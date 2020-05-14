@@ -11,4 +11,7 @@ COPY profiles /docker/profiles
 # Start once - prepare for a faster start
 RUN /docker/assembly.sh
 RUN export DEPLOY_FORCE=1 && /docker/deploy.sh
+# Need this option for kubernetes SSL handshake - it's a bug in OpenJDK
+# https://github.com/kubernetes-client/java/issues/854
+RUN echo "export EXTRA_JAVA_OPTS=\"-Djdk.tls.client.protocols=TLSv1.2\"" > /opt/karaf/bin/setenv
 USER 0
