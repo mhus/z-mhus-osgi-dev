@@ -54,12 +54,16 @@
 						okhttp3.*,
 						okio.*,
 						org.joda.time.*,
-						org.apache.commons.collections4.*
+						org.apache.commons.collections4.*,
+						io.fabric8.kubernetes.*,
+						com.fasterxml.jackson.*,
+						javax.validation.*
 						</Private-Package>
 						<Embed-Dependency>
 						client-java-api,
 						client-java,
-						client-java-extended
+						client-java-extended,
+						kubernetes-api
 						</Embed-Dependency>
 						<!-- 
 						<Embed-Transitive>true</Embed-Transitive>
@@ -123,6 +127,15 @@
 			<artifactId>client-java-extended</artifactId>
 			<version>${k8s.version}</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/io.fabric8/kubernetes-api -->
+		<dependency>
+		    <groupId>io.fabric8</groupId>
+		    <artifactId>kubernetes-api</artifactId>
+		    <version>3.0.12</version>
+		</dependency>
+		
+		
 		<!-- 
 		<dependency>
 			<groupId>io.kubernetes</groupId>
