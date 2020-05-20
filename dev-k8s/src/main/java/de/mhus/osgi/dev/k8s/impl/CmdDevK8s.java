@@ -9,6 +9,10 @@ import de.mhus.osgi.api.karaf.AbstractCmd;
 // https://github.com/kubernetes-client/java/tree/master/examples/src/main/java/io/kubernetes/client/examples
 // https://medium.com/programming-kubernetes/building-stuff-with-the-kubernetes-api-part-2-using-java-ceb8a5ff7920
 
+// cat /var/run/secrets/kubernetes.io/serviceaccount/token
+// all are cluster-admin: kubectl apply -f https://raw.githubusercontent.com/spekt8/spekt8/master/fabric8-rbac.yaml
+// https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+
 @Command(scope = "mhus", name = "dev-k8s", description = "Kubernetes tests")
 @Service
 public class CmdDevK8s extends AbstractCmd {
@@ -32,11 +36,16 @@ public class CmdDevK8s extends AbstractCmd {
             multiValued = true)
     String[] parameters;
 
-    private WithFabric8 withFabric8;
+    private static WithFabric8 withFabric8;
+
+    private static WatchExample watch;
         
     @Override
     public Object execute2() throws Exception {
         
+        if (cmd.equals("who")) {
+            Who.main(parameters);
+        } else
         if (cmd.equals("proto")) {
             ProtoExample.main(parameters);
             System.out.println("Done");
@@ -59,11 +68,18 @@ public class CmdDevK8s extends AbstractCmd {
                 withFabric8 = null;
             }
         } else
-        if (cmd.equals("my")) {
-            MyController.main(parameters);
-        } else
         if (cmd.equals("watch")) {
-            WatchExample.main(parameters);
+            if (watch == null) {
+                System.out.println("Start");
+                watch = new WatchExample(parameters);
+            } else {
+                System.out.println("Stop");
+                watch.close();
+                watch = null;
+            }
+        } else
+        if (cmd.equals("my")) {
+            My.main(parameters);
             System.out.println("Done");
         }
 

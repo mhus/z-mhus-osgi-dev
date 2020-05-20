@@ -79,9 +79,12 @@ spec:
         linkerd.io/inject: enabled
     spec:
       hostname: devserver
+      serviceAccountName: build-robot
       containers:
       - name: dev
         image: mhus/dev-playground:7.1.0
+        securityContext:
+          privileged: true
         ports:
         - containerPort: 8181
           name: http
