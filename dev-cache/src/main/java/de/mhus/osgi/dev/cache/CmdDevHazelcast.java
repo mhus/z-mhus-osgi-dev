@@ -80,8 +80,8 @@ public class CmdDevHazelcast extends AbstractCmd {
         	if (cc == null) {
         		cc = new CacheSimpleConfig();
         		cc.setName("test");
-        		cc.setKeyType("String");
-        		cc.setValueType("String");
+        		cc.setKeyType("java.lang.String");
+        		cc.setValueType("java.lang.String");
         		inst.getConfig().addCacheConfig(cc);
         	}
         	ICache<String, String> testc = cm.getCache("test");
