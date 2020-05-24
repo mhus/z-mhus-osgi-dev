@@ -17,6 +17,7 @@ import com.hazelcast.cache.ICache;
 import com.hazelcast.config.CacheSimpleConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICacheManager;
+import com.hazelcast.core.ILock;
 import com.hazelcast.core.Member;
 
 import de.mhus.lib.core.M;
@@ -87,6 +88,30 @@ public class CmdDevHazelcast extends AbstractCmd {
         	String a = testc.get("a");
         	System.out.println("A: " + a);
         	testc.put("a",new Date().toString());
+        }
+        if (cmd.equals("lock")) {
+        	String lockName = parameters == null || parameters.length == 0 ? "testlock" : parameters[0];
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ILock lock = inst.getLock(lockName);
+        	boolean res = lock.tryLock();
+        	System.out.println("Get Lock " + lockName + ": "+ res);
+        }
+        if (cmd.equals("unlock")) {
+        	String lockName = parameters == null || parameters.length == 0 ? "testlock" : parameters[0];
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ILock lock = inst.getLock(lockName);
+        	lock.unlock();
+        	System.out.println("unlocked " + lockName);
+        }
+        if (cmd.equals("forceunlock")) {
+        	String lockName = parameters == null || parameters.length == 0 ? "testlock" : parameters[0];
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ILock lock = inst.getLock(lockName);
+        	lock.forceUnlock();
+        	System.out.println("unlocked " + lockName);
         }
         
         
