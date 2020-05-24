@@ -6,12 +6,19 @@ Install Cellar (see cellar-docker.adoc)
 Install dev-cache
 
 ```
+
+cluster:bundle-install -s default mvn:javax.cache/cache-api/1.1.0
+
 cluster:bundle-install -s default mvn:de.mhus.osgi/dev-cache/7.1.0-SNAPSHOT  
+
+# Restart is important:
+shutdown -r -f
 
 bundle:watch .*
 
 dev-hazelcast clustermanager
 
+dev-hazelcast cache-test
 
 ```
 

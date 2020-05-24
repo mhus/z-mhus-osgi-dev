@@ -53,8 +53,10 @@ public class CmdDevHazelcast extends AbstractCmd {
 
         
         ClusterManager clusterManager = M.l(ClusterManager.class);
-        GroupManager groupManager = M.l(GroupManager.class);
-        ConfigurationAdmin configurationAdmin = M.l(ConfigurationAdmin.class);
+        @SuppressWarnings("unused")
+		GroupManager groupManager = M.l(GroupManager.class);
+        @SuppressWarnings("unused")
+		ConfigurationAdmin configurationAdmin = M.l(ConfigurationAdmin.class);
         
         if (cmd.equals("clustermanager")) {
         	System.out.println(clusterManager);
@@ -72,7 +74,7 @@ public class CmdDevHazelcast extends AbstractCmd {
         		System.out.println("CacheConfig: " + cc.getKey() + "=" + cc.getValue());
         	}
         }
-        if (cmd.equals("cache-test")) {
+        if (cmd.equals("cache-init")) {
         	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
         	HazelcastInstance inst = hccm.getInstance();
         	ICacheManager cm = inst.getCacheManager();
@@ -85,9 +87,46 @@ public class CmdDevHazelcast extends AbstractCmd {
         		inst.getConfig().addCacheConfig(cc);
         	}
         	ICache<String, String> testc = cm.getCache("test");
+        	System.out.println(testc);
+        }
+        if (cmd.equals("cache-test")) {
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ICacheManager cm = inst.getCacheManager();
+        	ICache<String, String> testc = cm.getCache("test");
+        	if (testc == null) {
+        		System.out.println("Cache config not found");
+        		return null;
+        	}
         	String a = testc.get("a");
         	System.out.println("A: " + a);
-        	testc.put("a",new Date().toString());
+        	String val = new Date().toString();
+        	testc.put("a",val);
+        	System.out.println("New Value: " + val);
+        }
+        if (cmd.equals("cache-set")) {
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ICacheManager cm = inst.getCacheManager();
+        	ICache<String, String> testc = cm.getCache("test");
+        	if (testc == null) {
+        		System.out.println("Cache config not found");
+        		return null;
+        	}
+        	testc.put(parameters[0], parameters[1]);
+        	System.out.println("SET");
+        }
+        if (cmd.equals("cache-get")) {
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ICacheManager cm = inst.getCacheManager();
+        	ICache<String, String> testc = cm.getCache("test");
+        	if (testc == null) {
+        		System.out.println("Cache config not found");
+        		return null;
+        	}
+        	String val = testc.get(parameters[0]);
+        	System.out.println("Value: " + val);
         }
         if (cmd.equals("lock")) {
         	String lockName = parameters == null || parameters.length == 0 ? "testlock" : parameters[0];
