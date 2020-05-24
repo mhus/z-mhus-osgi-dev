@@ -1,4 +1,22 @@
 
+### With Cellar 4.1.3
+
+Install Cellar (see cellar-docker.adoc)
+
+Install dev-cache
+
+```
+cluster:bundle-install -s default mvn:de.mhus.osgi/dev-cache/7.1.0-SNAPSHOT  
+
+bundle:watch .*
+
+dev-hazelcast clustermanager
+
+
+```
+
+
+### Old stuff
 
 Standalone:
 
@@ -6,7 +24,7 @@ Standalone:
 install -s mvn:javax.cache/cache-api/1.1.1
 install -s mvn:com.hazelcast/hazelcast-all/4.0
 feature:install mhu-dev
-install -s mvn:de.mhus.osgi/dev-cache/7.0.0-SNAPSHOT
+install -s mvn:de.mhus.osgi/dev-cache/7.1.0-SNAPSHOT
 ```
 
 
@@ -24,7 +42,7 @@ nano etc/hazelcast.xml
 uninstall com.hazelcast/3.9.1
 start com.hazelcast/3.9.4
 ### restart karaf
-install -s mvn:de.mhus.osgi/karaf-cache/7.0.0-SNAPSHOT
+install -s mvn:de.mhus.osgi/karaf-cache/7.1.0-SNAPSHOT
  ```
 
 Edit etc/hazelcast.xml and add - to enable caching

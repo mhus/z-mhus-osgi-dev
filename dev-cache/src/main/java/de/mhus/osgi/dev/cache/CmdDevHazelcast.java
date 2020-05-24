@@ -1,24 +1,23 @@
 package de.mhus.osgi.dev.cache;
 
-import javax.cache.Cache;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
-import javax.cache.configuration.MutableConfiguration;
-import javax.cache.spi.CachingProvider;
+import java.util.Date;
+import java.util.Map.Entry;
 
+import javax.cache.CacheManager;
+
+import org.apache.karaf.cellar.core.ClusterManager;
+import org.apache.karaf.cellar.core.GroupManager;
+import org.apache.karaf.cellar.hazelcast.HazelcastClusterManager;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
+import org.osgi.service.cm.ConfigurationAdmin;
 
-import com.hazelcast.cache.HazelcastCachingProvider;
-import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
-import com.hazelcast.cluster.Member;
-import com.hazelcast.config.Config;
-import com.hazelcast.core.DistributedObjectEvent;
-import com.hazelcast.core.DistributedObjectListener;
+import com.hazelcast.cache.ICache;
+import com.hazelcast.config.CacheSimpleConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.osgi.HazelcastOSGiInstance;
-import com.hazelcast.osgi.HazelcastOSGiService;
+import com.hazelcast.core.ICacheManager;
+import com.hazelcast.core.Member;
 
 import de.mhus.lib.core.M;
 import de.mhus.osgi.api.karaf.AbstractCmd;
@@ -32,7 +31,8 @@ public class CmdDevHazelcast extends AbstractCmd {
             name = "cmd",
             required = true,
             description =
-                    "Command to execute"
+                    "Command to execute\n"
+                    + " hazelcast-list-instances"
             ,
             multiValued = false)
     String cmd;
@@ -45,14 +45,52 @@ public class CmdDevHazelcast extends AbstractCmd {
             multiValued = true)
     String[] parameters;
     
-    HazelcastServerCachingProvider provider = null;
     CacheManager cacheManager = null;
     
     @Override
     public Object execute2() throws Exception {
 
         
-        HazelcastOSGiService service = M.l(HazelcastOSGiService.class);
+        ClusterManager clusterManager = M.l(ClusterManager.class);
+        GroupManager groupManager = M.l(GroupManager.class);
+        ConfigurationAdmin configurationAdmin = M.l(ConfigurationAdmin.class);
+        
+        if (cmd.equals("clustermanager")) {
+        	System.out.println(clusterManager);
+        	System.out.println(clusterManager.getClass());
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	System.out.println(inst);
+        	for (Member member : inst.getCluster().getMembers()) {
+                System.out.println("Node: " + member);
+            }
+        	ICacheManager cm = inst.getCacheManager();
+        	System.out.println(cm);
+        	System.out.println(cm.getClass());
+        	for (Entry<String, CacheSimpleConfig> cc : inst.getConfig().getCacheConfigs().entrySet()) {
+        		System.out.println("CacheConfig: " + cc.getKey() + "=" + cc.getValue());
+        	}
+        }
+        if (cmd.equals("cache-test")) {
+        	HazelcastClusterManager hccm = (HazelcastClusterManager)clusterManager;
+        	HazelcastInstance inst = hccm.getInstance();
+        	ICacheManager cm = inst.getCacheManager();
+        	CacheSimpleConfig cc = inst.getConfig().getCacheConfig("test");
+        	if (cc == null) {
+        		cc = new CacheSimpleConfig();
+        		cc.setName("test");
+        		cc.setKeyType("String");
+        		cc.setValueType("String");
+        		inst.getConfig().addCacheConfig(cc);
+        	}
+        	ICache<String, String> testc = cm.getCache("test");
+        	String a = testc.get("a");
+        	System.out.println("A: " + a);
+        	testc.put("a",new Date().toString());
+        }
+        
+        
+/*        
         HazelcastOSGiInstance inst = service.getHazelcastInstanceByName("mhus");
         if (inst == null) {
             System.out.println("Create");
@@ -158,7 +196,7 @@ public class CmdDevHazelcast extends AbstractCmd {
                 String value = cache.get(parameters[0]);
                 System.out.println(value);
             }
-
+*/
         return null;
     }
 

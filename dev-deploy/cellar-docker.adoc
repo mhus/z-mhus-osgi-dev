@@ -1,0 +1,120 @@
+
+== Karaf Cellar setup
+
+=== Startup karaf and cellar
+
+Start two karaf instances or more in different terminal sessions.
+
+----
+
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 18182:8181\
+ --name karaf1\
+ mhus/apache-karaf:4.2.6_04
+
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 18183:8181\
+ --name karaf2\
+ mhus/apache-karaf:4.2.6_04
+
+----
+
+In each karaf install the cellar feature
+
+----
+
+install -s mvn:javax.cache/cache-api/1.0.0-PFD
+
+feature:repo-add cellar
+feature:install cellar
+
+----
+
+=== Validate the cluster
+
+----
+
+karaf@96078aabfce6()> node-list 
+  │ Id              │ Alias │ Host Name  │ Port
+──┼─────────────────┼───────┼────────────┼─────
+  │ 172.17.0.3:5701 │       │ 172.17.0.3 │ 5701
+x │ 172.17.0.2:5701 │       │ 172.17.0.2 │ 5701
+karaf@96078aabfce6()>
+
+----
+
+Execute 'node-list' and you should see two nodes on each
+running karaf.
+
+And now try to install a bundle in the cluster. First validate the bundle is not installed
+
+----
+karaf@ed180621cd2f()> list | grep common
+karaf@ed180621cd2f()>
+----
+
+You should not see any output on each karaf instance.
+
+And now install the bundle at the first karaf instance
+
+----
+cluster:bundle-install -s default mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-lang/2.4_6
+----
+
+And test it on both again
+
+----
+karaf@ed180621cd2f()> list | grep common                                                                                                                                                                            
+62 │ Active │  80 │ 2.4.0.6 │ Apache ServiceMix :: Bundles :: commons-lang
+karaf@ed180621cd2f()>     
+----
+
+The cluster is installed and working.
+
+=== Install mhu-lib in the cluster
+
+----
+cluster:feature-repo-add default mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
+cluster:feature-repo-add default mvn:de.mhus.osgi/mhus-features/7.1.0-SNAPSHOT/xml/features
+cluster:feature-install default mhu-dev
+
+----
+
+== Optional executions
+
+=== Cleanup Karaf installations
+
+----
+
+docker stop karaf1
+docker rm karaf1
+
+docker stop karaf2
+docker rm karaf2
+
+----
+
+=== Karaf in debug mode
+
+In this version in debug mode:
+
+----
+
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 15006:5005\
+ -p 18182:8181\
+ --name karaf1\
+ mhus/apache-karaf:4.2.6_04 debug
+
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 15007:5005\
+ -p 18183:8181\
+ --name karaf2\
+ mhus/apache-karaf:4.2.6_04 debug
+
+----
+
