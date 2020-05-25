@@ -30,6 +30,7 @@ public class Booking {
     private String flight;
     private String ident;
     private Date created;
+    private Date modified;
 
     public Booking() {
         this.ident = "X" + IdentUtil.getServerIdent();
@@ -79,5 +80,14 @@ public class Booking {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public Date getModified() {
+        modified = new Date();
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 }

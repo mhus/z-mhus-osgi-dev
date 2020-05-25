@@ -1,16 +1,9 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: dev-test
-
-
----
 
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: reactive
+    app: test
   name: dev-operation1
   namespace: dev-test
 spec:
@@ -28,7 +21,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: reactive
+    app: test
   name: dev-operation2
   namespace: dev-test
 spec:
@@ -46,7 +39,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: reactive
+    app: test
   name: dev-operation3
   namespace: dev-test
 spec:
@@ -111,20 +104,20 @@ spec:
             port: 8181
           timeoutSeconds: 3
           failureThreshold: 1
-      - name: promtail-container
-        image: mhus/promtail-sidecar:1.0.0
-        env:
-        - name: LOG_NS
-          value: "reactive-test"
-        - name: LOG_JOB
-          value: "karaf"
-        - name: LOG_FILE_PATH
-          value: "/home/slog/karaf.log"
-        - name: LOG_URL
-          value: "http://loki.monitoring.svc.cluster.local:3100/api/prom/push"
-        volumeMounts:
-        - name: shared-logs
-          mountPath: /home/slog
+#       - name: promtail-container
+#         image: mhus/promtail-sidecar:1.0.0
+#         env:
+#         - name: LOG_NS
+#           value: "reactive-test"
+#         - name: LOG_JOB
+#           value: "karaf"
+#         - name: LOG_FILE_PATH
+#           value: "/home/slog/karaf.log"
+#         - name: LOG_URL
+#           value: "http://loki.monitoring.svc.cluster.local:3100/api/prom/push"
+#         volumeMounts:
+#         - name: shared-logs
+#           mountPath: /home/slog
       volumes:
       - name: shared-logs
         emptyDir: {}
@@ -182,20 +175,20 @@ spec:
             port: 8181
           timeoutSeconds: 3
           failureThreshold: 1
-      - name: promtail-container
-        image: mhus/promtail-sidecar:1.0.0
-        env:
-        - name: LOG_NS
-          value: "reactive-test"
-        - name: LOG_JOB
-          value: "karaf"
-        - name: LOG_FILE_PATH
-          value: "/home/slog/karaf.log"
-        - name: LOG_URL
-          value: "http://loki.monitoring.svc.cluster.local:3100/api/prom/push"
-        volumeMounts:
-        - name: shared-logs
-          mountPath: /home/slog
+#       - name: promtail-container
+#         image: mhus/promtail-sidecar:1.0.0
+#         env:
+#         - name: LOG_NS
+#           value: "reactive-test"
+#         - name: LOG_JOB
+#           value: "karaf"
+#         - name: LOG_FILE_PATH
+#           value: "/home/slog/karaf.log"
+#         - name: LOG_URL
+#           value: "http://loki.monitoring.svc.cluster.local:3100/api/prom/push"
+#         volumeMounts:
+#         - name: shared-logs
+#           mountPath: /home/slog
       volumes:
       - name: shared-logs
         emptyDir: {}

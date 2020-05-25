@@ -29,6 +29,8 @@ import org.osgi.service.jaxrs.runtime.dto.ResourceMethodInfoDTO;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
+import de.mhus.lib.core.MString;
+import de.mhus.lib.core.MThread;
 import de.mhus.osgi.api.karaf.AbstractCmd;
 import de.mhus.osgi.api.services.MOsgi;
 
@@ -63,6 +65,12 @@ public class CmdDevCxf extends AbstractCmd {
     @Option(name = "--url", description = "Location of the REST service", required = false, multiValued = false)
     String restLocation = "http://localhost:8181/booking/";
 
+    @Option(name = "--max", description = "Max Loops for fire", required = false, multiValued = false)
+    int max = 30;
+    
+    @Option(name = "--token", description = "JWT Token", required = false, multiValued = false)
+    String token = null;
+    
     private static ServiceRegistration<?> extensionRegistration;
     private static ServiceRegistration<BookingService> bookingServiceRegistration;
     
@@ -137,7 +145,10 @@ public class CmdDevCxf extends AbstractCmd {
             URL url = new URL(restLocation);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            if (MString.isSet(token))
+                connection.setRequestProperty("Authorization", "Bearer " + token);
             connection.setRequestMethod("GET");
+            connection.setUseCaches(false);
             connection.connect();
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -152,13 +163,43 @@ public class CmdDevCxf extends AbstractCmd {
                 System.err.println("Error when sending GET method : HTTP_CODE = " + connection.getResponseCode());
             }
         } else
+        if (cmd.equals("http.fire")) {
+            for (int i = 0; i < max; i++) {
+                for (String param : parameters) {
+                    URL url = new URL(param);
+                    System.out.println( i + " >>> " + url);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    if (MString.isSet(token))
+                        connection.setRequestProperty("Authorization", "Bearer " + token);
+                    connection.setRequestMethod("GET");
+                    connection.setUseCaches(false);
+                    connection.connect();
+        
+                    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        BufferedReader buffer = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        String line;
+                        StringBuilder sb = new StringBuilder();
+                        while ((line = buffer.readLine())!= null) {
+                            sb.append(line);
+                        }
+                        System.out.println(sb.toString());
+                    } else {
+                        System.err.println("Error when sending GET method : HTTP_CODE = " + connection.getResponseCode());
+                    }
+                }
+                MThread.sleep(50);
+            }
+        } else
         if (cmd.equals("http.add")) {
             
             URL url = new URL(restLocation);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            if (MString.isSet(token))
+                connection.setRequestProperty("Authorization", "Bearer " + token);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
+            connection.setUseCaches(false);
             connection.setDoOutput(true);
             connection.setDoInput(true);
 

@@ -27,4 +27,5 @@ docker push "mhus/dev-playground:7.1.0"
 
 dev-cxf --url http://dev-operation1:8181/booking http.list
 
+dev-cxf --max 10 http.fire http://dev-dynamic:8080/booking  http://dev-operation1:8181/booking
 
