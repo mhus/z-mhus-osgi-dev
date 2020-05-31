@@ -24,20 +24,24 @@ import de.mhus.lib.core.M;
 import de.mhus.lib.core.MCollection;
 import de.mhus.lib.core.MHousekeeper;
 import de.mhus.lib.core.MHousekeeperTask;
+import de.mhus.lib.core.MLog;
 import de.mhus.lib.core.MPeriod;
 import de.mhus.lib.core.MSystem;
+import de.mhus.lib.core.MThread;
 import de.mhus.lib.core.MThreadPool;
 import de.mhus.lib.core.concurrent.Lock;
 import de.mhus.lib.core.console.Console;
 import de.mhus.lib.core.console.ConsoleTable;
+import de.mhus.lib.core.logging.ITracer;
 import de.mhus.lib.core.mapi.DefaultHousekeeper;
 import de.mhus.lib.core.service.LockManager;
 import de.mhus.lib.core.util.AtomicClockUtil;
 import de.mhus.lib.core.util.ValueProvider;
 import de.mhus.osgi.api.karaf.CmdInterceptor;
 import de.mhus.osgi.api.karaf.CmdInterceptorUtil;
+import io.opentracing.Scope;
 
-public class MhusShit implements ShitIfc {
+public class MhusShit extends MLog implements ShitIfc {
 
     private long doitTime;
 
@@ -55,11 +59,35 @@ public class MhusShit implements ShitIfc {
         System.out.println("atomicservers");
         System.out.println("ask - try console input");
         System.out.println("interceptors - print all session interceptors");
+        System.out.println("tracetest");
     }
 
     @Override
     public Object doExecute(CmdShitYo base, String cmd, String[] parameters) throws Exception {
 
+    	if (cmd.equals("tracetest")) {
+    		ITracer tracer = M.tracer();
+    		try (Scope t1 = tracer.enter("test1", "a","b")) {
+    			log().f("FATAL Log Entry");
+    			log().e("ERROR Log Entry");
+    			log().w("WARN Log Entry");
+    			log().i("INFO Log Entry");
+    			log().d("DEBUG Log Entry");
+    			log().t("TRACE Log Entry");
+    			log().i("Sleep");
+    			MThread.sleep(1000);
+    			log().i("Awaken");
+    			for (int i = 0; i < 5; i++)
+	        		try (Scope t2 = tracer.enter("test2", "loop","" + i)) {
+	        			log().i("Sleep");
+	        			MThread.sleep(1000);
+	        			log().i("Awaken");
+	        			MThread.sleep(1000);
+	        		}
+    			MThread.sleep(1000);
+    			log().i("End");
+    		}
+    	}
         if (cmd.equals("interceptors")) {
             Session session = base.getSession();
             @SuppressWarnings("unchecked")

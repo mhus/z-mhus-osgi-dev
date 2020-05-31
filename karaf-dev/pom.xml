@@ -79,6 +79,10 @@
 			<groupId>de.mhus.osgi</groupId>
 			<artifactId>osgi-services</artifactId>
 		</dependency>
+		<dependency>
+	        <groupId>io.opentracing</groupId>
+		    <artifactId>opentracing-api</artifactId>
+		</dependency>
 				
 	</dependencies>
 </project>

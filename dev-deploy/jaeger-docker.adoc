@@ -1,0 +1,85 @@
+
+=== Setup
+
+----
+
+docker run -d --name jaeger \
+  -p 5775:5775/udp \
+  -p 6831:6831/udp \
+  -p 6832:6832/udp \
+  -p 5778:5778 \
+  -p 16686:16686 \
+  -p 14268:14268 \
+  jaegertracing/all-in-one:latest
+  
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 18182:8181\
+ -p 15007:5005\
+ --link jaeger:jaeger \
+ --name karaf1\
+ mhus/apache-karaf:4.2.6_04 debug
+  
+----
+
+=== Install
+
+----
+
+feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
+feature:repo-add mvn:de.mhus.osgi/mhus-features/7.1.0-SNAPSHOT/xml/features
+feature:install mhu-dev
+
+feature:install webconsole
+
+----
+
+=== Configuration
+
+http://localhost:18182/system/console/bundles
+karaf - karaf
+
+JAEGER SAMPLER TYPE const
+JAEGER SAMPLER PARAM 1
+JAEGER SAMPLER MANAGER HOST PORT jaeger:5778
+JAEGER REPORTER LOG SPANS false
+JAEGER AGENT HOST jaeger
+JAEGER AGENT PORT 6831
+JAEGER REPORTER FLUSH INTERVAL 1000
+JAEGER REPORTER MAX QUEUE SIZE 100
+JAEGER SERVICE NAME Sample
+Log level DEBUG
+
+----
+
+persistentwatch add .*
+
+echo "
+JAEGER_SAMPLER_TYPE=const
+JAEGER_SAMPLER_PARAM=1
+JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger:5778
+JAEGER_REPORTER_LOG_SPANS=false
+JAEGER_AGENT_HOST=jaeger
+JAEGER_AGENT_PORT=6831
+JAEGER_REPORTER_FLUSH_INTERVAL=1000
+JAEGER_REPORTER_MAX_QUEUE_SIZE=100
+JAEGER_SERVICE_NAME=Sample
+logLevel=DEBUG" | write etc/de.mhus.osgi.services.JaegerTracerService.cfg
+
+----
+
+=== Test
+
+http://localhost:16686
+
+ident --trace
+
+=== Misc
+
+----
+
+docker stop karaf1
+docker rm karaf1
+
+----
+
