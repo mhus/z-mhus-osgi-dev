@@ -14,12 +14,12 @@
 package de.mhus.osgi.dev.dev.testit;
 
 import de.mhus.lib.core.M;
-import de.mhus.lib.core.MApi;
 import de.mhus.lib.core.MLog;
 import de.mhus.lib.core.MStopWatch;
 import de.mhus.lib.core.MThread;
-import de.mhus.lib.core.logging.LevelMapper;
-import de.mhus.lib.core.logging.TrailLevelMapper;
+import de.mhus.lib.core.logging.ITracer;
+import io.opentracing.Scope;
+import io.opentracing.Span;
 
 public class ThreadLocalShit extends MLog implements ShitIfc, Runnable {
 
@@ -65,24 +65,15 @@ public class ThreadLocalShit extends MLog implements ShitIfc, Runnable {
     public void run() {
         log().i("Start Thread");
         threadLocal.set(msg);
-        {
-            LevelMapper lm = MApi.get().getLogFactory().getLevelMapper();
-            if (lm != null && lm instanceof TrailLevelMapper) {
-                log().i("Set trail level");
-                ((TrailLevelMapper) lm).doConfigureTrail(null, "MAP,T,D,I,W,E,F,G,0,TEST");
-            }
+        try (Scope scope = ITracer.get().start("TEST", true)) {
+	        MStopWatch time = new MStopWatch().start();
+	        while (!close) {
+	            MThread.sleep(interval);
+	            Span span = ITracer.get().current();
+	            log().i("Content", time, threadLocal.get(), span);
+	        }
+	        log().i("Exit Thread", time);
         }
-        MStopWatch time = new MStopWatch().start();
-        while (!close) {
-            MThread.sleep(interval);
-            String trail = null;
-            LevelMapper lm = MApi.get().getLogFactory().getLevelMapper();
-            if (lm != null && lm instanceof TrailLevelMapper) {
-                trail = ((TrailLevelMapper) lm).getTrailId();
-            }
-            log().i("Content", time, threadLocal.get(), trail);
-        }
-        log().i("Exit Thread", time);
         myThread = null; // cleanup before exit
     }
 }

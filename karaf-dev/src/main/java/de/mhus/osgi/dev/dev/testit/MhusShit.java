@@ -66,7 +66,7 @@ public class MhusShit extends MLog implements ShitIfc {
     public Object doExecute(CmdShitYo base, String cmd, String[] parameters) throws Exception {
 
     	if (cmd.equals("tracetest")) {
-    		ITracer tracer = M.tracer();
+    		ITracer tracer = ITracer.get();
     		try (Scope t1 = tracer.enter("test1", "a","b")) {
     			log().f("FATAL Log Entry");
     			log().e("ERROR Log Entry");
