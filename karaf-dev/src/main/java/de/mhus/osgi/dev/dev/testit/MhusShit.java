@@ -39,7 +39,10 @@ import de.mhus.lib.core.util.AtomicClockUtil;
 import de.mhus.lib.core.util.ValueProvider;
 import de.mhus.osgi.api.karaf.CmdInterceptor;
 import de.mhus.osgi.api.karaf.CmdInterceptorUtil;
+import io.opentracing.References;
 import io.opentracing.Scope;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer.SpanBuilder;
 
 public class MhusShit extends MLog implements ShitIfc {
 
@@ -88,7 +91,77 @@ public class MhusShit extends MLog implements ShitIfc {
     			log().i("End");
     		}
     	}
-        if (cmd.equals("interceptors")) {
+    	if (cmd.equals("tracetest2")) {
+    		ITracer tracer = ITracer.get();
+    		SpanContext ctx = null;
+    		try (Scope t1 = tracer.enter("test1", "a","b")) {
+    			log().f("FATAL Log Entry");
+    			log().e("ERROR Log Entry");
+    			log().w("WARN Log Entry");
+    			log().i("INFO Log Entry");
+    			log().d("DEBUG Log Entry");
+    			log().t("TRACE Log Entry");
+    			log().i("Sleep");
+    			MThread.sleep(1000);
+    			log().i("Awaken");
+    			ctx = t1.span().context();
+    			t1.span().finish();
+    			log().i("Finished 1");
+    		}
+    			
+			for (int i = 0; i < 1; i++) {
+				final Scope t2 = tracer.tracer()
+						.buildSpan("test2")
+						.addReference(References.CHILD_OF, ctx)
+						.withTag("loop", ""+i)
+						.startActive(true);
+				//final Scope t2 = tracer.start("test2", "yes", "loop", ""+i);
+        		try (t2) {
+        			log().i("Sleep");
+        			MThread.sleep(1000);
+        			log().i("Awaken");
+        			MThread.sleep(1000);
+        		}
+			}
+			MThread.sleep(1000);
+			log().i("End");
+    	}
+    	if (cmd.equals("tracetest3")) {
+    		ITracer tracer = ITracer.get();
+    		SpanContext ctx = null;
+    		SpanBuilder s1 = tracer.createSpan(null, "test1", "a","b");
+    		try (Scope t1 = s1.startActive(false)) {
+				log().f("FATAL Log Entry");
+				log().e("ERROR Log Entry");
+				log().w("WARN Log Entry");
+				log().i("INFO Log Entry");
+				log().d("DEBUG Log Entry");
+				log().t("TRACE Log Entry");
+				log().i("Sleep");
+				MThread.sleep(1000);
+				log().i("Awaken");
+				ctx = t1.span().context();
+				log().i("Finished 1");
+    		}
+			for (int i = 0; i < 2; i++) {
+				final Scope t2 = tracer.tracer()
+						.buildSpan("test2")
+						.addReference(References.CHILD_OF, ctx)
+						.withTag("loop", ""+i)
+						.startActive(true);
+				//final Scope t2 = tracer.start("test2", "yes", "loop", ""+i);
+        		try (t2) {
+        			System.gc();
+        			log().i("Sleep");
+        			MThread.sleep(1000);
+        			log().i("Awaken");
+        			MThread.sleep(1000);
+        		}
+			}
+			MThread.sleep(1000);
+			log().i("End");
+    	}
+    	if (cmd.equals("interceptors")) {
             Session session = base.getSession();
             @SuppressWarnings("unchecked")
             List<CmdInterceptor> interceptors = (List<CmdInterceptor>) session.get(CmdInterceptorUtil.SESSION_KEY);
