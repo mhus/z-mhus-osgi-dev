@@ -75,9 +75,7 @@
 		        <module>dev-micro</module>
 		         -->
                 <module>dev-cxf</module>
-                <!-- 
                 <module>dev-grpc</module>
-                 -->
                 <module>dev-k8s</module>
 		        
                 <module>dev-features</module>
