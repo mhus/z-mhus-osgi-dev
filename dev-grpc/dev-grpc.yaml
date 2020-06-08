@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-test
+
+---
+
+apiVersion: v1
+data:
+  deploy1.gogo: |
+
+   feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
+   feature:repo-add mvn:de.mhus.osgi/mhus-features/7.1.0-SNAPSHOT/xml/features
+   feature:repo-add mvn:de.mhus.osgi/dev-features/7.1.0-SNAPSHOT/xml/features
+   
+   feature:install dev-grpc
+
+kind: ConfigMap
+metadata:
+  name: karaf-init-deploy
+  namespace: dev-test
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test
+  name: dev-server
+  namespace: dev-test
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: dev-server
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-server
+  namespace: dev-test
+spec:
+  selector:
+    matchLabels:
+      app: dev-server
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: dev-server
+        update: "4"
+    spec:
+      hostname: devgrpc
+      containers:
+      - name: dev
+        image: mhus/apache-karaf:4.2.6_04
+        ports:
+        - containerPort: 8080
+        stdin: true
+        tty: true
+        volumeMounts:
+        - name: local-m2
+          mountPath: /home/user/.m2
+        - name: karaf-init-deploy-files
+          mountPath: /docker/deploy
+      volumes:
+      - name: local-m2
+        hostPath: 
+           path: /Users/mikehummel/.m2
+      - name: karaf-init-deploy-files
+        configMap:
+          name: karaf-init-deploy
+           

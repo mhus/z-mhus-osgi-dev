@@ -85,15 +85,18 @@ public class CmdDevGrpc extends AbstractCmd {
 		    GreetingServiceGrpc.GreetingServiceBlockingStub stub =
 		        GreetingServiceGrpc.newBlockingStub(channel);
 
-		    HelloResponse helloResponse = stub.greeting(
-		        HelloRequest.newBuilder()
-		            .setName(parameters[0])
-		            .setAge(18)
-		            .setSentiment(Sentiment.HAPPY)
-		            .build());
-
-		    System.out.println("Client: " + helloResponse);
-
+		    int cnt = 1;
+		    if (parameters != null && parameters.length > 1) cnt = M.to(parameters[1], 1);
+		    for (int i = 0; i < cnt; i++) {
+			    HelloResponse helloResponse = stub.greeting(
+			        HelloRequest.newBuilder()
+			            .setName(parameters[0] + "-" + i)
+			            .setAge(18)
+			            .setSentiment(Sentiment.HAPPY)
+			            .build());
+	
+			    System.out.println("Client: " + helloResponse);
+		    }
 		    channel.shutdown();		
 	}
     

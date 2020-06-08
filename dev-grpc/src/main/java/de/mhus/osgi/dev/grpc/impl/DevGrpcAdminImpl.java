@@ -12,14 +12,18 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 
-@Component
+@Component(immediate = true)
 public class DevGrpcAdminImpl implements DevGrpcAdmin {
 
 	private LinkedList<ServiceRegistration<GrpcServer>> list = new LinkedList<>();
 
 	@Activate
 	public void doActivate() {
-		
+		try {
+			doStart(8080); // start 8080 by default
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 	
 	@Deactivate

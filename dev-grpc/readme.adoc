@@ -1,5 +1,7 @@
 
-== Install
+== Install Docker
+
+Create a single docker instance for a one-to-self test:
 
 ----
 
@@ -17,8 +19,15 @@ feature:repo-add mvn:de.mhus.osgi/dev-features/7.1.0-SNAPSHOT/xml/features
 
 feature:install dev-grpc
 
+----
 
-bundle:refresh ports-grpc
+== Test Docker
+
+First start the server. User 'start' and 'shutdown' to control the server instance.
+
+Then use the client to communicate with the server.
+
+----
 
 dev-grpc start
 
@@ -28,5 +37,26 @@ dev-grpc list
 
 dev-grpc shutdown
 
- 
 ----
+
+== Install Kubernetes
+
+In Kubernetes create multiple servers.
+
+----
+kubectl apply -f dev-grpc.yaml
+----
+
+== Test Kubernetes
+
+----
+
+dev-grpc start
+
+dev-grpc --host dev-server client Ray 50
+
+----
+
+
+
+
