@@ -49,9 +49,11 @@ spec:
   selector:
     matchLabels:
       app: dev-server
-  replicas: 4
+  replicas: 3
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: dev-server
         update: "4"
