@@ -77,7 +77,6 @@ The cluster is installed and working.
 cluster:feature-repo-add default mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
 cluster:feature-repo-add default mvn:de.mhus.osgi/mhus-features/7.1.0-SNAPSHOT/xml/features
 cluster:feature-install default mhu-dev
-
 ----
 
 == Optional executions

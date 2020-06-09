@@ -18,6 +18,8 @@ bundle:watch .*
 
 dev-hazelcast clustermanager
 
+dev-hazelcast cache-init
+
 dev-hazelcast cache-test
 
 ```

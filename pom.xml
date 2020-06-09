@@ -67,9 +67,9 @@
             </activation>
 			<modules>
 				<module>karaf-dev</module>
-				<!-- 
 		        <module>dev-cache</module>
 		        <module>dev-jpa</module>
+				<!-- 
 				 -->
 		        <!-- 
 		        <module>dev-micro</module>
