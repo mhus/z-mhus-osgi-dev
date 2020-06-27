@@ -1,0 +1,5 @@
+<config>
+	<de.mhus.osgi.api.services.IServiceManager>
+	    <service class="de.mhus.osgi.dev.dev.osgi.MhusTestService"/>
+	</de.mhus.osgi.api.services.IServiceManager>
+</config>

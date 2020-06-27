@@ -1,7 +1,6 @@
 package de.mhus.osgi.dev.jpa.impl;
 
 import java.net.URL;
-import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

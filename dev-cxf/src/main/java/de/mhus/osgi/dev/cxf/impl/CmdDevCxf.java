@@ -31,8 +31,8 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import de.mhus.lib.core.MString;
 import de.mhus.lib.core.MThread;
+import de.mhus.osgi.api.MOsgi;
 import de.mhus.osgi.api.karaf.AbstractCmd;
-import de.mhus.osgi.api.services.MOsgi;
 
 @Command(scope = "mhus", name = "dev-cxf", description = "Cxf tests")
 @Service

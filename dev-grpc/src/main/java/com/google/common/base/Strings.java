@@ -18,13 +18,14 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.logging.Level.WARNING;
 
+import java.util.logging.Logger;
+
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.VisibleForTesting;
 
 import de.mhus.lib.core.MString;
-
-import java.util.logging.Logger;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
 /**
  * Static utility methods pertaining to {@code String} or {@code CharSequence} instances.

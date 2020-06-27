@@ -17,8 +17,8 @@ import de.mhus.lib.core.IProperties;
 import de.mhus.lib.core.MFile;
 import de.mhus.lib.core.MProperties;
 import de.mhus.lib.core.MString;
+import de.mhus.osgi.api.MOsgi;
 import de.mhus.osgi.api.karaf.AbstractCmd;
-import de.mhus.osgi.api.services.MOsgi;
 
 @Command(scope = "mhus", name = "dev-res", description = "Copy example config files from package into karaf evnironment")
 @Service

@@ -16,10 +16,11 @@ package com.google.common.base;
 
 import static com.google.common.base.Strings.lenientFormat;
 
-import com.google.common.annotations.GwtCompatible;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+
+import com.google.common.annotations.GwtCompatible;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 
 /**
  * Static convenience methods that help a method or constructor check whether it was invoked
