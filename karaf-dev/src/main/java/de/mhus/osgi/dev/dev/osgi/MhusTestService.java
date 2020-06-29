@@ -37,6 +37,11 @@ public class MhusTestService extends MLog implements ISimpleService {
         log().i("Set Event Admin",eventAdmin);
     }
     
+    @ServiceReference(unset=true)
+    public void unsetEventAdmin(EventAdmin eventAdmin) {
+        log().i("Unset Event Admin",eventAdmin);
+    }
+    
     @Override
     public String getSimpleServiceInfo() {
         return "test";
