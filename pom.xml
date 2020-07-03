@@ -77,6 +77,7 @@
                 <module>dev-cxf</module>
                 <module>dev-grpc</module>
                 <module>dev-k8s</module>
+                <module>dev-docker</module>
 		        
                 <module>dev-features</module>
                 <module>dev-deploy</module>

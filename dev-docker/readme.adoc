@@ -1,0 +1,42 @@
+
+== Prepare
+
+Start a new karaf with the docker socket mounted.
+
+----
+
+docker run -it \
+ -v ~/.m2:/home/user/.m2\
+ -p 15006:5005\
+ -p 18182:8181\
+ --name karaf1\
+ --group-add root\
+ -v /var/run/docker.sock:/var/run/docker.sock\
+ --privileged\
+ mhus/apache-karaf:4.2.6_04 debug
+
+----
+
+You need to change the permissions to the socket manually in the container. Could also be done in a Dockerfile configuration.
+
+----
+docker exec -t --user 0 karaf1 chmod 666 /var/run/docker.sock
+----
+
+Install the features and bundles
+
+----
+feature:repo-add mvn:org.apache.shiro/shiro-features/1.5.1/xml/features
+feature:repo-add mvn:de.mhus.osgi/mhus-features/7.1.0-SNAPSHOT/xml/features
+feature:repo-add mvn:de.mhus.osgi/dev-features/7.1.0-SNAPSHOT/xml/features
+
+feature:install mhu-base
+
+install -s mvn:de.mhus.osgi/dev-docker/7.1.0-SNAPSHOT
+----
+
+== Try Docker API
+
+----
+dev-docker ps
+----
