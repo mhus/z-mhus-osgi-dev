@@ -6,14 +6,9 @@ import org.osgi.service.component.annotations.Component;
 
 import de.mhus.lib.core.MLog;
 
-@Component(immediate=true)
+@Component(immediate = true)
 public class JpaService extends MLog implements JpaApi {
 
-	@Activate
-	public void doActivate(BundleContext ctx) {
-		
-		
-		
-	}
-	
+    @Activate
+    public void doActivate(BundleContext ctx) {}
 }

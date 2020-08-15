@@ -32,40 +32,44 @@ import java.io.IOException;
  * -Dexec.mainClass="io.kubernetes.client.examples.ProtoExample"
  *
  * <p>From inside $REPO_DIR/examples
- * 
- * https://github.com/kubernetes-client/java/blob/master/examples/src/main/java/io/kubernetes/client/examples/ProtoExample.java
+ *
+ * <p>https://github.com/kubernetes-client/java/blob/master/examples/src/main/java/io/kubernetes/client/examples/ProtoExample.java
  */
 public class ProtoExample {
-  public static void main(String[] args) throws IOException, ApiException, InterruptedException {
-    ApiClient client = Config.defaultClient();
-    Configuration.setDefaultApiClient(client);
+    public static void main(String[] args) throws IOException, ApiException, InterruptedException {
+        ApiClient client = Config.defaultClient();
+        Configuration.setDefaultApiClient(client);
 
-    ProtoClient pc = new ProtoClient(client);
-    ObjectOrStatus<PodList> list = pc.list(PodList.newBuilder(), "/api/v1/namespaces/default/pods");
+        ProtoClient pc = new ProtoClient(client);
+        ObjectOrStatus<PodList> list =
+                pc.list(PodList.newBuilder(), "/api/v1/namespaces/default/pods");
 
-    if (list.object.getItemsCount() > 0) {
-      Pod p = list.object.getItems(0);
-      System.out.println(p);
+        if (list.object.getItemsCount() > 0) {
+            Pod p = list.object.getItems(0);
+            System.out.println(p);
+        }
+
+        Namespace namespace =
+                Namespace.newBuilder()
+                        .setMetadata(ObjectMeta.newBuilder().setName("test").build())
+                        .build();
+
+        ObjectOrStatus<Namespace> ns =
+                pc.create(namespace, "/api/v1/namespaces", "v1", "Namespace");
+        System.out.println(ns);
+        if (ns.object != null) {
+            namespace =
+                    ns.object
+                            .toBuilder()
+                            .setSpec(NamespaceSpec.newBuilder().addFinalizers("test").build())
+                            .build();
+            // This is how you would update an object, but you can't actually
+            // update namespaces, so this returns a 405
+            ns = pc.update(namespace, "/api/v1/namespaces/test", "v1", "Namespace");
+            System.out.println(ns.status);
+        }
+
+        ns = pc.delete(Namespace.newBuilder(), "/api/v1/namespaces/test");
+        System.out.println(ns);
     }
-
-    Namespace namespace =
-        Namespace.newBuilder().setMetadata(ObjectMeta.newBuilder().setName("test").build()).build();
-
-    ObjectOrStatus<Namespace> ns = pc.create(namespace, "/api/v1/namespaces", "v1", "Namespace");
-    System.out.println(ns);
-    if (ns.object != null) {
-      namespace =
-          ns.object
-              .toBuilder()
-              .setSpec(NamespaceSpec.newBuilder().addFinalizers("test").build())
-              .build();
-      // This is how you would update an object, but you can't actually
-      // update namespaces, so this returns a 405
-      ns = pc.update(namespace, "/api/v1/namespaces/test", "v1", "Namespace");
-      System.out.println(ns.status);
-    }
-
-    ns = pc.delete(Namespace.newBuilder(), "/api/v1/namespaces/test");
-    System.out.println(ns);
-  }
 }

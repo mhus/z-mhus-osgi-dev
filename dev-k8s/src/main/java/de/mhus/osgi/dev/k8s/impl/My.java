@@ -29,10 +29,10 @@ public class My {
     public static void main(String[] parameters) throws IOException, ApiException {
         main1(parameters);
     }
-    
+
     public static void main1(String[] parameters) throws IOException, ApiException {
         MProperties attr = IProperties.explodeToMProperties(parameters);
-        
+
         ApiClient client = Config.defaultClient();
         client.setDebugging(true);
         Configuration.setDefaultApiClient(client);
@@ -43,12 +43,14 @@ public class My {
         boolean exists = false;
         try {
             @SuppressWarnings("unused")
-            V1Service existing = api.readNamespacedService("dev-dynamic", "dev-test", null, null, null);
+            V1Service existing =
+                    api.readNamespacedService("dev-dynamic", "dev-test", null, null, null);
             if (attr.getBoolean("recreate", false)) {
                 @SuppressWarnings("unused")
-                V1Status resDelete = api.deleteNamespacedService("dev-dynamic", "dev-test", null, null, 5, null, null, null);
-            } else
-                exists = true;
+                V1Status resDelete =
+                        api.deleteNamespacedService(
+                                "dev-dynamic", "dev-test", null, null, 5, null, null, null);
+            } else exists = true;
         } catch (ApiException e) {
             e.printStackTrace();
         }
@@ -76,61 +78,71 @@ public class My {
         selector.put("app", "dev-server");
         spec.setSelector(selector);
         spec.setType("LoadBalancer");
-        service.setSpec(spec );
+        service.setSpec(spec);
         service.setKind("Service");
-        
+
         GenericKubernetesApi<V1Service, V1ServiceList> serviceClient =
                 new GenericKubernetesApi<>(
-                        V1Service.class, 
-                        V1ServiceList.class, 
-                        "", 
-                        "v1", 
+                        V1Service.class,
+                        V1ServiceList.class,
+                        "",
+                        "v1",
                         "services",
-                        api.getApiClient()
-                        );
+                        api.getApiClient());
 
         KubernetesApiResponse<V1Service> response = null;
-        if (exists)
-            response = serviceClient.update(service);
-        else
-            response = serviceClient.create(service);
-        if (!response.isSuccess())
-            throw new RuntimeException(response.getStatus().toString());
-        
+        if (exists) response = serviceClient.update(service);
+        else response = serviceClient.create(service);
+        if (!response.isSuccess()) throw new RuntimeException(response.getStatus().toString());
+
         // api.createNamespacedService("dev-test", service, null, null, "");
 
     }
 
     public static void main2(String[] args) throws IOException {
-//        ApiClient defaultClient = Configuration.getDefaultApiClient();
-//        defaultClient.setBasePath("http://localhost");
-//        
-//        // Configure API key authorization: BearerToken
-//        ApiKeyAuth BearerToken = (ApiKeyAuth) defaultClient.getAuthentication("BearerToken");
-//        BearerToken.setApiKey("YOUR API KEY");
-        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-        //BearerToken.setApiKeyPrefix("Token");
+        //        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        //        defaultClient.setBasePath("http://localhost");
+        //
+        //        // Configure API key authorization: BearerToken
+        //        ApiKeyAuth BearerToken = (ApiKeyAuth)
+        // defaultClient.getAuthentication("BearerToken");
+        //        BearerToken.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to
+        // null)
+        // BearerToken.setApiKeyPrefix("Token");
 
-        
         ApiClient defaultClient = ClientBuilder.cluster().build();
         Configuration.setDefaultApiClient(defaultClient);
-        
+
         CoreV1Api apiInstance = new CoreV1Api(defaultClient);
-        
-        String namespace = "dev-test"; // String | object name and auth scope, such as for teams and projects
-        V1Service body = new V1Service(); // V1Service | 
+
+        String namespace =
+                "dev-test"; // String | object name and auth scope, such as for teams and projects
+        V1Service body = new V1Service(); // V1Service |
         String pretty = "pretty_example"; // String | If 'true', then the output is pretty printed.
-        String dryRun = "dryRun_example"; // String | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed
-        String fieldManager = "fieldManager_example"; // String | fieldManager is a name associated with the actor or entity that is making these changes. The value must be less than or 128 characters long, and only contain printable characters, as defined by https://golang.org/pkg/unicode/#IsPrint.
+        String dryRun =
+                "dryRun_example"; // String | When present, indicates that modifications should not
+                                  // be persisted. An invalid or unrecognized dryRun directive will
+                                  // result in an error response and no further processing of the
+                                  // request. Valid values are: - All: all dry run stages will be
+                                  // processed
+        String fieldManager =
+                "fieldManager_example"; // String | fieldManager is a name associated with the actor
+                                        // or entity that is making these changes. The value must be
+                                        // less than or 128 characters long, and only contain
+                                        // printable characters, as defined by
+                                        // https://golang.org/pkg/unicode/#IsPrint.
         try {
-          V1Service result = apiInstance.createNamespacedService(namespace, body, pretty, dryRun, fieldManager);
-          System.out.println(result);
+            V1Service result =
+                    apiInstance.createNamespacedService(
+                            namespace, body, pretty, dryRun, fieldManager);
+            System.out.println(result);
         } catch (ApiException e) {
-          System.err.println("Exception when calling CoreV1Api#createNamespacedService");
-          System.err.println("Status code: " + e.getCode());
-          System.err.println("Reason: " + e.getResponseBody());
-          System.err.println("Response headers: " + e.getResponseHeaders());
-          e.printStackTrace();
+            System.err.println("Exception when calling CoreV1Api#createNamespacedService");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
         }
-      }
+    }
 }

@@ -36,127 +36,138 @@ import static de.mhus.osgi.dev.cache.ehcache.jsr107.internal.classes.Constructor
 import static org.ehcache.core.spi.service.ServiceUtils.findAmongst;
 import static org.ehcache.core.spi.service.ServiceUtils.findSingletonAmongst;
 
-/**
- * @author Alex Snaps
- */
+/** @author Alex Snaps */
 public class ClassInstanceProvider<K, C extends ClassInstanceConfiguration<? extends T>, T> {
 
-  /**
-   * The order in which entries are put in is kept.
-   */
-  protected final Map<K, C> preconfigured = Collections.synchronizedMap(new LinkedHashMap<K, C>());
+    /** The order in which entries are put in is kept. */
+    protected final Map<K, C> preconfigured =
+            Collections.synchronizedMap(new LinkedHashMap<K, C>());
 
-  /**
-   * Instances provided by this provider vs their counts.
-   */
-  protected final ConcurrentWeakIdentityHashMap<T, AtomicInteger> providedVsCount = new ConcurrentWeakIdentityHashMap<>();
-  protected final Set<T> instantiated = Collections.newSetFromMap(new ConcurrentWeakIdentityHashMap<T, Boolean>());
+    /** Instances provided by this provider vs their counts. */
+    protected final ConcurrentWeakIdentityHashMap<T, AtomicInteger> providedVsCount =
+            new ConcurrentWeakIdentityHashMap<>();
 
-  private final Class<C> cacheLevelConfig;
-  private final boolean uniqueClassLevelConfig;
+    protected final Set<T> instantiated =
+            Collections.newSetFromMap(new ConcurrentWeakIdentityHashMap<T, Boolean>());
 
-  protected ClassInstanceProvider(ClassInstanceProviderConfiguration<K, C> factoryConfig,
-                                  Class<C> cacheLevelConfig) {
-    this(factoryConfig, cacheLevelConfig, false);
-  }
+    private final Class<C> cacheLevelConfig;
+    private final boolean uniqueClassLevelConfig;
 
-  protected ClassInstanceProvider(ClassInstanceProviderConfiguration<K, C> factoryConfig,
-                                  Class<C> cacheLevelConfig, boolean uniqueClassLevelConfig) {
-    this.uniqueClassLevelConfig = uniqueClassLevelConfig;
-    if (factoryConfig != null) {
-      preconfigured.putAll(factoryConfig.getDefaults());
-    }
-    this.cacheLevelConfig = cacheLevelConfig;
-  }
-
-  protected C getPreconfigured(K alias) {
-    return preconfigured.get(alias);
-  }
-
-  protected T newInstance(K alias, CacheConfiguration<?, ?> cacheConfiguration) {
-    C config = null;
-    if (uniqueClassLevelConfig) {
-      config = findSingletonAmongst(cacheLevelConfig, cacheConfiguration.getServiceConfigurations());
-    } else {
-      Iterator<? extends C> iterator =
-          findAmongst(cacheLevelConfig, cacheConfiguration.getServiceConfigurations()).iterator();
-      if (iterator.hasNext()) {
-        config = iterator.next();
-      }
-    }
-    return newInstance(alias, config);
-  }
-
-  protected T newInstance(K alias, ServiceConfiguration<?, ?>... serviceConfigurations) {
-    C config = null;
-    Iterator<C> iterator = findAmongst(cacheLevelConfig, (Object[]) serviceConfigurations).iterator();
-    if (iterator.hasNext()) {
-      config = iterator.next();
-    }
-    return newInstance(alias, config);
-  }
-
-  protected T newInstance(K alias, ServiceConfiguration<?, ?> serviceConfiguration) {
-    C config = null;
-    if (serviceConfiguration != null && cacheLevelConfig.isAssignableFrom(serviceConfiguration.getClass())) {
-      config = cacheLevelConfig.cast(serviceConfiguration);
-    }
-    return newInstance(alias, config);
-  }
-
-  private T newInstance(K alias, ClassInstanceConfiguration<? extends T> config) {
-    if (config == null) {
-      config = getPreconfigured(alias);
-      if (config == null) {
-        return null;
-      }
+    protected ClassInstanceProvider(
+            ClassInstanceProviderConfiguration<K, C> factoryConfig, Class<C> cacheLevelConfig) {
+        this(factoryConfig, cacheLevelConfig, false);
     }
 
-    T instance;
-
-    if(config.getInstance() != null) {
-      instance = config.getInstance();
-    } else {
-      try {
-        instance = invokeConstructor(config.getClazz(), config.getArguments());
-        instantiated.add(instance);
-      } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-        throw new RuntimeException(e);
-      }
+    protected ClassInstanceProvider(
+            ClassInstanceProviderConfiguration<K, C> factoryConfig,
+            Class<C> cacheLevelConfig,
+            boolean uniqueClassLevelConfig) {
+        this.uniqueClassLevelConfig = uniqueClassLevelConfig;
+        if (factoryConfig != null) {
+            preconfigured.putAll(factoryConfig.getDefaults());
+        }
+        this.cacheLevelConfig = cacheLevelConfig;
     }
 
-    AtomicInteger currentCount = providedVsCount.putIfAbsent(instance, new AtomicInteger(1));
-    if(currentCount != null) {
-      currentCount.incrementAndGet();
-    }
-    return instance;
-  }
-
-  /**
-   * If the instance is provided by the user, {@link Closeable#close()}
-   * will not be invoked.
-   */
-  protected void releaseInstance(T instance) throws IOException {
-    AtomicInteger currentCount = providedVsCount.get(instance);
-    if(currentCount != null) {
-      if(currentCount.decrementAndGet() < 0) {
-        currentCount.incrementAndGet();
-        throw new IllegalArgumentException("Given instance of " + instance.getClass().getName() + " is not managed by this provider");
-      }
-    } else {
-      throw new IllegalArgumentException("Given instance of " + instance.getClass().getName() + " is not managed by this provider");
+    protected C getPreconfigured(K alias) {
+        return preconfigured.get(alias);
     }
 
-    if(instantiated.remove(instance) && instance instanceof Closeable) {
-      ((Closeable)instance).close();
+    protected T newInstance(K alias, CacheConfiguration<?, ?> cacheConfiguration) {
+        C config = null;
+        if (uniqueClassLevelConfig) {
+            config =
+                    findSingletonAmongst(
+                            cacheLevelConfig, cacheConfiguration.getServiceConfigurations());
+        } else {
+            Iterator<? extends C> iterator =
+                    findAmongst(cacheLevelConfig, cacheConfiguration.getServiceConfigurations())
+                            .iterator();
+            if (iterator.hasNext()) {
+                config = iterator.next();
+            }
+        }
+        return newInstance(alias, config);
     }
-  }
 
-  public void start(ServiceProvider<Service> serviceProvider) {
-    // default no-op
-  }
+    protected T newInstance(K alias, ServiceConfiguration<?, ?>... serviceConfigurations) {
+        C config = null;
+        Iterator<C> iterator =
+                findAmongst(cacheLevelConfig, (Object[]) serviceConfigurations).iterator();
+        if (iterator.hasNext()) {
+            config = iterator.next();
+        }
+        return newInstance(alias, config);
+    }
 
-  public void stop() {
-    // default no-op
-  }
+    protected T newInstance(K alias, ServiceConfiguration<?, ?> serviceConfiguration) {
+        C config = null;
+        if (serviceConfiguration != null
+                && cacheLevelConfig.isAssignableFrom(serviceConfiguration.getClass())) {
+            config = cacheLevelConfig.cast(serviceConfiguration);
+        }
+        return newInstance(alias, config);
+    }
+
+    private T newInstance(K alias, ClassInstanceConfiguration<? extends T> config) {
+        if (config == null) {
+            config = getPreconfigured(alias);
+            if (config == null) {
+                return null;
+            }
+        }
+
+        T instance;
+
+        if (config.getInstance() != null) {
+            instance = config.getInstance();
+        } else {
+            try {
+                instance = invokeConstructor(config.getClazz(), config.getArguments());
+                instantiated.add(instance);
+            } catch (InstantiationException
+                    | InvocationTargetException
+                    | NoSuchMethodException
+                    | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        AtomicInteger currentCount = providedVsCount.putIfAbsent(instance, new AtomicInteger(1));
+        if (currentCount != null) {
+            currentCount.incrementAndGet();
+        }
+        return instance;
+    }
+
+    /** If the instance is provided by the user, {@link Closeable#close()} will not be invoked. */
+    protected void releaseInstance(T instance) throws IOException {
+        AtomicInteger currentCount = providedVsCount.get(instance);
+        if (currentCount != null) {
+            if (currentCount.decrementAndGet() < 0) {
+                currentCount.incrementAndGet();
+                throw new IllegalArgumentException(
+                        "Given instance of "
+                                + instance.getClass().getName()
+                                + " is not managed by this provider");
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    "Given instance of "
+                            + instance.getClass().getName()
+                            + " is not managed by this provider");
+        }
+
+        if (instantiated.remove(instance) && instance instanceof Closeable) {
+            ((Closeable) instance).close();
+        }
+    }
+
+    public void start(ServiceProvider<Service> serviceProvider) {
+        // default no-op
+    }
+
+    public void stop() {
+        // default no-op
+    }
 }

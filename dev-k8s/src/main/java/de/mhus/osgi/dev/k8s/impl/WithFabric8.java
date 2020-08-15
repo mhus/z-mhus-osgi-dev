@@ -12,47 +12,58 @@ import io.fabric8.kubernetes.client.Watcher;
 // https://github.com/fluent/fluentd-kubernetes-daemonset/issues/14
 
 public class WithFabric8 {
-  private DefaultKubernetesClient client;
+    private DefaultKubernetesClient client;
 
-  public WithFabric8() throws IOException {
+    public WithFabric8() throws IOException {
 
-      client = new DefaultKubernetesClient();
-      
-      client.pods()
-      .inAnyNamespace()
-      .watch(new DummyWatcher());
-      
-  }
-  
-  public void close() {
-      client.close();
-  }
+        client = new DefaultKubernetesClient();
 
-  
-  public static class DummyWatcher implements Watcher<Pod> {
-
-      @Override
-      public void eventReceived(Action action, Pod pod) {
-        switch (action) {
-          case ADDED:            
-              System.out.println("DummyWatcher::Added " + pod.getMetadata().getNamespace() + "/" + pod.getMetadata().getName());
-            break;
-          case MODIFIED:         
-              System.out.println("DummyWatcher::Modified " + pod.getMetadata().getNamespace() + "/" + pod.getMetadata().getName());
-            break;
-          case DELETED:          
-              System.out.println("DummyWatcher::Deleted " + pod.getMetadata().getNamespace() + "/" + pod.getMetadata().getName());
-            break;
-          case ERROR:            
-              System.out.println("DummyWatcher::Error " + pod.getMetadata().getNamespace() + "/" + pod.getMetadata().getName());
-            break;
-        }
-      }
-
-      @Override
-      public void onClose(KubernetesClientException cause) {
-          System.out.println("DummyWatcher::Close");
-      }
+        client.pods().inAnyNamespace().watch(new DummyWatcher());
     }
-  
+
+    public void close() {
+        client.close();
+    }
+
+    public static class DummyWatcher implements Watcher<Pod> {
+
+        @Override
+        public void eventReceived(Action action, Pod pod) {
+            switch (action) {
+                case ADDED:
+                    System.out.println(
+                            "DummyWatcher::Added "
+                                    + pod.getMetadata().getNamespace()
+                                    + "/"
+                                    + pod.getMetadata().getName());
+                    break;
+                case MODIFIED:
+                    System.out.println(
+                            "DummyWatcher::Modified "
+                                    + pod.getMetadata().getNamespace()
+                                    + "/"
+                                    + pod.getMetadata().getName());
+                    break;
+                case DELETED:
+                    System.out.println(
+                            "DummyWatcher::Deleted "
+                                    + pod.getMetadata().getNamespace()
+                                    + "/"
+                                    + pod.getMetadata().getName());
+                    break;
+                case ERROR:
+                    System.out.println(
+                            "DummyWatcher::Error "
+                                    + pod.getMetadata().getNamespace()
+                                    + "/"
+                                    + pod.getMetadata().getName());
+                    break;
+            }
+        }
+
+        @Override
+        public void onClose(KubernetesClientException cause) {
+            System.out.println("DummyWatcher::Close");
+        }
+    }
 }

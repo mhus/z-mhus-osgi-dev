@@ -20,32 +20,30 @@ import org.ehcache.expiry.ExpiryPolicy;
 import java.time.Duration;
 import java.util.function.Supplier;
 
-/**
- * Eh107Expiry
- */
+/** Eh107Expiry */
 abstract class Eh107Expiry<K, V> implements ExpiryPolicy<K, V> {
-  private final ThreadLocal<Object> shortCircuitAccess = new ThreadLocal<>();
+    private final ThreadLocal<Object> shortCircuitAccess = new ThreadLocal<>();
 
-  void enableShortCircuitAccessCalls() {
-    shortCircuitAccess.set(this);
-  }
-
-  void disableShortCircuitAccessCalls() {
-    shortCircuitAccess.remove();
-  }
-
-  private boolean isShortCircuitAccessCalls() {
-    return shortCircuitAccess.get() != null;
-  }
-
-  @Override
-  public final Duration getExpiryForAccess(K key, Supplier<? extends V> value) {
-    if (isShortCircuitAccessCalls()) {
-      return null;
-    } else {
-      return getExpiryForAccessInternal(key, value);
+    void enableShortCircuitAccessCalls() {
+        shortCircuitAccess.set(this);
     }
-  }
 
-  protected abstract Duration getExpiryForAccessInternal(K key, Supplier<? extends V> value);
+    void disableShortCircuitAccessCalls() {
+        shortCircuitAccess.remove();
+    }
+
+    private boolean isShortCircuitAccessCalls() {
+        return shortCircuitAccess.get() != null;
+    }
+
+    @Override
+    public final Duration getExpiryForAccess(K key, Supplier<? extends V> value) {
+        if (isShortCircuitAccessCalls()) {
+            return null;
+        } else {
+            return getExpiryForAccessInternal(key, value);
+        }
+    }
+
+    protected abstract Duration getExpiryForAccessInternal(K key, Supplier<? extends V> value);
 }

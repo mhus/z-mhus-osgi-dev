@@ -12,14 +12,17 @@ import de.mhus.db.osgi.api.adb.ReferenceCollector;
 import de.mhus.lib.errors.MException;
 import de.mhus.lib.xdb.XdbService;
 
-@Component(service = CommonDbConsumer.class,property = "commonService=common_adb",immediate = true)
+@Component(
+        service = CommonDbConsumer.class,
+        property = "commonService=common_adb",
+        immediate = true)
 public class DevAdbSchema extends AbstractCommonAdbConsumer {
 
     @Activate
     public void doActivate(ComponentContext ctx) {
         System.out.println("DevAdbSchema: Start AdbDbSchema");
     }
-    
+
     @Override
     public void registerObjectTypes(List<Class<?>> list) {
         System.out.println("DevAdbSchema: AdbDbSchema::registerObjectTypes");
@@ -37,25 +40,19 @@ public class DevAdbSchema extends AbstractCommonAdbConsumer {
     }
 
     @Override
-    public void collectReferences(Object object, ReferenceCollector collector) {
-        
-    }
+    public void collectReferences(Object object, ReferenceCollector collector) {}
 
     @Override
-    public void doCleanup() {
-        
-    }
+    public void doCleanup() {}
 
     @Override
-    public void doPostInitialize(XdbService manager) throws Exception {
-        
-    }
+    public void doPostInitialize(XdbService manager) throws Exception {}
 
     @Override
     public boolean canCreate(Object obj) throws MException {
         return true;
     }
-    
+
     @Override
     public boolean canRead(Object obj) throws MException {
         return true;
@@ -70,6 +67,4 @@ public class DevAdbSchema extends AbstractCommonAdbConsumer {
     public boolean canDelete(Object obj) throws MException {
         return true;
     }
-    
-    
 }

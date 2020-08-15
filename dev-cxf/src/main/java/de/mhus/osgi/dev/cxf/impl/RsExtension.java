@@ -12,10 +12,15 @@ import javax.ws.rs.ext.ReaderInterceptorContext;
 import javax.ws.rs.ext.WriterInterceptor;
 import javax.ws.rs.ext.WriterInterceptorContext;
 
-public class RsExtension implements ReaderInterceptor, WriterInterceptor, ContainerResponseFilter, ContainerRequestFilter {
+public class RsExtension
+        implements ReaderInterceptor,
+                WriterInterceptor,
+                ContainerResponseFilter,
+                ContainerRequestFilter {
 
     @Override
-    public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
+    public Object aroundReadFrom(ReaderInterceptorContext context)
+            throws IOException, WebApplicationException {
         System.out.println("RsExtension:aroundReadFrom");
         return context.proceed();
     }
@@ -26,15 +31,16 @@ public class RsExtension implements ReaderInterceptor, WriterInterceptor, Contai
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+    public void filter(
+            ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         System.out.println("RsExtension:ContainerResponseFilter");
     }
 
     @Override
-    public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
+    public void aroundWriteTo(WriterInterceptorContext context)
+            throws IOException, WebApplicationException {
         System.out.println("RsExtension:aroundWriteTo");
         context.proceed();
     }
-
 }

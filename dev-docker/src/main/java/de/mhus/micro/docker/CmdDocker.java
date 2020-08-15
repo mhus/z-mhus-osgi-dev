@@ -16,14 +16,9 @@ import de.mhus.osgi.api.karaf.AbstractCmd;
 @Service
 public class CmdDocker extends AbstractCmd {
 
-    @Argument(
-            index = 0,
-            name = "cmd",
-            required = true,
-            description = "ps",
-            multiValued = false)
+    @Argument(index = 0, name = "cmd", required = true, description = "ps", multiValued = false)
     String cmd;
-    
+
     @Argument(
             index = 1,
             name = "paramteters",
@@ -34,18 +29,16 @@ public class CmdDocker extends AbstractCmd {
 
     @Override
     public Object execute2() throws Exception {
-        
+
         if (cmd.equals("ps")) {
-            Containers list = new UnixDocker(new File("/var/run/docker.sock"))
-                    .containers();
+            Containers list = new UnixDocker(new File("/var/run/docker.sock")).containers();
             for (Container c : list) {
                 System.out.println(c.containerId());
                 System.out.println(c);
                 System.out.println();
             }
-         }
+        }
 
         return null;
     }
-
 }

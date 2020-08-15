@@ -11,7 +11,6 @@ import de.mhus.lib.core.MSystem;
 
 public abstract class AbstractTestService implements ITestService {
 
-
     protected ConfigurationAdmin configurationAdmin;
 
     @Activate
@@ -35,5 +34,4 @@ public abstract class AbstractTestService implements ITestService {
         System.out.println("AbstractTestService:setConfigurationAdmin: " + admin);
         configurationAdmin = admin;
     }
-
 }

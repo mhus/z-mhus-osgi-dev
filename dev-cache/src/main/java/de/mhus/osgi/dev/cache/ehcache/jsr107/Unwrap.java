@@ -18,18 +18,19 @@ package de.mhus.osgi.dev.cache.ehcache.jsr107;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
 
-/**
- * @author teck
- */
+/** @author teck */
 final class Unwrap {
 
-  static <T> T unwrap(Class<T> clazz, Object... obj) {
-    requireNonNull(clazz);
-    return stream(obj).filter(clazz::isInstance).map(clazz::cast).findFirst()
-      .orElseThrow(() -> new IllegalArgumentException("Cannot unwrap to " + clazz));
-  }
+    static <T> T unwrap(Class<T> clazz, Object... obj) {
+        requireNonNull(clazz);
+        return stream(obj)
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Cannot unwrap to " + clazz));
+    }
 
-  private Unwrap() {
-    //
-  }
+    private Unwrap() {
+        //
+    }
 }

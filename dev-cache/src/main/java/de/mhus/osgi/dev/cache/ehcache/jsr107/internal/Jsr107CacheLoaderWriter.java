@@ -21,11 +21,8 @@ import org.ehcache.spi.loaderwriter.CacheLoaderWriter;
 
 import java.util.Map;
 
-/**
- * Extension of the CacheLoaderWriter interface for doing tricks in 107 world.
- */
+/** Extension of the CacheLoaderWriter interface for doing tricks in 107 world. */
 public interface Jsr107CacheLoaderWriter<K, V> extends CacheLoaderWriter<K, V> {
 
-  Map<K, V> loadAllAlways(Iterable<? extends K> keys) throws BulkCacheLoadingException, Exception;
-
+    Map<K, V> loadAllAlways(Iterable<? extends K> keys) throws BulkCacheLoadingException, Exception;
 }

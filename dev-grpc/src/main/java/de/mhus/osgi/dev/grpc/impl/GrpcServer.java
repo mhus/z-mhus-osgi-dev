@@ -4,10 +4,9 @@ import io.grpc.Server;
 
 public interface GrpcServer {
 
-	void shutdown();
-	
-	void start(int port) throws Exception;
+    void shutdown();
 
-	Server getServer();
-	
+    void start(int port) throws Exception;
+
+    Server getServer();
 }

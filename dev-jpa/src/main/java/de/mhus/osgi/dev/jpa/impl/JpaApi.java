@@ -1,5 +1,3 @@
 package de.mhus.osgi.dev.jpa.impl;
 
-public interface JpaApi {
-
-}
+public interface JpaApi {}

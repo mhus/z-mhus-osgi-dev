@@ -16,11 +16,10 @@ public class CmdDev extends AbstractCmd {
             index = 0,
             name = "cmd",
             required = true,
-            description = "updateall\n"
-                    + "stopstartall\n",
+            description = "updateall\n" + "stopstartall\n",
             multiValued = false)
     String cmd;
-    
+
     @Argument(
             index = 1,
             name = "paramteters",
@@ -35,7 +34,8 @@ public class CmdDev extends AbstractCmd {
         if (cmd.equals("updateall")) {
             for (Bundle bundle : MOsgi.getBundleContext().getBundles()) {
                 if (bundle.getVersion().toString().endsWith(".SNAPSHOT")) {
-                    System.out.println(">>> " + bundle.getSymbolicName() + ":" + bundle.getVersion());
+                    System.out.println(
+                            ">>> " + bundle.getSymbolicName() + ":" + bundle.getVersion());
                     try {
                         bundle.update();
                     } catch (Throwable t) {
@@ -43,11 +43,11 @@ public class CmdDev extends AbstractCmd {
                     }
                 }
             }
-        } else
-        if (cmd.equals("stopstartall")) {
+        } else if (cmd.equals("stopstartall")) {
             for (Bundle bundle : MOsgi.getBundleContext().getBundles()) {
                 if (bundle.getVersion().toString().endsWith(".SNAPSHOT")) {
-                    System.out.println(">>> " + bundle.getSymbolicName() + ":" + bundle.getVersion());
+                    System.out.println(
+                            ">>> " + bundle.getSymbolicName() + ":" + bundle.getVersion());
                     try {
                         bundle.stop();
                         bundle.start();
@@ -56,9 +56,8 @@ public class CmdDev extends AbstractCmd {
                     }
                 }
             }
-        } 
+        }
 
         return null;
     }
-
 }

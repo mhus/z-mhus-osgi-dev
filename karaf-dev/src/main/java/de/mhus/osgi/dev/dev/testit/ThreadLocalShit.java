@@ -66,13 +66,13 @@ public class ThreadLocalShit extends MLog implements ShitIfc, Runnable {
         log().i("Start Thread");
         threadLocal.set(msg);
         try (Scope scope = ITracer.get().start("TEST", "Test")) {
-	        MStopWatch time = new MStopWatch().start();
-	        while (!close) {
-	            MThread.sleep(interval);
-	            Span span = ITracer.get().current();
-	            log().i("Content", time, threadLocal.get(), span);
-	        }
-	        log().i("Exit Thread", time);
+            MStopWatch time = new MStopWatch().start();
+            while (!close) {
+                MThread.sleep(interval);
+                Span span = ITracer.get().current();
+                log().i("Content", time, threadLocal.get(), span);
+            }
+            log().i("Exit Thread", time);
         }
         myThread = null; // cleanup before exit
     }

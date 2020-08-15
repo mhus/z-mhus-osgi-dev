@@ -8,5 +8,4 @@ public class NoneCopier<T> extends ReadWriteCopier<T> {
     public T copy(T obj) {
         return obj;
     }
-
 }

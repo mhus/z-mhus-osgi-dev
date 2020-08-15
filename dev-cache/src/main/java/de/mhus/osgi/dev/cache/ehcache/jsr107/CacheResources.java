@@ -27,88 +27,97 @@ import javax.cache.configuration.CacheEntryListenerConfiguration;
 
 import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.Jsr107CacheLoaderWriter;
 
-/**
- * @author teck
- */
+/** @author teck */
 class CacheResources<K, V> {
 
-  private final Eh107Expiry<K, V> expiryPolicy;
-  private final Jsr107CacheLoaderWriter<? super K, V> cacheLoaderWriter;
-  private final Map<CacheEntryListenerConfiguration<K, V>, ListenerResources<K, V>> listenerResources = new ConcurrentHashMap<>();
-  private final AtomicBoolean closed = new AtomicBoolean();
-  private final String cacheName;
+    private final Eh107Expiry<K, V> expiryPolicy;
+    private final Jsr107CacheLoaderWriter<? super K, V> cacheLoaderWriter;
+    private final Map<CacheEntryListenerConfiguration<K, V>, ListenerResources<K, V>>
+            listenerResources = new ConcurrentHashMap<>();
+    private final AtomicBoolean closed = new AtomicBoolean();
+    private final String cacheName;
 
-  CacheResources(String cacheName, Jsr107CacheLoaderWriter<? super K, V> cacheLoaderWriter, Eh107Expiry<K, V> expiry, Map<CacheEntryListenerConfiguration<K, V>, ListenerResources<K, V>> listenerResources) {
-    this.cacheName = cacheName;
-    this.cacheLoaderWriter = cacheLoaderWriter;
-    this.expiryPolicy = expiry;
-    this.listenerResources.putAll(listenerResources);
-  }
-
-  CacheResources(String cacheName, Jsr107CacheLoaderWriter<? super K, V> cacheLoaderWriter, Eh107Expiry<K, V> expiry) {
-    this(cacheName, cacheLoaderWriter, expiry, new ConcurrentHashMap<>());
-  }
-
-  Eh107Expiry<K, V> getExpiryPolicy() {
-    return expiryPolicy;
-  }
-
-  Jsr107CacheLoaderWriter<? super K, V> getCacheLoaderWriter() {
-    return cacheLoaderWriter;
-  }
-
-  Map<CacheEntryListenerConfiguration<K, V>, ListenerResources<K, V>> getListenerResources() {
-    return Collections.unmodifiableMap(listenerResources);
-  }
-
-  synchronized ListenerResources<K, V> registerCacheEntryListener(CacheEntryListenerConfiguration<K, V> listenerConfig) {
-    checkClosed();
-
-    if (listenerResources.containsKey(listenerConfig)) {
-      throw new IllegalArgumentException("listener config already registered");
+    CacheResources(
+            String cacheName,
+            Jsr107CacheLoaderWriter<? super K, V> cacheLoaderWriter,
+            Eh107Expiry<K, V> expiry,
+            Map<CacheEntryListenerConfiguration<K, V>, ListenerResources<K, V>> listenerResources) {
+        this.cacheName = cacheName;
+        this.cacheLoaderWriter = cacheLoaderWriter;
+        this.expiryPolicy = expiry;
+        this.listenerResources.putAll(listenerResources);
     }
 
-    ListenerResources<K, V> rv = ListenerResources.createListenerResources(listenerConfig);
-    listenerResources.put(listenerConfig, rv);
-    return rv;
-  }
-
-  private void checkClosed() {
-    if (closed.get()) {
-      throw new IllegalStateException("cache resources closed for cache [" + cacheName + "]");
+    CacheResources(
+            String cacheName,
+            Jsr107CacheLoaderWriter<? super K, V> cacheLoaderWriter,
+            Eh107Expiry<K, V> expiry) {
+        this(cacheName, cacheLoaderWriter, expiry, new ConcurrentHashMap<>());
     }
-  }
 
-  synchronized ListenerResources<K, V> deregisterCacheEntryListener(CacheEntryListenerConfiguration<K, V> listenerConfig) {
-    checkClosed();
+    Eh107Expiry<K, V> getExpiryPolicy() {
+        return expiryPolicy;
+    }
 
-    ListenerResources<K, V> resources = listenerResources.remove(listenerConfig);
-    if (resources == null) {
-      return null;
+    Jsr107CacheLoaderWriter<? super K, V> getCacheLoaderWriter() {
+        return cacheLoaderWriter;
     }
-    try {
-      CloseUtil.closeAll(resources);
-    } catch (Throwable t) {
-      throw new CacheException(t);
-    }
-    return resources;
-  }
 
-  synchronized void closeResources() {
-    if (closed.compareAndSet(false, true)) {
-      try {
-        CloseUtil.closeAll(expiryPolicy, cacheLoaderWriter, listenerResources.values());
-      } catch (Throwable t) {
-        throw new CacheException(t);
-      }
+    Map<CacheEntryListenerConfiguration<K, V>, ListenerResources<K, V>> getListenerResources() {
+        return Collections.unmodifiableMap(listenerResources);
     }
-  }
 
-  synchronized CacheException closeResourcesAfter(CacheException exception) {
-    if (closed.compareAndSet(false, true)) {
-      return closeAllAfter(exception, expiryPolicy, cacheLoaderWriter, listenerResources.values());
-    } else {
-      return exception;
+    synchronized ListenerResources<K, V> registerCacheEntryListener(
+            CacheEntryListenerConfiguration<K, V> listenerConfig) {
+        checkClosed();
+
+        if (listenerResources.containsKey(listenerConfig)) {
+            throw new IllegalArgumentException("listener config already registered");
+        }
+
+        ListenerResources<K, V> rv = ListenerResources.createListenerResources(listenerConfig);
+        listenerResources.put(listenerConfig, rv);
+        return rv;
     }
-  }
+
+    private void checkClosed() {
+        if (closed.get()) {
+            throw new IllegalStateException("cache resources closed for cache [" + cacheName + "]");
+        }
+    }
+
+    synchronized ListenerResources<K, V> deregisterCacheEntryListener(
+            CacheEntryListenerConfiguration<K, V> listenerConfig) {
+        checkClosed();
+
+        ListenerResources<K, V> resources = listenerResources.remove(listenerConfig);
+        if (resources == null) {
+            return null;
+        }
+        try {
+            CloseUtil.closeAll(resources);
+        } catch (Throwable t) {
+            throw new CacheException(t);
+        }
+        return resources;
+    }
+
+    synchronized void closeResources() {
+        if (closed.compareAndSet(false, true)) {
+            try {
+                CloseUtil.closeAll(expiryPolicy, cacheLoaderWriter, listenerResources.values());
+            } catch (Throwable t) {
+                throw new CacheException(t);
+            }
+        }
+    }
+
+    synchronized CacheException closeResourcesAfter(CacheException exception) {
+        if (closed.compareAndSet(false, true)) {
+            return closeAllAfter(
+                    exception, expiryPolicy, cacheLoaderWriter, listenerResources.values());
+        } else {
+            return exception;
+        }
+    }
 }

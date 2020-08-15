@@ -22,49 +22,50 @@ import org.ehcache.spi.service.ServiceCreationConfiguration;
 
 import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.classes.ClassInstanceProviderConfiguration;
 
-/**
- * {@link ServiceCreationConfiguration} for the default {@link CacheLoaderWriterProvider}.
- */
-public class DefaultCacheLoaderWriterProviderConfiguration extends ClassInstanceProviderConfiguration<String, DefaultCacheLoaderWriterConfiguration> implements ServiceCreationConfiguration<CacheLoaderWriterProvider, DefaultCacheLoaderWriterProviderConfiguration> {
+/** {@link ServiceCreationConfiguration} for the default {@link CacheLoaderWriterProvider}. */
+public class DefaultCacheLoaderWriterProviderConfiguration
+        extends ClassInstanceProviderConfiguration<String, DefaultCacheLoaderWriterConfiguration>
+        implements ServiceCreationConfiguration<
+                CacheLoaderWriterProvider, DefaultCacheLoaderWriterProviderConfiguration> {
 
-  public DefaultCacheLoaderWriterProviderConfiguration() {
-    super();
-  }
+    public DefaultCacheLoaderWriterProviderConfiguration() {
+        super();
+    }
 
-  public DefaultCacheLoaderWriterProviderConfiguration(DefaultCacheLoaderWriterProviderConfiguration config) {
-    super(config);
-  }
+    public DefaultCacheLoaderWriterProviderConfiguration(
+            DefaultCacheLoaderWriterProviderConfiguration config) {
+        super(config);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<CacheLoaderWriterProvider> getServiceType() {
-    return CacheLoaderWriterProvider.class;
-  }
+    /** {@inheritDoc} */
+    @Override
+    public Class<CacheLoaderWriterProvider> getServiceType() {
+        return CacheLoaderWriterProvider.class;
+    }
 
-  /**
-   * Adds a default {@link CacheLoaderWriter} class and associated constuctor arguments to be used with a cache matching
-   * the provided alias.
-   *
-   * @param alias the cache alias
-   * @param clazz the cache loader writer class
-   * @param arguments the constructor arguments
-   *
-   * @return this configuration instance
-   */
-  public DefaultCacheLoaderWriterProviderConfiguration addLoaderFor(String alias, Class<? extends CacheLoaderWriter<?, ?>> clazz, Object... arguments) {
-    getDefaults().put(alias, new DefaultCacheLoaderWriterConfiguration(clazz, arguments));
-    return this;
-  }
+    /**
+     * Adds a default {@link CacheLoaderWriter} class and associated constuctor arguments to be used
+     * with a cache matching the provided alias.
+     *
+     * @param alias the cache alias
+     * @param clazz the cache loader writer class
+     * @param arguments the constructor arguments
+     * @return this configuration instance
+     */
+    public DefaultCacheLoaderWriterProviderConfiguration addLoaderFor(
+            String alias, Class<? extends CacheLoaderWriter<?, ?>> clazz, Object... arguments) {
+        getDefaults().put(alias, new DefaultCacheLoaderWriterConfiguration(clazz, arguments));
+        return this;
+    }
 
-  @Override
-  public DefaultCacheLoaderWriterProviderConfiguration derive() {
-    return new DefaultCacheLoaderWriterProviderConfiguration(this);
-  }
+    @Override
+    public DefaultCacheLoaderWriterProviderConfiguration derive() {
+        return new DefaultCacheLoaderWriterProviderConfiguration(this);
+    }
 
-  @Override
-  public DefaultCacheLoaderWriterProviderConfiguration build(DefaultCacheLoaderWriterProviderConfiguration configuration) {
-    return configuration;
-  }
+    @Override
+    public DefaultCacheLoaderWriterProviderConfiguration build(
+            DefaultCacheLoaderWriterProviderConfiguration configuration) {
+        return configuration;
+    }
 }

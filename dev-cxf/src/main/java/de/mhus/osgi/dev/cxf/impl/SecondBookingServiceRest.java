@@ -33,25 +33,26 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 
 @Path("/booking2")
-//@Component(service = BookingService.class, property = { "osgi.jaxrs.resource=true" }, immediate = true)
+// @Component(service = BookingService.class, property = { "osgi.jaxrs.resource=true" }, immediate =
+// true)
 public class SecondBookingServiceRest implements BookingService {
-    
+
     private final Map<Long, Booking> bookings = new HashMap<>();
+
     {
-        bookings.put(1l,new Booking());
+        bookings.put(1l, new Booking());
     }
 
     @Activate
     public void doActivate() {
         System.out.println("BookingServiceRest:doActivate");
     }
-    
+
     @Deactivate
     public void doDeactivate() {
         System.out.println("BookingServiceRest:doDeactivate");
     }
-    
-    
+
     @Override
     @Path("/")
     @Produces("application/json")
@@ -67,7 +68,7 @@ public class SecondBookingServiceRest implements BookingService {
     public Booking get(@PathParam("id") Long id) {
         return bookings.get(id);
     }
-    
+
     @Override
     @Path("/")
     @Consumes("application/json")

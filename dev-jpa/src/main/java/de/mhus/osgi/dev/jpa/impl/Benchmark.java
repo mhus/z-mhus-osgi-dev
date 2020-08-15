@@ -20,10 +20,9 @@ import de.mhus.lib.errors.MException;
 
 public class Benchmark {
 
-    
+    public static void benchmark(String provMatch, String[] parameters)
+            throws InterruptedException {
 
-    public static void benchmark(String provMatch, String[] parameters) throws InterruptedException {
-        
         EntityManager entityManager = Test01.createEntityManager(provMatch);
         try {
             AdbService service = AdbOsgiUtil.getCommonAdbService();
@@ -35,8 +34,8 @@ public class Benchmark {
                 System.out.println("ADB Wait for connection");
                 MThread.sleepInLoop(10000);
             }
-            
-            for ( AdbPageEntry entry : adb.getAll(AdbPageEntry.class))
+
+            for (AdbPageEntry entry : adb.getAll(AdbPageEntry.class))
                 try {
                     entry.delete();
                 } catch (MException e1) {
@@ -44,7 +43,7 @@ public class Benchmark {
                     e1.printStackTrace();
                 }
             System.out.println("Count: " + adb.count(Db.query(AdbPageEntry.class)));
-            
+
             System.out.println("Cleanup JPA");
             if (TestPersistenceUnitInfo.AUTOCOMMIT) {
                 entityManager.createQuery("delete from PageEntry").executeUpdate();
@@ -58,27 +57,27 @@ public class Benchmark {
                 CriteriaBuilder qb = entityManager.getCriteriaBuilder();
                 CriteriaQuery<Long> cq = qb.createQuery(Long.class);
                 cq.select(qb.count(cq.from(PageEntry.class)));
-                //ParameterExpression<Integer> p = qb.parameter(Integer.class);
+                // ParameterExpression<Integer> p = qb.parameter(Integer.class);
                 Long cnt = entityManager.createQuery(cq).getSingleResult();
                 System.out.println("Count: " + cnt);
             }
-            
+
             System.out.println(">>> Start");
-            URL url = new URL( "http://www.google.com" );
+            URL url = new URL("http://www.google.com");
             int CNT = MCast.toint(parameters[0], 1000000);
             int READ_LOOPS = MCast.toint(parameters[1], 10);
-            
+
             // WriteLoad Test
-            
+
             {
                 MStopWatch watch = new MStopWatch("ADB SaveLoad").start();
                 for (int i = 0; i < CNT; i++) {
                     System.out.print(".");
                     AdbPageEntry entry = adb.inject(new AdbPageEntry());
                     entry.setLinkDestination(url);
-                    entry.setLinkName( "Entry " + new Date());
+                    entry.setLinkName("Entry " + new Date());
                     entry.save();
-                    
+
                     AdbPageEntry loaded = adb.getObject(AdbPageEntry.class, entry.getId());
                     if (!entry.getLinkName().equals(loaded.getLinkName()))
                         throw new MException("ADB Not the same");
@@ -92,18 +91,18 @@ public class Benchmark {
                 for (int i = 0; i < CNT; i++) {
                     System.out.print(".");
                     PageEntry entry = new PageEntry();
-                    entry.setLinkName( "Entry " + new Date() );
-                    entry.setLinkDestination( new URL( "http://www.google.com" ) );
-                
+                    entry.setLinkName("Entry " + new Date());
+                    entry.setLinkDestination(new URL("http://www.google.com"));
+
                     if (TestPersistenceUnitInfo.AUTOCOMMIT) {
-                        entityManager.persist( entry );
+                        entityManager.persist(entry);
                     } else {
                         EntityTransaction entTrans = entityManager.getTransaction();
                         entTrans.begin();
-                        entityManager.persist( entry );
+                        entityManager.persist(entry);
                         entTrans.commit();
                     }
-                    
+
                     PageEntry loaded = entityManager.find(PageEntry.class, entry.getId());
                     if (!entry.getLinkName().equals(loaded.getLinkName()))
                         throw new MException("ADB Not the same");
@@ -112,14 +111,13 @@ public class Benchmark {
                 System.out.println();
                 System.out.println(watch);
             }
-            
+
             // Read
             {
                 MStopWatch watch = new MStopWatch("ADB Read").start();
                 for (int i = 0; i < READ_LOOPS; i++) {
                     System.out.print(".");
-                    for (AdbPageEntry entry : adb.getAll(AdbPageEntry.class))
-                        entry.getLinkName();
+                    for (AdbPageEntry entry : adb.getAll(AdbPageEntry.class)) entry.getLinkName();
                 }
                 watch.stop();
                 System.out.println();
@@ -130,7 +128,8 @@ public class Benchmark {
                 for (int i = 0; i < READ_LOOPS; i++) {
                     System.out.print(".");
 
-                    CriteriaQuery<PageEntry> criteria = entityManager.getCriteriaBuilder().createQuery(PageEntry.class);
+                    CriteriaQuery<PageEntry> criteria =
+                            entityManager.getCriteriaBuilder().createQuery(PageEntry.class);
                     criteria.select(criteria.from(PageEntry.class));
 
                     for (PageEntry entry : entityManager.createQuery(criteria).getResultList())
@@ -140,7 +139,7 @@ public class Benchmark {
                 System.out.println();
                 System.out.println(watch);
             }
-            
+
             // Delete
             {
                 int cnt = 0;
@@ -158,16 +157,17 @@ public class Benchmark {
                 int cnt = 0;
                 // entityManager.flush();
                 MStopWatch watch = new MStopWatch("JPA Delete").start();
-                CriteriaQuery<PageEntry> criteria = entityManager.getCriteriaBuilder().createQuery(PageEntry.class);
+                CriteriaQuery<PageEntry> criteria =
+                        entityManager.getCriteriaBuilder().createQuery(PageEntry.class);
                 criteria.select(criteria.from(PageEntry.class));
                 for (PageEntry entry : entityManager.createQuery(criteria).getResultList()) {
                     System.out.print(".");
                     if (TestPersistenceUnitInfo.AUTOCOMMIT) {
-                        entityManager.remove( entry );
+                        entityManager.remove(entry);
                     } else {
                         EntityTransaction entTrans = entityManager.getTransaction();
                         entTrans.begin();
-                        entityManager.remove( entry );
+                        entityManager.remove(entry);
                         entTrans.commit();
                     }
                     cnt++;
@@ -176,7 +176,7 @@ public class Benchmark {
                 System.out.println();
                 System.out.println(cnt + " " + watch);
             }
-            
+
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -186,8 +186,5 @@ public class Benchmark {
         } finally {
             entityManager.close();
         }
-        
-        
-        
     }
 }

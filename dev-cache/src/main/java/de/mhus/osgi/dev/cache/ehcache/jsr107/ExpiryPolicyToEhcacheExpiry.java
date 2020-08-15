@@ -26,59 +26,62 @@ import javax.cache.expiry.ExpiryPolicy;
 
 class ExpiryPolicyToEhcacheExpiry<K, V> extends Eh107Expiry<K, V> implements Closeable {
 
-  private final ExpiryPolicy expiryPolicy;
+    private final ExpiryPolicy expiryPolicy;
 
-  ExpiryPolicyToEhcacheExpiry(ExpiryPolicy expiryPolicy) {
-    this.expiryPolicy = expiryPolicy;
-  }
-
-  @Override
-  public java.time.Duration getExpiryForCreation(K key, V value) {
-    try {
-      Duration duration = expiryPolicy.getExpiryForCreation();
-      return convertDuration(duration);
-    } catch (Throwable t) {
-      return java.time.Duration.ZERO;
+    ExpiryPolicyToEhcacheExpiry(ExpiryPolicy expiryPolicy) {
+        this.expiryPolicy = expiryPolicy;
     }
-  }
 
-  @Override
-  protected java.time.Duration getExpiryForAccessInternal(K key, Supplier<? extends V> value) {
-    try {
-      Duration duration = expiryPolicy.getExpiryForAccess();
-      if (duration == null) {
-        return null;
-      }
-      return convertDuration(duration);
-    } catch (Throwable t) {
-      return java.time.Duration.ZERO;
+    @Override
+    public java.time.Duration getExpiryForCreation(K key, V value) {
+        try {
+            Duration duration = expiryPolicy.getExpiryForCreation();
+            return convertDuration(duration);
+        } catch (Throwable t) {
+            return java.time.Duration.ZERO;
+        }
     }
-  }
 
-  @Override
-  public java.time.Duration getExpiryForUpdate(K key, Supplier<? extends V> oldValue, V newValue) {
-    try {
-      Duration duration = expiryPolicy.getExpiryForUpdate();
-      if (duration == null) {
-        return null;
-      }
-      return convertDuration(duration);
-    } catch (Throwable t) {
-      return java.time.Duration.ZERO;
+    @Override
+    protected java.time.Duration getExpiryForAccessInternal(K key, Supplier<? extends V> value) {
+        try {
+            Duration duration = expiryPolicy.getExpiryForAccess();
+            if (duration == null) {
+                return null;
+            }
+            return convertDuration(duration);
+        } catch (Throwable t) {
+            return java.time.Duration.ZERO;
+        }
     }
-  }
 
-  @Override
-  public void close() throws IOException {
-    if (expiryPolicy instanceof Closeable) {
-      ((Closeable)expiryPolicy).close();
+    @Override
+    public java.time.Duration getExpiryForUpdate(
+            K key, Supplier<? extends V> oldValue, V newValue) {
+        try {
+            Duration duration = expiryPolicy.getExpiryForUpdate();
+            if (duration == null) {
+                return null;
+            }
+            return convertDuration(duration);
+        } catch (Throwable t) {
+            return java.time.Duration.ZERO;
+        }
     }
-  }
 
-  private java.time.Duration convertDuration(Duration duration) {
-    if (duration.isEternal()) {
-      return org.ehcache.expiry.ExpiryPolicy.INFINITE;
+    @Override
+    public void close() throws IOException {
+        if (expiryPolicy instanceof Closeable) {
+            ((Closeable) expiryPolicy).close();
+        }
     }
-    return java.time.Duration.of(duration.getDurationAmount(), ExpiryUtils.jucTimeUnitToTemporalUnit(duration.getTimeUnit()));
-  }
+
+    private java.time.Duration convertDuration(Duration duration) {
+        if (duration.isEternal()) {
+            return org.ehcache.expiry.ExpiryPolicy.INFINITE;
+        }
+        return java.time.Duration.of(
+                duration.getDurationAmount(),
+                ExpiryUtils.jucTimeUnitToTemporalUnit(duration.getTimeUnit()));
+    }
 }

@@ -9,12 +9,9 @@ import de.mhus.lib.annotations.adb.DbPrimaryKey;
 
 public class AdbPageEntry extends DbComfortableObject {
 
-    @DbPrimaryKey
-    private UUID id;
-    @DbPersistent
-    private String linkName;
-    @DbPersistent
-    private URL linkDestination;
+    @DbPrimaryKey private UUID id;
+    @DbPersistent private String linkName;
+    @DbPersistent private URL linkDestination;
 
     public UUID getId() {
         return id;
@@ -35,5 +32,4 @@ public class AdbPageEntry extends DbComfortableObject {
     public void setLinkDestination(URL linkDestination) {
         this.linkDestination = linkDestination;
     }
-
 }

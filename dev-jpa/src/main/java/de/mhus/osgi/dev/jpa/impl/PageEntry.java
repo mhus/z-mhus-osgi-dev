@@ -18,22 +18,26 @@ public class PageEntry {
 
     private String linkName;
     private URL linkDestination;
-    
-	public String getLinkName() {
-		return linkName;
-	}
-	public void setLinkName(String linkName) {
-		this.linkName = linkName;
-	}
-	public URL getLinkDestination() {
-		return linkDestination;
-	}
-	public void setLinkDestination(URL linkDestination) {
-		this.linkDestination = linkDestination;
-	}
-	public long getId() {
-		return id;
-	}
+
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }
+
+    public URL getLinkDestination() {
+        return linkDestination;
+    }
+
+    public void setLinkDestination(URL linkDestination) {
+        this.linkDestination = linkDestination;
+    }
+
+    public long getId() {
+        return id;
+    }
 
     // gets & setters omitted
 }

@@ -18,18 +18,13 @@ package de.mhus.osgi.dev.cache.ehcache.jsr107;
 
 import org.ehcache.impl.copy.ReadWriteCopier;
 
-/**
- * Default copier for JSR caches to be used for immutable types
- * even for store by value cases.
- */
+/** Default copier for JSR caches to be used for immutable types even for store by value cases. */
 class Eh107IdentityCopier<T> extends ReadWriteCopier<T> {
 
-  public Eh107IdentityCopier() {
+    public Eh107IdentityCopier() {}
 
-  }
-
-  @Override
-  public T copy(T obj) {
-    return obj;
-  }
+    @Override
+    public T copy(T obj) {
+        return obj;
+    }
 }

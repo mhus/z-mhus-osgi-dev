@@ -8,7 +8,7 @@ https://raw.githubusercontent.com/pentaho/pentaho-karaf-assembly/master/pentaho-
     <parent>
         <artifactId>dev-deploy</artifactId>
         <groupId>de.mhus.osgi</groupId>
-        <version>7.1.0-SNAPSHOT</version>
+        <version>7.1.0</version>
     </parent>
     <artifactId>dev-docker</artifactId>
     <packaging>pom</packaging>

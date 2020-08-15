@@ -11,5 +11,4 @@ public class TestService extends AbstractTestService {
     public String saySo() {
         return "so ... " + configurationAdmin + " " + MSystem.getObjectId(this);
     }
-
 }

@@ -31,20 +31,20 @@ import java.io.IOException;
  * <p>From inside $REPO_DIR/examples
  */
 public class SimpleExample {
-  public static void main(String[] args) throws IOException, ApiException {
-      
-    System.setProperty("jdk.tls.client.protocols","TLSv1.2");
-    
-    ApiClient client = Config.defaultClient();
-    client.setVerifyingSsl(false);
+    public static void main(String[] args) throws IOException, ApiException {
 
-    Configuration.setDefaultApiClient(client);
+        System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
 
-    CoreV1Api api = new CoreV1Api();
-    V1PodList list =
-        api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null);
-    for (V1Pod item : list.getItems()) {
-      System.out.println(item.getMetadata().getName());
+        ApiClient client = Config.defaultClient();
+        client.setVerifyingSsl(false);
+
+        Configuration.setDefaultApiClient(client);
+
+        CoreV1Api api = new CoreV1Api();
+        V1PodList list =
+                api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null);
+        for (V1Pod item : list.getItems()) {
+            System.out.println(item.getMetadata().getName());
+        }
     }
-  }
 }

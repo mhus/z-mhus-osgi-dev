@@ -59,9 +59,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public List<URL> getJarFileUrls() {
         try {
-            return Collections.list(this.getClass()
-                                        .getClassLoader()
-                                        .getResources(""));
+            return Collections.list(this.getClass().getClassLoader().getResources(""));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -99,11 +97,9 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
     public Properties getProperties() {
         Properties prop = new Properties();
         // https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl
-        prop.put("hibernate.hbm2ddl.auto","create-only");
-        if (HIBERNATE_DIALECT != null)
-            prop.put("hibernate.dialect", HIBERNATE_DIALECT);
-        if (AUTOCOMMIT)
-            prop.put("hibernate.connection.autocommit", "true");
+        prop.put("hibernate.hbm2ddl.auto", "create-only");
+        if (HIBERNATE_DIALECT != null) prop.put("hibernate.dialect", HIBERNATE_DIALECT);
+        if (AUTOCOMMIT) prop.put("hibernate.connection.autocommit", "true");
         return prop;
     }
 
@@ -118,13 +114,10 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
     }
 
     @Override
-    public void addTransformer(ClassTransformer transformer) {
-
-    }
+    public void addTransformer(ClassTransformer transformer) {}
 
     @Override
     public ClassLoader getNewTempClassLoader() {
         return getClassLoader();
     }
-    
 }

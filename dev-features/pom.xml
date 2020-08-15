@@ -24,7 +24,7 @@
 	<parent>
 		<artifactId>mhus-osgi-dev</artifactId>
 		<groupId>de.mhus.osgi</groupId>
-		<version>7.1.0-SNAPSHOT</version>
+		<version>7.1.0</version>
 	</parent>
 
 	<build>

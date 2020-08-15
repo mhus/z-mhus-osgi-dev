@@ -19,7 +19,6 @@ import org.ehcache.config.Builder;
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.impl.config.copy.DefaultCopierConfiguration;
 
-import java.util.Collection;
 
 import javax.cache.configuration.CacheEntryListenerConfiguration;
 import javax.cache.configuration.Configuration;
@@ -27,98 +26,101 @@ import javax.cache.configuration.Configuration;
 import static org.ehcache.core.spi.service.ServiceUtils.findAmongst;
 
 /**
- * Abstract {@link Configuration} implementation that enables building a JSR-107 compatible configuration from
- * a native Ehcache {@link CacheConfiguration}.
+ * Abstract {@link Configuration} implementation that enables building a JSR-107 compatible
+ * configuration from a native Ehcache {@link CacheConfiguration}.
  *
  * @param <K> the key type
  * @param <V> the value type
  */
 public abstract class Eh107Configuration<K, V> implements Configuration<K, V> {
 
-  private static final long serialVersionUID = 7324956960962454439L;
+    private static final long serialVersionUID = 7324956960962454439L;
 
-  /**
-   * Creates a new JSR-107 {@link Configuration} from the provided {@link CacheConfiguration}.
-   *
-   * @param ehcacheConfig the native Ehcache configuration
-   * @param <K> the key type
-   * @param <V> the value type
-   *
-   * @return a JSR-107 configuration
-   */
-  public static <K, V> Configuration<K, V> fromEhcacheCacheConfiguration(CacheConfiguration<K, V> ehcacheConfig) {
-    return new Eh107ConfigurationWrapper<>(ehcacheConfig);
-  }
-
-  /**
-   * Creates a new JSR-107 {@link Configuration} from the provided {@link CacheConfiguration} obtained through a
-   * {@link Builder}.
-   *
-   * @param ehcacheConfigBuilder the native Ehcache configuration through a builder
-   * @param <K> the key type
-   * @param <V> the value type
-   *
-   * @return a JSR-107 configuration
-   */
-  public static <K, V> Configuration<K, V> fromEhcacheCacheConfiguration(Builder<? extends CacheConfiguration<K, V>> ehcacheConfigBuilder) {
-    return new Eh107ConfigurationWrapper<>(ehcacheConfigBuilder.build());
-  }
-
-  /**
-   * Enables to unwrap the underlying configuration.
-   *
-   * @param clazz the unwrap target class
-   * @param <T> the unwrap target type
-   *
-   * @return unwrapped type
-   *
-   * @throws IllegalArgumentException if the type cannot be unwrapped in the target type
-   */
-  public abstract <T> T unwrap(Class<T> clazz);
-
-  abstract boolean isReadThrough();
-
-  abstract boolean isWriteThrough();
-
-  abstract boolean isStatisticsEnabled();
-
-  abstract void setStatisticsEnabled(boolean enabled);
-
-  abstract boolean isManagementEnabled();
-
-  abstract void setManagementEnabled(boolean enabled);
-
-  abstract void addCacheEntryListenerConfiguration(CacheEntryListenerConfiguration<K, V> cacheEntryListenerConfiguration);
-
-  abstract void removeCacheEntryListenerConfiguration(CacheEntryListenerConfiguration<K, V> cacheEntryListenerConfiguration);
-
-  static class Eh107ConfigurationWrapper<K, V> implements Configuration<K, V> {
-
-    private static final long serialVersionUID = -142083549674760400L;
-
-    private final transient CacheConfiguration<K, V> cacheConfiguration;
-
-    private Eh107ConfigurationWrapper(CacheConfiguration<K, V> cacheConfiguration) {
-      this.cacheConfiguration = cacheConfiguration;
+    /**
+     * Creates a new JSR-107 {@link Configuration} from the provided {@link CacheConfiguration}.
+     *
+     * @param ehcacheConfig the native Ehcache configuration
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return a JSR-107 configuration
+     */
+    public static <K, V> Configuration<K, V> fromEhcacheCacheConfiguration(
+            CacheConfiguration<K, V> ehcacheConfig) {
+        return new Eh107ConfigurationWrapper<>(ehcacheConfig);
     }
 
-    CacheConfiguration<K, V> getCacheConfiguration() {
-      return cacheConfiguration;
+    /**
+     * Creates a new JSR-107 {@link Configuration} from the provided {@link CacheConfiguration}
+     * obtained through a {@link Builder}.
+     *
+     * @param ehcacheConfigBuilder the native Ehcache configuration through a builder
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return a JSR-107 configuration
+     */
+    public static <K, V> Configuration<K, V> fromEhcacheCacheConfiguration(
+            Builder<? extends CacheConfiguration<K, V>> ehcacheConfigBuilder) {
+        return new Eh107ConfigurationWrapper<>(ehcacheConfigBuilder.build());
     }
 
-    @Override
-    public Class<K> getKeyType() {
-      return cacheConfiguration.getKeyType();
-    }
+    /**
+     * Enables to unwrap the underlying configuration.
+     *
+     * @param clazz the unwrap target class
+     * @param <T> the unwrap target type
+     * @return unwrapped type
+     * @throws IllegalArgumentException if the type cannot be unwrapped in the target type
+     */
+    public abstract <T> T unwrap(Class<T> clazz);
 
-    @Override
-    public Class<V> getValueType() {
-      return cacheConfiguration.getValueType();
-    }
+    abstract boolean isReadThrough();
 
-    @Override
-    public boolean isStoreByValue() {
-      return !findAmongst(DefaultCopierConfiguration.class, cacheConfiguration.getServiceConfigurations()).isEmpty();
+    abstract boolean isWriteThrough();
+
+    abstract boolean isStatisticsEnabled();
+
+    abstract void setStatisticsEnabled(boolean enabled);
+
+    abstract boolean isManagementEnabled();
+
+    abstract void setManagementEnabled(boolean enabled);
+
+    abstract void addCacheEntryListenerConfiguration(
+            CacheEntryListenerConfiguration<K, V> cacheEntryListenerConfiguration);
+
+    abstract void removeCacheEntryListenerConfiguration(
+            CacheEntryListenerConfiguration<K, V> cacheEntryListenerConfiguration);
+
+    static class Eh107ConfigurationWrapper<K, V> implements Configuration<K, V> {
+
+        private static final long serialVersionUID = -142083549674760400L;
+
+        private final transient CacheConfiguration<K, V> cacheConfiguration;
+
+        private Eh107ConfigurationWrapper(CacheConfiguration<K, V> cacheConfiguration) {
+            this.cacheConfiguration = cacheConfiguration;
+        }
+
+        CacheConfiguration<K, V> getCacheConfiguration() {
+            return cacheConfiguration;
+        }
+
+        @Override
+        public Class<K> getKeyType() {
+            return cacheConfiguration.getKeyType();
+        }
+
+        @Override
+        public Class<V> getValueType() {
+            return cacheConfiguration.getValueType();
+        }
+
+        @Override
+        public boolean isStoreByValue() {
+            return !findAmongst(
+                            DefaultCopierConfiguration.class,
+                            cacheConfiguration.getServiceConfigurations())
+                    .isEmpty();
+        }
     }
-  }
 }

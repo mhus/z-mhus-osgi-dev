@@ -39,7 +39,7 @@ public class AddressShit implements ShitIfc {
             return "OK";
         }
         if (cmd.equals("definition")) {
-            System.out.println( Address.getDefinition() );
+            System.out.println(Address.getDefinition());
             return null;
         }
         if (cmd.equals("parse")) {

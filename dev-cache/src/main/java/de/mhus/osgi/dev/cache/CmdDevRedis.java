@@ -19,10 +19,7 @@ public class CmdDevRedis extends AbstractCmd {
             index = 0,
             name = "cmd",
             required = true,
-            description =
-                    "Command to execute\n"
-                    + ""
-            ,
+            description = "Command to execute\n" + "",
             multiValued = false)
     String cmd;
 
@@ -33,26 +30,23 @@ public class CmdDevRedis extends AbstractCmd {
             description = "Parameters",
             multiValued = true)
     String[] parameters;
-    
+
     @Override
     public Object execute2() throws Exception {
 
-    	Config config = new Config();
-    	config.useSingleServer().setAddress("redis://redisserver:6379");
-    	// .useClusterServers()
-    	       // use "rediss://" for SSL connection
-//    	      .addNodeAddress("redis://redisserver:6379");
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://redisserver:6379");
+        // .useClusterServers()
+        // use "rediss://" for SSL connection
+        //    	      .addNodeAddress("redis://redisserver:6379");
 
-    	RedissonClient redisson = Redisson.create(config);
-    	
-    	RedissonReactiveClient redissonReactive = Redisson.createReactive(config);
+        RedissonClient redisson = Redisson.create(config);
 
-    	RedissonRxClient redissonRx = Redisson.createRx(config);
+        RedissonReactiveClient redissonReactive = Redisson.createReactive(config);
 
-    	redisson.shutdown();
+        RedissonRxClient redissonRx = Redisson.createRx(config);
+
+        redisson.shutdown();
         return null;
     }
-    
-
-    
 }

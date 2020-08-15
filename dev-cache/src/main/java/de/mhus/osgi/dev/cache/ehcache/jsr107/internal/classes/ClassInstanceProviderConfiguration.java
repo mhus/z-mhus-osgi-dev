@@ -20,25 +20,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Base class for ProviderFactory config that instantiates service classes.
- * Keeps the order in which defaults are added.
+ * Base class for ProviderFactory config that instantiates service classes. Keeps the order in which
+ * defaults are added.
  *
  * @author Alex Snaps
  */
 public class ClassInstanceProviderConfiguration<K, C extends ClassInstanceConfiguration<?>> {
 
-  private final Map<K, C> defaults;
+    private final Map<K, C> defaults;
 
-  public ClassInstanceProviderConfiguration() {
-    this.defaults = new LinkedHashMap<>();
-  }
+    public ClassInstanceProviderConfiguration() {
+        this.defaults = new LinkedHashMap<>();
+    }
 
-  public ClassInstanceProviderConfiguration(ClassInstanceProviderConfiguration<K, C> config) {
-    this.defaults = new LinkedHashMap<>(config.getDefaults());
-  }
+    public ClassInstanceProviderConfiguration(ClassInstanceProviderConfiguration<K, C> config) {
+        this.defaults = new LinkedHashMap<>(config.getDefaults());
+    }
 
-  public Map<K, C> getDefaults() {
-    return defaults;
-  }
-
+    public Map<K, C> getDefaults() {
+        return defaults;
+    }
 }

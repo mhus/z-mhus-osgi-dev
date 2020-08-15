@@ -36,25 +36,28 @@ import org.osgi.service.component.annotations.Deactivate;
 import de.mhus.lib.core.service.IdentUtil;
 
 @Path("/booking")
-@Component(service = BookingService.class, property = { "osgi.jaxrs.resource=true" }, immediate = true)
+@Component(
+        service = BookingService.class,
+        property = {"osgi.jaxrs.resource=true"},
+        immediate = true)
 public class BookingServiceRest implements BookingService {
-    
+
     private final Map<Long, Booking> bookings = new HashMap<>();
+
     {
-        bookings.put(1l,new Booking(IdentUtil.getServerIdent()));
+        bookings.put(1l, new Booking(IdentUtil.getServerIdent()));
     }
 
     @Activate
     public void doActivate() {
         System.out.println("BookingServiceRest:doActivate");
     }
-    
+
     @Deactivate
     public void doDeactivate() {
         System.out.println("BookingServiceRest:doDeactivate");
     }
-    
-    
+
     @Override
     @Path("/")
     @Produces("application/json")
@@ -70,7 +73,7 @@ public class BookingServiceRest implements BookingService {
     public Booking get(@PathParam("id") Long id) {
         return bookings.get(id);
     }
-    
+
     @Override
     @Path("/")
     @Consumes("application/json")

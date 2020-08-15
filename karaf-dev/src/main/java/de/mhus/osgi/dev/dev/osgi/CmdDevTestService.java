@@ -11,14 +11,9 @@ import de.mhus.osgi.api.karaf.AbstractCmd;
 @Service
 public class CmdDevTestService extends AbstractCmd {
 
-    @Argument(
-            index = 0,
-            name = "cmd",
-            required = true,
-            description = "sayso",
-            multiValued = false)
+    @Argument(index = 0, name = "cmd", required = true, description = "sayso", multiValued = false)
     String cmd;
-    
+
     @Argument(
             index = 1,
             name = "paramteters",
@@ -32,12 +27,11 @@ public class CmdDevTestService extends AbstractCmd {
 
         if (cmd.equals("sayso")) {
             ITestService service = MOsgi.getService(ITestService.class);
-            //TestService service = M.l(ITestService.class);
+            // TestService service = M.l(ITestService.class);
             String res = service.saySo();
             System.out.println("Answer: " + res);
         }
-        
+
         return null;
     }
-
 }

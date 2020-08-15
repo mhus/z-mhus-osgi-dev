@@ -68,112 +68,111 @@ public class MhusShit extends MLog implements ShitIfc {
     @Override
     public Object doExecute(CmdShitYo base, String cmd, String[] parameters) throws Exception {
 
-    	if (cmd.equals("tracetest")) {
-    		ITracer tracer = ITracer.get();
-    		try (Scope t1 = tracer.enter("test1", "a","b")) {
-    			log().f("FATAL Log Entry");
-    			log().e("ERROR Log Entry");
-    			log().w("WARN Log Entry");
-    			log().i("INFO Log Entry");
-    			log().d("DEBUG Log Entry");
-    			log().t("TRACE Log Entry");
-    			log().i("Sleep");
-    			MThread.sleep(1000);
-    			log().i("Awaken");
-    			for (int i = 0; i < 5; i++)
-	        		try (Scope t2 = tracer.enter("test2", "loop","" + i)) {
-	        			log().i("Sleep");
-	        			MThread.sleep(1000);
-	        			log().i("Awaken");
-	        			MThread.sleep(1000);
-	        		}
-    			MThread.sleep(1000);
-    			log().i("End");
-    		}
-    	}
-    	if (cmd.equals("tracetest2")) {
-    		ITracer tracer = ITracer.get();
-    		SpanContext ctx = null;
-    		try (Scope t1 = tracer.enter("test1", "a","b")) {
-    			log().f("FATAL Log Entry");
-    			log().e("ERROR Log Entry");
-    			log().w("WARN Log Entry");
-    			log().i("INFO Log Entry");
-    			log().d("DEBUG Log Entry");
-    			log().t("TRACE Log Entry");
-    			log().i("Sleep");
-    			MThread.sleep(1000);
-    			log().i("Awaken");
-    			ctx = t1.span().context();
-    			t1.span().finish();
-    			log().i("Finished 1");
-    		}
-    			
-			for (int i = 0; i < 1; i++) {
-				final Scope t2 = tracer.tracer()
-						.buildSpan("test2")
-						.addReference(References.CHILD_OF, ctx)
-						.withTag("loop", ""+i)
-						.startActive(true);
-				//final Scope t2 = tracer.start("test2", "yes", "loop", ""+i);
-        		try (t2) {
-        			log().i("Sleep");
-        			MThread.sleep(1000);
-        			log().i("Awaken");
-        			MThread.sleep(1000);
-        		}
-			}
-			MThread.sleep(1000);
-			log().i("End");
-    	}
-    	if (cmd.equals("tracetest3")) {
-    		ITracer tracer = ITracer.get();
-    		SpanContext ctx = null;
-    		SpanBuilder s1 = tracer.createSpan(null, "test1", "a","b");
-    		try (Scope t1 = s1.startActive(false)) {
-				log().f("FATAL Log Entry");
-				log().e("ERROR Log Entry");
-				log().w("WARN Log Entry");
-				log().i("INFO Log Entry");
-				log().d("DEBUG Log Entry");
-				log().t("TRACE Log Entry");
-				log().i("Sleep");
-				MThread.sleep(1000);
-				log().i("Awaken");
-				ctx = t1.span().context();
-				log().i("Finished 1");
-    		}
-			for (int i = 0; i < 2; i++) {
-				final Scope t2 = tracer.tracer()
-						.buildSpan("test2")
-						.addReference(References.CHILD_OF, ctx)
-						.withTag("loop", ""+i)
-						.startActive(true);
-				//final Scope t2 = tracer.start("test2", "yes", "loop", ""+i);
-        		try (t2) {
-        			System.gc();
-        			log().i("Sleep");
-        			MThread.sleep(1000);
-        			log().i("Awaken");
-        			MThread.sleep(1000);
-        		}
-			}
-			MThread.sleep(1000);
-			log().i("End");
-    	}
-    	if (cmd.equals("interceptors")) {
+        if (cmd.equals("tracetest")) {
+            ITracer tracer = ITracer.get();
+            try (Scope t1 = tracer.enter("test1", "a", "b")) {
+                log().f("FATAL Log Entry");
+                log().e("ERROR Log Entry");
+                log().w("WARN Log Entry");
+                log().i("INFO Log Entry");
+                log().d("DEBUG Log Entry");
+                log().t("TRACE Log Entry");
+                log().i("Sleep");
+                MThread.sleep(1000);
+                log().i("Awaken");
+                for (int i = 0; i < 5; i++)
+                    try (Scope t2 = tracer.enter("test2", "loop", "" + i)) {
+                        log().i("Sleep");
+                        MThread.sleep(1000);
+                        log().i("Awaken");
+                        MThread.sleep(1000);
+                    }
+                MThread.sleep(1000);
+                log().i("End");
+            }
+        }
+        if (cmd.equals("tracetest2")) {
+            ITracer tracer = ITracer.get();
+            SpanContext ctx = null;
+            try (Scope t1 = tracer.enter("test1", "a", "b")) {
+                log().f("FATAL Log Entry");
+                log().e("ERROR Log Entry");
+                log().w("WARN Log Entry");
+                log().i("INFO Log Entry");
+                log().d("DEBUG Log Entry");
+                log().t("TRACE Log Entry");
+                log().i("Sleep");
+                MThread.sleep(1000);
+                log().i("Awaken");
+                ctx = t1.span().context();
+                t1.span().finish();
+                log().i("Finished 1");
+            }
+
+            for (int i = 0; i < 1; i++) {
+                final Scope t2 =
+                        tracer.tracer()
+                                .buildSpan("test2")
+                                .addReference(References.CHILD_OF, ctx)
+                                .withTag("loop", "" + i)
+                                .startActive(true);
+                // final Scope t2 = tracer.start("test2", "yes", "loop", ""+i);
+                try (t2) {
+                    log().i("Sleep");
+                    MThread.sleep(1000);
+                    log().i("Awaken");
+                    MThread.sleep(1000);
+                }
+            }
+            MThread.sleep(1000);
+            log().i("End");
+        }
+        if (cmd.equals("tracetest3")) {
+            ITracer tracer = ITracer.get();
+            SpanContext ctx = null;
+            SpanBuilder s1 = tracer.createSpan(null, "test1", "a", "b");
+            try (Scope t1 = s1.startActive(false)) {
+                log().f("FATAL Log Entry");
+                log().e("ERROR Log Entry");
+                log().w("WARN Log Entry");
+                log().i("INFO Log Entry");
+                log().d("DEBUG Log Entry");
+                log().t("TRACE Log Entry");
+                log().i("Sleep");
+                MThread.sleep(1000);
+                log().i("Awaken");
+                ctx = t1.span().context();
+                log().i("Finished 1");
+            }
+            for (int i = 0; i < 2; i++) {
+                final Scope t2 =
+                        tracer.tracer()
+                                .buildSpan("test2")
+                                .addReference(References.CHILD_OF, ctx)
+                                .withTag("loop", "" + i)
+                                .startActive(true);
+                // final Scope t2 = tracer.start("test2", "yes", "loop", ""+i);
+                try (t2) {
+                    System.gc();
+                    log().i("Sleep");
+                    MThread.sleep(1000);
+                    log().i("Awaken");
+                    MThread.sleep(1000);
+                }
+            }
+            MThread.sleep(1000);
+            log().i("End");
+        }
+        if (cmd.equals("interceptors")) {
             Session session = base.getSession();
             @SuppressWarnings("unchecked")
-            List<CmdInterceptor> interceptors = (List<CmdInterceptor>) session.get(CmdInterceptorUtil.SESSION_KEY);
+            List<CmdInterceptor> interceptors =
+                    (List<CmdInterceptor>) session.get(CmdInterceptorUtil.SESSION_KEY);
             for (CmdInterceptor inter : interceptors)
                 System.out.println(inter.getClass().getCanonicalName() + " = " + inter);
-        } else
-        if (cmd.equals("ask")) {
-            char result = Console.askQuestion(
-                    "Really do something?",
-                    new char[] {'y', 'N'},
-                    true,
-                    false);
+        } else if (cmd.equals("ask")) {
+            char result =
+                    Console.askQuestion("Really do something?", new char[] {'y', 'N'}, true, false);
             System.out.println("Result: " + result);
         } else if (cmd.equals("atomicservers")) {
             AtomicClockUtil.TIME_SERVERS.forEach(s -> System.out.println(s));

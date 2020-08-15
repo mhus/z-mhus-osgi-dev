@@ -8,16 +8,15 @@ import io.grpc.stub.StreamObserver;
 
 public class GreetingServiceImpl extends GreetingServiceImplBase {
 
-	@Override
+    @Override
     public void greeting(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
-      System.out.println("Server: " + request);
+        System.out.println("Server: " + request);
 
-      String greeting = "Hi " + request.getName() + " - I'm " + IdentUtil.getServerIdent();
+        String greeting = "Hi " + request.getName() + " - I'm " + IdentUtil.getServerIdent();
 
-      HelloResponse response = HelloResponse.newBuilder().setGreeting(greeting).build();
+        HelloResponse response = HelloResponse.newBuilder().setGreeting(greeting).build();
 
-      responseObserver.onNext(response);
-      responseObserver.onCompleted();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
-	
 }

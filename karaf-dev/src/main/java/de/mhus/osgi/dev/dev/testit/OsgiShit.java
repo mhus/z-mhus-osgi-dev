@@ -15,15 +15,18 @@ import de.mhus.osgi.dev.dev.CmdDev;
 public class OsgiShit implements ShitIfc {
 
     private static ServiceRegistration<EventHandler> registrationEventHandler;
-    public static String[] blacklist = new String[] {
-            "org/osgi/service/log/LogEntry" // ignore ... too much useless events
-    };
-    
+    public static String[] blacklist =
+            new String[] {
+                "org/osgi/service/log/LogEntry" // ignore ... too much useless events
+            };
+
     @Override
     public void printUsage() {
         System.out.println("sessionid                      - print current session id");
-        System.out.println("registerEventHandler <topic>*  - register/unregister event handler, use *, e.g. com/acme/reportgenerator/*");
-        System.out.println("blacklist [starts with]*       - set event handler blacklist, e.g. org/osgi/service/log/LogEntry");
+        System.out.println(
+                "registerEventHandler <topic>*  - register/unregister event handler, use *, e.g. com/acme/reportgenerator/*");
+        System.out.println(
+                "blacklist [starts with]*       - set event handler blacklist, e.g. org/osgi/service/log/LogEntry");
     }
 
     @SuppressWarnings("unchecked")
@@ -32,26 +35,26 @@ public class OsgiShit implements ShitIfc {
 
         if (cmd.equals("blacklist")) {
             blacklist = parameters;
-        } else
-        if (cmd.equals("registerEventHandler")) {
+        } else if (cmd.equals("registerEventHandler")) {
             if (registrationEventHandler == null) {
                 @SuppressWarnings("rawtypes")
                 Dictionary props = new Hashtable();
                 props.put(EventConstants.EVENT_TOPIC, parameters);
-                BundleContext bundleContext = FrameworkUtil.getBundle(CmdDev.class).getBundleContext();
+                BundleContext bundleContext =
+                        FrameworkUtil.getBundle(CmdDev.class).getBundleContext();
                 System.out.println("Register");
-                registrationEventHandler = bundleContext.registerService(EventHandler.class.getName(), new PrintEventHandler() , props);
+                registrationEventHandler =
+                        bundleContext.registerService(
+                                EventHandler.class.getName(), new PrintEventHandler(), props);
             } else {
                 System.out.println("Unregister");
                 registrationEventHandler.unregister();
                 registrationEventHandler = null;
             }
-        } else
-        if (cmd.equals("sessionid")) {
+        } else if (cmd.equals("sessionid")) {
             System.out.println(MSystem.getObjectId(base.getSession()));
         }
-            
+
         return null;
     }
-
 }

@@ -17,24 +17,22 @@ package de.mhus.osgi.dev.cache.ehcache.jsr107;
 
 import javax.cache.integration.CompletionListener;
 
-/**
- * @author teck
- */
+/** @author teck */
 final class NullCompletionListener implements CompletionListener {
 
-  static final CompletionListener INSTANCE = new NullCompletionListener();
+    static final CompletionListener INSTANCE = new NullCompletionListener();
 
-  @Override
-  public void onCompletion() {
-    // nothing
-  }
+    @Override
+    public void onCompletion() {
+        // nothing
+    }
 
-  @Override
-  public void onException(Exception e) {
-    // nothing
-  }
+    @Override
+    public void onException(Exception e) {
+        // nothing
+    }
 
-  private NullCompletionListener() {
-    //
-  }
+    private NullCompletionListener() {
+        //
+    }
 }

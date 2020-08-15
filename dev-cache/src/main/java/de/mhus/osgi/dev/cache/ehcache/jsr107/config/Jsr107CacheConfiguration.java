@@ -20,43 +20,45 @@ import org.ehcache.spi.service.ServiceConfiguration;
 
 import de.mhus.osgi.dev.cache.ehcache.jsr107.Jsr107Service;
 
-/**
- * Jsr107CacheConfiguration
- */
+/** Jsr107CacheConfiguration */
 public class Jsr107CacheConfiguration implements ServiceConfiguration<Jsr107Service, Void> {
 
-  private final ConfigurationElementState statisticsEnabled;
-  private final ConfigurationElementState managementEnabled;
+    private final ConfigurationElementState statisticsEnabled;
+    private final ConfigurationElementState managementEnabled;
 
-  public Jsr107CacheConfiguration(ConfigurationElementState statisticsEnabled, ConfigurationElementState managementEnabled) {
-    this.statisticsEnabled = statisticsEnabled;
-    this.managementEnabled = managementEnabled;
-  }
+    public Jsr107CacheConfiguration(
+            ConfigurationElementState statisticsEnabled,
+            ConfigurationElementState managementEnabled) {
+        this.statisticsEnabled = statisticsEnabled;
+        this.managementEnabled = managementEnabled;
+    }
 
-  @Override
-  public Class<Jsr107Service> getServiceType() {
-    return Jsr107Service.class;
-  }
+    @Override
+    public Class<Jsr107Service> getServiceType() {
+        return Jsr107Service.class;
+    }
 
-  /**
-   * Indicates if management is to be enabled.
-   * <p>
-   * A {@code null} return value indicates that cache manager level config is to be taken.
-   *
-   * @return {@code true} if management is enabled, {@code false} if disabled, {@code null} to keep cache manager level
-   */
-  public ConfigurationElementState isManagementEnabled() {
-    return managementEnabled;
-  }
+    /**
+     * Indicates if management is to be enabled.
+     *
+     * <p>A {@code null} return value indicates that cache manager level config is to be taken.
+     *
+     * @return {@code true} if management is enabled, {@code false} if disabled, {@code null} to
+     *     keep cache manager level
+     */
+    public ConfigurationElementState isManagementEnabled() {
+        return managementEnabled;
+    }
 
-  /**
-   * Indicates if statistics are to be enabled.
-   * <p>
-   * A {@code null} return value indicates that cache manager level config is to be taken.
-   *
-   * @return {@code true} if statistics are enabled, {@code false} if disabled, {@code null} to keep cache manager level
-   */
-  public ConfigurationElementState isStatisticsEnabled() {
-    return statisticsEnabled;
-  }
+    /**
+     * Indicates if statistics are to be enabled.
+     *
+     * <p>A {@code null} return value indicates that cache manager level config is to be taken.
+     *
+     * @return {@code true} if statistics are enabled, {@code false} if disabled, {@code null} to
+     *     keep cache manager level
+     */
+    public ConfigurationElementState isStatisticsEnabled() {
+        return statisticsEnabled;
+    }
 }

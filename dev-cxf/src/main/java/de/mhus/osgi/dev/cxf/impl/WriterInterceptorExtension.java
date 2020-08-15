@@ -9,9 +9,9 @@ import javax.ws.rs.ext.WriterInterceptorContext;
 public class WriterInterceptorExtension implements WriterInterceptor {
 
     @Override
-    public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
+    public void aroundWriteTo(WriterInterceptorContext context)
+            throws IOException, WebApplicationException {
         System.out.println("JaxRsExtension:aroundWriteTo");
         context.proceed();
     }
-
 }

@@ -34,185 +34,197 @@ import javax.cache.expiry.ExpiryPolicy;
 import javax.cache.integration.CacheLoader;
 import javax.cache.integration.CacheWriter;
 
-/**
- * @author teck
- */
-class Eh107CompleteConfiguration<K, V> extends Eh107Configuration<K, V> implements CompleteConfiguration<K, V> {
+/** @author teck */
+class Eh107CompleteConfiguration<K, V> extends Eh107Configuration<K, V>
+        implements CompleteConfiguration<K, V> {
 
-  private static final long serialVersionUID = -142083640934760400L;
+    private static final long serialVersionUID = -142083640934760400L;
 
-  private final Class<K> keyType;
-  private final Class<V> valueType;
-  private final boolean isStoreByValue;
-  private final boolean isReadThrough;
-  private final boolean isWriteThrough;
-  private volatile boolean isStatisticsEnabled;
-  private volatile boolean isManagementEnabled;
-  private final List<CacheEntryListenerConfiguration<K, V>> cacheEntryListenerConfigs = new CopyOnWriteArrayList<>();
-  private final Factory<CacheLoader<K, V>> cacheLoaderFactory;
-  private final Factory<CacheWriter<? super K, ? super V>> cacheWriterFactory;
-  private final Factory<ExpiryPolicy> expiryPolicyFactory;
+    private final Class<K> keyType;
+    private final Class<V> valueType;
+    private final boolean isStoreByValue;
+    private final boolean isReadThrough;
+    private final boolean isWriteThrough;
+    private volatile boolean isStatisticsEnabled;
+    private volatile boolean isManagementEnabled;
+    private final List<CacheEntryListenerConfiguration<K, V>> cacheEntryListenerConfigs =
+            new CopyOnWriteArrayList<>();
+    private final Factory<CacheLoader<K, V>> cacheLoaderFactory;
+    private final Factory<CacheWriter<? super K, ? super V>> cacheWriterFactory;
+    private final Factory<ExpiryPolicy> expiryPolicyFactory;
 
-  private final transient CacheConfiguration<K, V> ehcacheConfig;
+    private final transient CacheConfiguration<K, V> ehcacheConfig;
 
-
-  Eh107CompleteConfiguration(Configuration<K, V> config) {
-    this(config, null);
-  }
-
-  Eh107CompleteConfiguration(Configuration<K, V> config, org.ehcache.config.CacheConfiguration<K, V> ehcacheConfig) {
-    this(config, ehcacheConfig, false, false);
-  }
-
-  public Eh107CompleteConfiguration(Configuration<K, V> config, final CacheConfiguration<K, V> ehcacheConfig, boolean useEhcacheExpiry, boolean useEhcacheLoaderWriter) {
-    this.ehcacheConfig = ehcacheConfig;
-    this.keyType = config.getKeyType();
-    this.valueType = config.getValueType();
-    this.isStoreByValue = isStoreByValue(config, ehcacheConfig);
-
-    Factory<ExpiryPolicy> tempExpiryPolicyFactory = EternalExpiryPolicy.factoryOf();
-
-    if (config instanceof CompleteConfiguration) {
-      CompleteConfiguration<K, V> completeConfig = (CompleteConfiguration<K, V>) config;
-      this.isReadThrough = completeConfig.isReadThrough();
-      this.isWriteThrough = completeConfig.isWriteThrough();
-      this.isStatisticsEnabled = completeConfig.isStatisticsEnabled();
-      this.isManagementEnabled = completeConfig.isManagementEnabled();
-
-      if (useEhcacheLoaderWriter) {
-        this.cacheLoaderFactory = createThrowingFactory();
-        this.cacheWriterFactory = createThrowingFactory();
-      } else {
-        this.cacheLoaderFactory = completeConfig.getCacheLoaderFactory();
-        this.cacheWriterFactory = completeConfig.getCacheWriterFactory();
-      }
-
-      tempExpiryPolicyFactory = completeConfig.getExpiryPolicyFactory();
-      for (CacheEntryListenerConfiguration<K, V> listenerConfig : completeConfig.getCacheEntryListenerConfigurations()) {
-        cacheEntryListenerConfigs.add(listenerConfig);
-      }
-    } else {
-      this.isReadThrough = false;
-      this.isWriteThrough = false;
-      this.isStatisticsEnabled = false;
-      this.isManagementEnabled = false;
-      this.cacheLoaderFactory = null;
-      this.cacheWriterFactory = null;
+    Eh107CompleteConfiguration(Configuration<K, V> config) {
+        this(config, null);
     }
 
-    if (useEhcacheExpiry) {
-      tempExpiryPolicyFactory = createThrowingFactory();
+    Eh107CompleteConfiguration(
+            Configuration<K, V> config, org.ehcache.config.CacheConfiguration<K, V> ehcacheConfig) {
+        this(config, ehcacheConfig, false, false);
     }
 
-    this.expiryPolicyFactory = tempExpiryPolicyFactory;
-  }
+    public Eh107CompleteConfiguration(
+            Configuration<K, V> config,
+            final CacheConfiguration<K, V> ehcacheConfig,
+            boolean useEhcacheExpiry,
+            boolean useEhcacheLoaderWriter) {
+        this.ehcacheConfig = ehcacheConfig;
+        this.keyType = config.getKeyType();
+        this.valueType = config.getValueType();
+        this.isStoreByValue = isStoreByValue(config, ehcacheConfig);
 
-  private static <K, V> boolean isStoreByValue(Configuration<K, V> config, CacheConfiguration<K, V> ehcacheConfig) {
-    if(ehcacheConfig != null) {
-      Collection<ServiceConfiguration<?, ?>> serviceConfigurations = ehcacheConfig.getServiceConfigurations();
-      for (ServiceConfiguration<?, ?> serviceConfiguration : serviceConfigurations) {
-        if (serviceConfiguration instanceof DefaultCopierConfiguration) {
-          DefaultCopierConfiguration<?> copierConfig = (DefaultCopierConfiguration)serviceConfiguration;
-          if(copierConfig.getType().equals(DefaultCopierConfiguration.Type.VALUE)) {
-            if(copierConfig.getClazz().isAssignableFrom(IdentityCopier.class)) {
-              return false;
+        Factory<ExpiryPolicy> tempExpiryPolicyFactory = EternalExpiryPolicy.factoryOf();
+
+        if (config instanceof CompleteConfiguration) {
+            CompleteConfiguration<K, V> completeConfig = (CompleteConfiguration<K, V>) config;
+            this.isReadThrough = completeConfig.isReadThrough();
+            this.isWriteThrough = completeConfig.isWriteThrough();
+            this.isStatisticsEnabled = completeConfig.isStatisticsEnabled();
+            this.isManagementEnabled = completeConfig.isManagementEnabled();
+
+            if (useEhcacheLoaderWriter) {
+                this.cacheLoaderFactory = createThrowingFactory();
+                this.cacheWriterFactory = createThrowingFactory();
             } else {
-              return true;
+                this.cacheLoaderFactory = completeConfig.getCacheLoaderFactory();
+                this.cacheWriterFactory = completeConfig.getCacheWriterFactory();
             }
-          }
+
+            tempExpiryPolicyFactory = completeConfig.getExpiryPolicyFactory();
+            for (CacheEntryListenerConfiguration<K, V> listenerConfig :
+                    completeConfig.getCacheEntryListenerConfigurations()) {
+                cacheEntryListenerConfigs.add(listenerConfig);
+            }
+        } else {
+            this.isReadThrough = false;
+            this.isWriteThrough = false;
+            this.isStatisticsEnabled = false;
+            this.isManagementEnabled = false;
+            this.cacheLoaderFactory = null;
+            this.cacheWriterFactory = null;
         }
-      }
+
+        if (useEhcacheExpiry) {
+            tempExpiryPolicyFactory = createThrowingFactory();
+        }
+
+        this.expiryPolicyFactory = tempExpiryPolicyFactory;
     }
-    return config.isStoreByValue();
-  }
 
-  @Override
-  public Class<K> getKeyType() {
-    return this.keyType;
-  }
+    private static <K, V> boolean isStoreByValue(
+            Configuration<K, V> config, CacheConfiguration<K, V> ehcacheConfig) {
+        if (ehcacheConfig != null) {
+            Collection<ServiceConfiguration<?, ?>> serviceConfigurations =
+                    ehcacheConfig.getServiceConfigurations();
+            for (ServiceConfiguration<?, ?> serviceConfiguration : serviceConfigurations) {
+                if (serviceConfiguration instanceof DefaultCopierConfiguration) {
+                    DefaultCopierConfiguration<?> copierConfig =
+                            (DefaultCopierConfiguration) serviceConfiguration;
+                    if (copierConfig.getType().equals(DefaultCopierConfiguration.Type.VALUE)) {
+                        if (copierConfig.getClazz().isAssignableFrom(IdentityCopier.class)) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return config.isStoreByValue();
+    }
 
-  @Override
-  public Class<V> getValueType() {
-    return this.valueType;
-  }
+    @Override
+    public Class<K> getKeyType() {
+        return this.keyType;
+    }
 
-  @Override
-  public boolean isStoreByValue() {
-    return this.isStoreByValue;
-  }
+    @Override
+    public Class<V> getValueType() {
+        return this.valueType;
+    }
 
-  @Override
-  public boolean isReadThrough() {
-    return this.isReadThrough;
-  }
+    @Override
+    public boolean isStoreByValue() {
+        return this.isStoreByValue;
+    }
 
-  @Override
-  public boolean isWriteThrough() {
-    return this.isWriteThrough;
-  }
+    @Override
+    public boolean isReadThrough() {
+        return this.isReadThrough;
+    }
 
-  @Override
-  public boolean isStatisticsEnabled() {
-    return this.isStatisticsEnabled;
-  }
+    @Override
+    public boolean isWriteThrough() {
+        return this.isWriteThrough;
+    }
 
-  @Override
-  public boolean isManagementEnabled() {
-    return this.isManagementEnabled;
-  }
+    @Override
+    public boolean isStatisticsEnabled() {
+        return this.isStatisticsEnabled;
+    }
 
-  @Override
-  public Iterable<CacheEntryListenerConfiguration<K, V>> getCacheEntryListenerConfigurations() {
-    return Collections.unmodifiableList(this.cacheEntryListenerConfigs);
-  }
+    @Override
+    public boolean isManagementEnabled() {
+        return this.isManagementEnabled;
+    }
 
-  @Override
-  public Factory<CacheLoader<K, V>> getCacheLoaderFactory() {
-    return this.cacheLoaderFactory;
-  }
+    @Override
+    public Iterable<CacheEntryListenerConfiguration<K, V>> getCacheEntryListenerConfigurations() {
+        return Collections.unmodifiableList(this.cacheEntryListenerConfigs);
+    }
 
-  @Override
-  public Factory<CacheWriter<? super K, ? super V>> getCacheWriterFactory() {
-    return this.cacheWriterFactory;
-  }
+    @Override
+    public Factory<CacheLoader<K, V>> getCacheLoaderFactory() {
+        return this.cacheLoaderFactory;
+    }
 
-  @Override
-  public Factory<ExpiryPolicy> getExpiryPolicyFactory() {
-    return this.expiryPolicyFactory;
-  }
+    @Override
+    public Factory<CacheWriter<? super K, ? super V>> getCacheWriterFactory() {
+        return this.cacheWriterFactory;
+    }
 
-  @Override
-  void setManagementEnabled(boolean isManagementEnabled) {
-    this.isManagementEnabled = isManagementEnabled;
-  }
+    @Override
+    public Factory<ExpiryPolicy> getExpiryPolicyFactory() {
+        return this.expiryPolicyFactory;
+    }
 
-  @Override
-  void setStatisticsEnabled(boolean isStatisticsEnabled) {
-    this.isStatisticsEnabled = isStatisticsEnabled;
-  }
+    @Override
+    void setManagementEnabled(boolean isManagementEnabled) {
+        this.isManagementEnabled = isManagementEnabled;
+    }
 
-  @Override
-  void addCacheEntryListenerConfiguration(CacheEntryListenerConfiguration<K, V> listenerConfig) {
-    this.cacheEntryListenerConfigs.add(listenerConfig);
-  }
+    @Override
+    void setStatisticsEnabled(boolean isStatisticsEnabled) {
+        this.isStatisticsEnabled = isStatisticsEnabled;
+    }
 
-  @Override
-  void removeCacheEntryListenerConfiguration(CacheEntryListenerConfiguration<K, V> listenerConfig) {
-    this.cacheEntryListenerConfigs.remove(listenerConfig);
-  }
+    @Override
+    void addCacheEntryListenerConfiguration(CacheEntryListenerConfiguration<K, V> listenerConfig) {
+        this.cacheEntryListenerConfigs.add(listenerConfig);
+    }
 
-  @Override
-  public <T> T unwrap(Class<T> clazz) {
-      return Unwrap.unwrap(clazz, this, ehcacheConfig);
-  }
+    @Override
+    void removeCacheEntryListenerConfiguration(
+            CacheEntryListenerConfiguration<K, V> listenerConfig) {
+        this.cacheEntryListenerConfigs.remove(listenerConfig);
+    }
 
-  private Object writeReplace() {
-    throw new UnsupportedOperationException("Serialization of Ehcache provider configuration classes is not supported");
-  }
+    @Override
+    public <T> T unwrap(Class<T> clazz) {
+        return Unwrap.unwrap(clazz, this, ehcacheConfig);
+    }
 
-  private <T> Factory<T> createThrowingFactory() {
-    return (Factory<T>) () -> {
-      throw new UnsupportedOperationException("Cannot convert from Ehcache type to JSR-107 factory");
-    };
-  }
+    private Object writeReplace() {
+        throw new UnsupportedOperationException(
+                "Serialization of Ehcache provider configuration classes is not supported");
+    }
+
+    private <T> Factory<T> createThrowingFactory() {
+        return (Factory<T>)
+                () -> {
+                    throw new UnsupportedOperationException(
+                            "Cannot convert from Ehcache type to JSR-107 factory");
+                };
+    }
 }

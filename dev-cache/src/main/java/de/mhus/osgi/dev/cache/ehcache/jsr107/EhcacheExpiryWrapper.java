@@ -20,29 +20,27 @@ import org.ehcache.expiry.ExpiryPolicy;
 import java.time.Duration;
 import java.util.function.Supplier;
 
-/**
- * EhcacheExpiryWrapper
- */
+/** EhcacheExpiryWrapper */
 class EhcacheExpiryWrapper<K, V> extends Eh107Expiry<K, V> {
 
-  private final ExpiryPolicy<? super K, ? super V> wrappedExpiry;
+    private final ExpiryPolicy<? super K, ? super V> wrappedExpiry;
 
-  EhcacheExpiryWrapper(ExpiryPolicy<? super K, ? super V> wrappedExpiry) {
-    this.wrappedExpiry = wrappedExpiry;
-  }
+    EhcacheExpiryWrapper(ExpiryPolicy<? super K, ? super V> wrappedExpiry) {
+        this.wrappedExpiry = wrappedExpiry;
+    }
 
-  @Override
-  public Duration getExpiryForCreation(K key, V value) {
-    return wrappedExpiry.getExpiryForCreation(key, value);
-  }
+    @Override
+    public Duration getExpiryForCreation(K key, V value) {
+        return wrappedExpiry.getExpiryForCreation(key, value);
+    }
 
-  @Override
-  protected Duration getExpiryForAccessInternal(K key, Supplier<? extends V> value) {
-    return wrappedExpiry.getExpiryForAccess(key, value);
-  }
+    @Override
+    protected Duration getExpiryForAccessInternal(K key, Supplier<? extends V> value) {
+        return wrappedExpiry.getExpiryForAccess(key, value);
+    }
 
-  @Override
-  public Duration getExpiryForUpdate(K key, Supplier<? extends V> oldValue, V newValue) {
-    return wrappedExpiry.getExpiryForUpdate(key, oldValue, newValue);
-  }
+    @Override
+    public Duration getExpiryForUpdate(K key, Supplier<? extends V> oldValue, V newValue) {
+        return wrappedExpiry.getExpiryForUpdate(key, oldValue, newValue);
+    }
 }

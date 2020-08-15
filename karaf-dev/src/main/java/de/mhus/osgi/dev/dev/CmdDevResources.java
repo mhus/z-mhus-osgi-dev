@@ -20,7 +20,10 @@ import de.mhus.lib.core.MString;
 import de.mhus.osgi.api.MOsgi;
 import de.mhus.osgi.api.karaf.AbstractCmd;
 
-@Command(scope = "mhus", name = "dev-res", description = "Copy example config files from package into karaf evnironment")
+@Command(
+        scope = "mhus",
+        name = "dev-res",
+        description = "Copy example config files from package into karaf evnironment")
 @Service
 public class CmdDevResources extends AbstractCmd {
 
@@ -28,10 +31,11 @@ public class CmdDevResources extends AbstractCmd {
             index = 0,
             name = "file",
             required = true,
-            description = "cp - copy file/dir into workspace, cat cat file, list - site available files",
+            description =
+                    "cp - copy file/dir into workspace, cat cat file, list - site available files",
             multiValued = false)
     String cmd;
-    
+
     @Argument(
             index = 1,
             name = "file",
@@ -63,7 +67,7 @@ public class CmdDevResources extends AbstractCmd {
             description = "try run",
             multiValued = false)
     boolean test;
-    
+
     @Option(
             name = "-y",
             aliases = "--yes-overwrite",
@@ -71,7 +75,7 @@ public class CmdDevResources extends AbstractCmd {
             description = "Overwrite files",
             multiValued = false)
     boolean overwrite;
-    
+
     @Override
     public Object execute2() throws Exception {
 
@@ -88,10 +92,8 @@ public class CmdDevResources extends AbstractCmd {
             Bundle bundle = findBundle(in);
 
             Enumeration<String> list = bundle.getEntryPaths(in);
-            if (list == null)
-                copyFile(bundle, in, target);
-            else
-                copyDir(bundle, in, target);
+            if (list == null) copyFile(bundle, in, target);
+            else copyDir(bundle, in, target);
         } else if (cmd.equals("cat")) {
             String in = "examples/" + file;
             Bundle bundle = findBundle(in);
@@ -99,7 +101,6 @@ public class CmdDevResources extends AbstractCmd {
             try (InputStream is = url.openStream()) {
                 MFile.copyFile(is, System.out);
             }
-            
         }
         return null;
     }
@@ -109,8 +110,7 @@ public class CmdDevResources extends AbstractCmd {
         if (list == null) return;
         while (list.hasMoreElements()) {
             String sub = list.nextElement();
-            if (sub.endsWith("/"))
-                copyDir(bundle, sub, target);
+            if (sub.endsWith("/")) copyDir(bundle, sub, target);
             else {
                 String out = target + sub.substring(9 + file.length());
                 try {
@@ -138,8 +138,7 @@ public class CmdDevResources extends AbstractCmd {
         }
         try (is) {
             File out = new File(to);
-            if (out.exists() && !overwrite)
-                System.out.println("- file already exists");
+            if (out.exists() && !overwrite) System.out.println("- file already exists");
             else {
                 long size = -1;
                 if (parameters == null) {
@@ -153,46 +152,43 @@ public class CmdDevResources extends AbstractCmd {
                     String content = MFile.readFile(is);
                     int pos = 0;
                     while (true) {
-                        pos = content.indexOf("#{",pos);
+                        pos = content.indexOf("#{", pos);
                         if (pos < 0) break;
-                        if (pos > 0 && content.charAt(pos-1) == '#') {
-                            content = content.substring(0, pos) + content.substring(pos+1);
+                        if (pos > 0 && content.charAt(pos - 1) == '#') {
+                            content = content.substring(0, pos) + content.substring(pos + 1);
                             pos = pos + 1;
                             continue;
                         }
-                        int end = content.indexOf("}",pos);
+                        int end = content.indexOf("}", pos);
                         if (end < 0) {
                             System.out.println("- Error: Open parameter definition");
                             break;
                         }
-                        String key = content.substring(pos+2,end);
+                        String key = content.substring(pos + 2, end);
                         String def = null;
                         int pos2 = key.indexOf(':');
                         if (pos2 > 0) {
-                            def = key.substring(pos2+1);
-                            key = key.substring(0,pos2);
+                            def = key.substring(pos2 + 1);
+                            key = key.substring(0, pos2);
                         }
                         String value = p.getString(key, def);
                         if (value == null) {
                             System.out.println("- Parameter not defined for " + key + " - leave");
                             pos = end + 1;
                             continue;
-                        } else if (test)
-                            System.out.println("- Set " + key + " to " + value);
-                        content = content.substring(0, pos) + value + content.substring(end+1);
+                        } else if (test) System.out.println("- Set " + key + " to " + value);
+                        content = content.substring(0, pos) + value + content.substring(end + 1);
                         pos = pos + value.length();
                     }
                     if (!test) {
                         try (FileOutputStream os = new FileOutputStream(out)) {
-                            if (MFile.writeFile(os, content))
-                                size = content.length();
+                            if (MFile.writeFile(os, content)) size = content.length();
                         }
                     }
                 }
                 System.out.println("- " + size + " bytes");
             }
         }
-
     }
 
     private Bundle findBundle(String path) {
@@ -208,11 +204,8 @@ public class CmdDevResources extends AbstractCmd {
         if (list == null) return;
         while (list.hasMoreElements()) {
             String sub = list.nextElement();
-            if (sub.endsWith("/"))
-                showList(bundle, sub);
-            else
-                System.out.println(bundle.getBundleId() + " " + sub.substring(9));
+            if (sub.endsWith("/")) showList(bundle, sub);
+            else System.out.println(bundle.getBundleId() + " " + sub.substring(9));
         }
     }
-
 }

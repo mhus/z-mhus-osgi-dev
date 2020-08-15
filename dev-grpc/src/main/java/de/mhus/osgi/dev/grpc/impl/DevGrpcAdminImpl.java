@@ -15,53 +15,51 @@ import org.osgi.service.component.annotations.Deactivate;
 @Component(immediate = true)
 public class DevGrpcAdminImpl implements DevGrpcAdmin {
 
-	private LinkedList<ServiceRegistration<GrpcServer>> list = new LinkedList<>();
+    private LinkedList<ServiceRegistration<GrpcServer>> list = new LinkedList<>();
 
-	@Activate
-	public void doActivate() {
-		try {
-			doStart(8080); // start 8080 by default
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
-	
-	@Deactivate
-	public void doDeactivate() {
-		doShutdown();
-	}
+    @Activate
+    public void doActivate() {
+        try {
+            doStart(8080); // start 8080 by default
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void doShutdown() {
-		list.forEach(i -> i.unregister() );
-		list.clear();
-	}
+    @Deactivate
+    public void doDeactivate() {
+        doShutdown();
+    }
 
-	@Override
-	public void doStart(int port) throws Exception {
-		GrpcServerImpl service = new GrpcServerImpl();
-		service.start(port);
-		
-		BundleContext ctx = FrameworkUtil.getBundle(DevGrpcAdminImpl.class).getBundleContext();
-		
-		Dictionary<String, Object> properties = new Hashtable<>();
-		properties.put("port", port);
-		ServiceRegistration<GrpcServer> reg = ctx.registerService(GrpcServer.class, service, properties);
-		
-		list.add(reg);
-		
-	}
+    @Override
+    public void doShutdown() {
+        list.forEach(i -> i.unregister());
+        list.clear();
+    }
 
-	@Override
-	public List<GrpcServer> list() {
-		LinkedList<GrpcServer> out = new LinkedList<>();
-		BundleContext ctx = FrameworkUtil.getBundle(DevGrpcAdminImpl.class).getBundleContext();
-		
-		for (ServiceRegistration<GrpcServer> reg : list)
-			out.add(ctx.getService(reg.getReference()));
-		
-		return out;
-	}
-	
-	
+    @Override
+    public void doStart(int port) throws Exception {
+        GrpcServerImpl service = new GrpcServerImpl();
+        service.start(port);
+
+        BundleContext ctx = FrameworkUtil.getBundle(DevGrpcAdminImpl.class).getBundleContext();
+
+        Dictionary<String, Object> properties = new Hashtable<>();
+        properties.put("port", port);
+        ServiceRegistration<GrpcServer> reg =
+                ctx.registerService(GrpcServer.class, service, properties);
+
+        list.add(reg);
+    }
+
+    @Override
+    public List<GrpcServer> list() {
+        LinkedList<GrpcServer> out = new LinkedList<>();
+        BundleContext ctx = FrameworkUtil.getBundle(DevGrpcAdminImpl.class).getBundleContext();
+
+        for (ServiceRegistration<GrpcServer> reg : list)
+            out.add(ctx.getService(reg.getReference()));
+
+        return out;
+    }
 }

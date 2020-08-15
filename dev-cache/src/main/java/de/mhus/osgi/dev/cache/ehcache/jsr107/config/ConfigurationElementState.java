@@ -16,40 +16,32 @@
 
 package de.mhus.osgi.dev.cache.ehcache.jsr107.config;
 
-/**
- * ConfigurationElementState
- */
+/** ConfigurationElementState */
 public enum ConfigurationElementState {
 
-  /**
-   * Indicates the configuration did not specify a value
-   */
-  UNSPECIFIED {
-    @Override
-    public boolean asBoolean() {
-      throw new IllegalStateException("Cannot be converted to boolean");
-    }
-  },
+    /** Indicates the configuration did not specify a value */
+    UNSPECIFIED {
+        @Override
+        public boolean asBoolean() {
+            throw new IllegalStateException("Cannot be converted to boolean");
+        }
+    },
 
-  /**
-   * Indicates the configuration disabled the option
-   */
-  DISABLED {
-    @Override
-    public boolean asBoolean() {
-      return false;
-    }
-  },
+    /** Indicates the configuration disabled the option */
+    DISABLED {
+        @Override
+        public boolean asBoolean() {
+            return false;
+        }
+    },
 
-  /**
-   * Indicates the configuration enabled the option
-   */
-  ENABLED {
-    @Override
-    public boolean asBoolean() {
-      return true;
-    }
-  };
+    /** Indicates the configuration enabled the option */
+    ENABLED {
+        @Override
+        public boolean asBoolean() {
+            return true;
+        }
+    };
 
-  public abstract boolean asBoolean();
+    public abstract boolean asBoolean();
 }

@@ -31,65 +31,65 @@ import static java.util.Objects.requireNonNull;
 @ServiceDependencies(StatisticsService.class)
 public class DefaultJsr107Service implements Jsr107Service {
 
-  private final Jsr107Configuration configuration;
-  private volatile StatisticsService statisticsService;
+    private final Jsr107Configuration configuration;
+    private volatile StatisticsService statisticsService;
 
-  public DefaultJsr107Service(Jsr107Configuration configuration) {
-    this.configuration = configuration;
-  }
-
-  @Override
-  public void start(final ServiceProvider<Service> serviceProvider) {
-    this.statisticsService = serviceProvider.getService(StatisticsService.class);
-  }
-
-  @Override
-  public String getTemplateNameForCache(String cacheAlias) {
-    final Jsr107Configuration cfg = configuration;
-    if (cfg == null) {
-      return null;
+    public DefaultJsr107Service(Jsr107Configuration configuration) {
+        this.configuration = configuration;
     }
-    String template = cfg.getTemplates().get(cacheAlias);
-    if (template != null) {
-      return template;
+
+    @Override
+    public void start(final ServiceProvider<Service> serviceProvider) {
+        this.statisticsService = serviceProvider.getService(StatisticsService.class);
     }
-    return cfg.getDefaultTemplate();
-  }
 
-  @Override
-  public void stop() {
-    // no-op
-  }
-
-  @Override
-  public boolean jsr107CompliantAtomics() {
-    final Jsr107Configuration cfg = configuration;
-    if (cfg == null) {
-      return true;
+    @Override
+    public String getTemplateNameForCache(String cacheAlias) {
+        final Jsr107Configuration cfg = configuration;
+        if (cfg == null) {
+            return null;
+        }
+        String template = cfg.getTemplates().get(cacheAlias);
+        if (template != null) {
+            return template;
+        }
+        return cfg.getDefaultTemplate();
     }
-    return cfg.isJsr107CompliantAtomics();
-  }
 
-  @Override
-  public ConfigurationElementState isManagementEnabledOnAllCaches() {
-    if (configuration == null) {
-      return null;
-    } else {
-      return configuration.isEnableManagementAll();
+    @Override
+    public void stop() {
+        // no-op
     }
-  }
 
-  @Override
-  public ConfigurationElementState isStatisticsEnabledOnAllCaches() {
-    if (configuration == null) {
-      return null;
-    } else {
-      return configuration.isEnableStatisticsAll();
+    @Override
+    public boolean jsr107CompliantAtomics() {
+        final Jsr107Configuration cfg = configuration;
+        if (cfg == null) {
+            return true;
+        }
+        return cfg.isJsr107CompliantAtomics();
     }
-  }
 
-  @Override
-  public StatisticsService getStatistics() {
-    return requireNonNull(statisticsService);
-  }
+    @Override
+    public ConfigurationElementState isManagementEnabledOnAllCaches() {
+        if (configuration == null) {
+            return null;
+        } else {
+            return configuration.isEnableManagementAll();
+        }
+    }
+
+    @Override
+    public ConfigurationElementState isStatisticsEnabledOnAllCaches() {
+        if (configuration == null) {
+            return null;
+        } else {
+            return configuration.isEnableStatisticsAll();
+        }
+    }
+
+    @Override
+    public StatisticsService getStatistics() {
+        return requireNonNull(statisticsService);
+    }
 }

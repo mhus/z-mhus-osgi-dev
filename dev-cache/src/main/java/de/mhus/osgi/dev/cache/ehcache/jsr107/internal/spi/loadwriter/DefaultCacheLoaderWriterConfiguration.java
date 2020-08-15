@@ -23,42 +23,45 @@ import org.ehcache.spi.service.ServiceConfiguration;
 
 import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.classes.ClassInstanceConfiguration;
 
-/**
-* {@link ServiceConfiguration} for the default {@link CacheLoaderWriterProvider}.
-*/
-public class DefaultCacheLoaderWriterConfiguration extends ClassInstanceConfiguration<CacheLoaderWriter<?, ?>> implements CacheLoaderWriterConfiguration<DefaultCacheLoaderWriterConfiguration> {
+/** {@link ServiceConfiguration} for the default {@link CacheLoaderWriterProvider}. */
+public class DefaultCacheLoaderWriterConfiguration
+        extends ClassInstanceConfiguration<CacheLoaderWriter<?, ?>>
+        implements CacheLoaderWriterConfiguration<DefaultCacheLoaderWriterConfiguration> {
 
-  /**
-   * Creates a new configuration object with the specified {@link CacheLoaderWriter} class and associated constructor
-   * arguments.
-   *
-   * @param clazz the cache loader writer class
-   * @param arguments the constructor arguments
-   */
-  public DefaultCacheLoaderWriterConfiguration(final Class<? extends CacheLoaderWriter<?, ?>> clazz, Object... arguments) {
-    super(clazz, arguments);
-  }
+    /**
+     * Creates a new configuration object with the specified {@link CacheLoaderWriter} class and
+     * associated constructor arguments.
+     *
+     * @param clazz the cache loader writer class
+     * @param arguments the constructor arguments
+     */
+    public DefaultCacheLoaderWriterConfiguration(
+            final Class<? extends CacheLoaderWriter<?, ?>> clazz, Object... arguments) {
+        super(clazz, arguments);
+    }
 
-  /**
-   * Creates a new configuration with the specified {@link CacheLoaderWriter} instance.
-   *
-   * @param loaderWriter the cache loader writer
-   */
-  public DefaultCacheLoaderWriterConfiguration(CacheLoaderWriter<?, ?> loaderWriter) {
-    super(loaderWriter);
-  }
+    /**
+     * Creates a new configuration with the specified {@link CacheLoaderWriter} instance.
+     *
+     * @param loaderWriter the cache loader writer
+     */
+    public DefaultCacheLoaderWriterConfiguration(CacheLoaderWriter<?, ?> loaderWriter) {
+        super(loaderWriter);
+    }
 
-  protected DefaultCacheLoaderWriterConfiguration(DefaultCacheLoaderWriterConfiguration configuration) {
-    super(configuration);
-  }
+    protected DefaultCacheLoaderWriterConfiguration(
+            DefaultCacheLoaderWriterConfiguration configuration) {
+        super(configuration);
+    }
 
-  @Override
-  public DefaultCacheLoaderWriterConfiguration derive() {
-    return new DefaultCacheLoaderWriterConfiguration(this);
-  }
+    @Override
+    public DefaultCacheLoaderWriterConfiguration derive() {
+        return new DefaultCacheLoaderWriterConfiguration(this);
+    }
 
-  @Override
-  public DefaultCacheLoaderWriterConfiguration build(DefaultCacheLoaderWriterConfiguration configuration) {
-    return configuration;
-  }
+    @Override
+    public DefaultCacheLoaderWriterConfiguration build(
+            DefaultCacheLoaderWriterConfiguration configuration) {
+        return configuration;
+    }
 }

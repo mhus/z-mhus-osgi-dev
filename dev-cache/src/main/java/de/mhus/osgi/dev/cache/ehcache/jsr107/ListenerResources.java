@@ -30,70 +30,70 @@ import javax.cache.configuration.Factory;
 import javax.cache.event.CacheEntryEventFilter;
 import javax.cache.event.CacheEntryListener;
 
-/**
- * ListenerResources
- */
+/** ListenerResources */
 class ListenerResources<K, V> implements Closeable {
 
-  private final CacheEntryListener<? super K, ? super V> listener;
-  private final CacheEntryEventFilter<? super K, ? super V> filter;
-  private List<EventListenerAdaptors.EventListenerAdaptor<K, V>> ehListeners = null;
+    private final CacheEntryListener<? super K, ? super V> listener;
+    private final CacheEntryEventFilter<? super K, ? super V> filter;
+    private List<EventListenerAdaptors.EventListenerAdaptor<K, V>> ehListeners = null;
 
-  @SuppressWarnings("unchecked")
-  static <K, V> ListenerResources<K, V> createListenerResources(CacheEntryListenerConfiguration<K, V> listenerConfig) {
-    CacheEntryListener<? super K, ? super V> listener = listenerConfig.getCacheEntryListenerFactory().create();
+    @SuppressWarnings("unchecked")
+    static <K, V> ListenerResources<K, V> createListenerResources(
+            CacheEntryListenerConfiguration<K, V> listenerConfig) {
+        CacheEntryListener<? super K, ? super V> listener =
+                listenerConfig.getCacheEntryListenerFactory().create();
 
-    // create the filter, closing the listener above upon exception
-    CacheEntryEventFilter<? super K, ? super V> filter;
-    try {
-      Factory<CacheEntryEventFilter<? super K, ? super V>> filterFactory = listenerConfig
-          .getCacheEntryEventFilterFactory();
-      if (filterFactory != null) {
-        filter = listenerConfig.getCacheEntryEventFilterFactory().create();
-      } else {
-        filter = event -> true;
-      }
-    } catch (Throwable t) {
-      throw closeAllAfter(new CacheException(t), listener);
+        // create the filter, closing the listener above upon exception
+        CacheEntryEventFilter<? super K, ? super V> filter;
+        try {
+            Factory<CacheEntryEventFilter<? super K, ? super V>> filterFactory =
+                    listenerConfig.getCacheEntryEventFilterFactory();
+            if (filterFactory != null) {
+                filter = listenerConfig.getCacheEntryEventFilterFactory().create();
+            } else {
+                filter = event -> true;
+            }
+        } catch (Throwable t) {
+            throw closeAllAfter(new CacheException(t), listener);
+        }
+
+        try {
+            return new ListenerResources<>(listener, filter);
+        } catch (Throwable t) {
+            throw closeAllAfter(new CacheException(t), filter, listener);
+        }
     }
 
-    try {
-      return new ListenerResources<>(listener, filter);
-    } catch (Throwable t) {
-      throw closeAllAfter(new CacheException(t), filter, listener);
+    ListenerResources(
+            CacheEntryListener<? super K, ? super V> listener,
+            CacheEntryEventFilter<? super K, ? super V> filter) {
+        this.listener = listener;
+        this.filter = filter;
     }
-  }
 
-
-
-  ListenerResources(CacheEntryListener<? super K, ? super V> listener,
-                    CacheEntryEventFilter<? super K, ? super V> filter) {
-    this.listener = listener;
-    this.filter = filter;
-  }
-
-  CacheEntryEventFilter<? super K, ? super V> getFilter() {
-    return filter;
-  }
-
-  CacheEntryListener<? super K, ? super V> getListener() {
-    return listener;
-  }
-
-  synchronized List<EventListenerAdaptors.EventListenerAdaptor<K, V>> getEhcacheListeners(Cache<K, V> source, boolean requestsOld) {
-    if (ehListeners == null) {
-      ehListeners = EventListenerAdaptors.ehListenersFor(listener, filter, source, requestsOld);
+    CacheEntryEventFilter<? super K, ? super V> getFilter() {
+        return filter;
     }
-    return Collections.unmodifiableList(ehListeners);
-  }
 
-  @Override
-  public void close() {
-    try {
-      closeAll(listener, filter);
-    } catch (Throwable t) {
-      throw new CacheException(t);
+    CacheEntryListener<? super K, ? super V> getListener() {
+        return listener;
     }
-  }
 
+    synchronized List<EventListenerAdaptors.EventListenerAdaptor<K, V>> getEhcacheListeners(
+            Cache<K, V> source, boolean requestsOld) {
+        if (ehListeners == null) {
+            ehListeners =
+                    EventListenerAdaptors.ehListenersFor(listener, filter, source, requestsOld);
+        }
+        return Collections.unmodifiableList(ehListeners);
+    }
+
+    @Override
+    public void close() {
+        try {
+            closeAll(listener, filter);
+        } catch (Throwable t) {
+            throw new CacheException(t);
+        }
+    }
 }

@@ -14,34 +14,34 @@ import de.mhus.osgi.api.services.ISimpleService;
 @ServiceComponent(property = "test=test")
 public class MhusTestService extends MLog implements ISimpleService {
 
-//    @ServiceReference
-//    public BundleContext bcontext;
-    
+    //    @ServiceReference
+    //    public BundleContext bcontext;
+
     @ServiceActivate
     public void doActivate() {
         log().i("doActivate");
     }
-    
+
     @ServiceDeactivate
     public void doDeactivate() {
         log().i("doDeactivate");
     }
-    
+
     @ServiceReference
     public void setContext(BundleContext context) {
-        log().i("Set Context",context);
+        log().i("Set Context", context);
     }
-    
+
     @ServiceReference
     public void setEventAdmin(EventAdmin eventAdmin) {
-        log().i("Set Event Admin",eventAdmin);
+        log().i("Set Event Admin", eventAdmin);
     }
-    
-    @ServiceReference(unset=true)
+
+    @ServiceReference(unset = true)
     public void unsetEventAdmin(EventAdmin eventAdmin) {
-        log().i("Unset Event Admin",eventAdmin);
+        log().i("Unset Event Admin", eventAdmin);
     }
-    
+
     @Override
     public String getSimpleServiceInfo() {
         return "test";
@@ -53,8 +53,5 @@ public class MhusTestService extends MLog implements ISimpleService {
     }
 
     @Override
-    public void doSimpleServiceCommand(String cmd, Object... param) {
-        
-    }
-
+    public void doSimpleServiceCommand(String cmd, Object... param) {}
 }

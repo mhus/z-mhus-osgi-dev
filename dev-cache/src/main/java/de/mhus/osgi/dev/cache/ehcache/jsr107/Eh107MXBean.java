@@ -21,38 +21,40 @@ import javax.cache.CacheException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-/**
- * @author teck
- */
+/** @author teck */
 abstract class Eh107MXBean {
 
-  private final ObjectName objectName;
+    private final ObjectName objectName;
 
-  Eh107MXBean(String cacheName, URI cacheManagerURI, final String beanName) {
-    this.objectName = createObjectName(cacheName, cacheManagerURI, beanName);
-  }
-
-  private String sanitize(String string) {
-    return string == null ? "" : string.replaceAll(",|:|=|\n", ".");
-  }
-
-  private ObjectName createObjectName(String cacheName, URI cacheManagerURI, String beanName) {
-    String cacheManagerName = sanitize(cacheManagerURI.toString());
-    cacheName = sanitize(cacheName);
-
-    // The classloader should really be used as part of the ObjectName IMO, but
-    // the TCK would fail with that
-
-    try {
-      return new ObjectName("javax.cache:type=" + beanName + ",CacheManager=" + cacheManagerName + ",Cache="
-          + cacheName);
-    } catch (MalformedObjectNameException e) {
-      throw new CacheException(e);
+    Eh107MXBean(String cacheName, URI cacheManagerURI, final String beanName) {
+        this.objectName = createObjectName(cacheName, cacheManagerURI, beanName);
     }
-  }
 
-  ObjectName getObjectName() {
-    return this.objectName;
-  }
+    private String sanitize(String string) {
+        return string == null ? "" : string.replaceAll(",|:|=|\n", ".");
+    }
 
+    private ObjectName createObjectName(String cacheName, URI cacheManagerURI, String beanName) {
+        String cacheManagerName = sanitize(cacheManagerURI.toString());
+        cacheName = sanitize(cacheName);
+
+        // The classloader should really be used as part of the ObjectName IMO, but
+        // the TCK would fail with that
+
+        try {
+            return new ObjectName(
+                    "javax.cache:type="
+                            + beanName
+                            + ",CacheManager="
+                            + cacheManagerName
+                            + ",Cache="
+                            + cacheName);
+        } catch (MalformedObjectNameException e) {
+            throw new CacheException(e);
+        }
+    }
+
+    ObjectName getObjectName() {
+        return this.objectName;
+    }
 }

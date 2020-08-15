@@ -10,7 +10,8 @@ import de.mhus.osgi.api.karaf.AbstractCmd;
 // https://medium.com/programming-kubernetes/building-stuff-with-the-kubernetes-api-part-2-using-java-ceb8a5ff7920
 
 // cat /var/run/secrets/kubernetes.io/serviceaccount/token
-// all are cluster-admin: kubectl apply -f https://raw.githubusercontent.com/spekt8/spekt8/master/fabric8-rbac.yaml
+// all are cluster-admin: kubectl apply -f
+// https://raw.githubusercontent.com/spekt8/spekt8/master/fabric8-rbac.yaml
 // https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 
 @Command(scope = "mhus", name = "dev-k8s", description = "Kubernetes tests")
@@ -21,10 +22,7 @@ public class CmdDevK8s extends AbstractCmd {
             index = 0,
             name = "cmd",
             required = true,
-            description =
-                    "Command to execute\n"
-                    + "  list"
-            ,
+            description = "Command to execute\n" + "  list",
             multiValued = false)
     String cmd;
 
@@ -39,26 +37,22 @@ public class CmdDevK8s extends AbstractCmd {
     private static WithFabric8 withFabric8;
 
     private static WatchExample watch;
-        
+
     @Override
     public Object execute2() throws Exception {
-        
+
         if (cmd.equals("who")) {
             Who.main(parameters);
-        } else
-        if (cmd.equals("proto")) {
+        } else if (cmd.equals("proto")) {
             ProtoExample.main(parameters);
             System.out.println("Done");
-        } else
-        if (cmd.equals("simple")) {
+        } else if (cmd.equals("simple")) {
             SimpleExample.main(parameters);
             System.out.println("Done");
-        } else
-    	if (cmd.equals("controller")) {
-    		ControllerExample.main(parameters);
-    		System.out.println("Done");
-    	} else
-        if (cmd.equals("fabric8")) {
+        } else if (cmd.equals("controller")) {
+            ControllerExample.main(parameters);
+            System.out.println("Done");
+        } else if (cmd.equals("fabric8")) {
             if (withFabric8 == null) {
                 System.out.println("Start");
                 withFabric8 = new WithFabric8();
@@ -67,8 +61,7 @@ public class CmdDevK8s extends AbstractCmd {
                 withFabric8.close();
                 withFabric8 = null;
             }
-        } else
-        if (cmd.equals("watch")) {
+        } else if (cmd.equals("watch")) {
             if (watch == null) {
                 System.out.println("Start");
                 watch = new WatchExample(parameters);
@@ -77,13 +70,11 @@ public class CmdDevK8s extends AbstractCmd {
                 watch.close();
                 watch = null;
             }
-        } else
-        if (cmd.equals("my")) {
+        } else if (cmd.equals("my")) {
             My.main(parameters);
             System.out.println("Done");
         }
 
         return null;
     }
-
 }

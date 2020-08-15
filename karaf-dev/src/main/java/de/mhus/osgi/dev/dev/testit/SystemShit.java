@@ -40,18 +40,19 @@ public class SystemShit implements ShitIfc {
                 System.out.println(obj.getClass());
             }
             return obj;
-        } else
-        if (cmd.equals("env")) {
-            for ( Entry<String, String> entry : System.getenv().entrySet())
-                if (parameters == null || parameters.length < 1 || entry.getKey().contains(parameters[0]))
-                System.out.println(entry.getKey() + "=" + entry.getValue());
-        } else
-        if (cmd.equals("properties")) {
-            for ( Entry<Object, Object> entry : System.getProperties().entrySet())
-                if (parameters == null || parameters.length < 1 || String.valueOf(entry.getKey()).contains(parameters[0]))
-                System.out.println(entry.getKey() + "=" + entry.getValue());
+        } else if (cmd.equals("env")) {
+            for (Entry<String, String> entry : System.getenv().entrySet())
+                if (parameters == null
+                        || parameters.length < 1
+                        || entry.getKey().contains(parameters[0]))
+                    System.out.println(entry.getKey() + "=" + entry.getValue());
+        } else if (cmd.equals("properties")) {
+            for (Entry<Object, Object> entry : System.getProperties().entrySet())
+                if (parameters == null
+                        || parameters.length < 1
+                        || String.valueOf(entry.getKey()).contains(parameters[0]))
+                    System.out.println(entry.getKey() + "=" + entry.getValue());
         }
         return null;
     }
-
 }

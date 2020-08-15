@@ -26,44 +26,47 @@ import de.mhus.osgi.dev.cache.ehcache.jsr107.internal.classes.ClassInstanceProvi
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author Alex Snaps
- */
-public class DefaultCacheLoaderWriterProvider extends ClassInstanceProvider<String, DefaultCacheLoaderWriterConfiguration, CacheLoaderWriter<?, ?>> implements CacheLoaderWriterProvider {
+/** @author Alex Snaps */
+public class DefaultCacheLoaderWriterProvider
+        extends ClassInstanceProvider<
+                String, DefaultCacheLoaderWriterConfiguration, CacheLoaderWriter<?, ?>>
+        implements CacheLoaderWriterProvider {
 
-  private final Set<String> cachesWithJsrRegisteredLoaders = new HashSet<>();
+    private final Set<String> cachesWithJsrRegisteredLoaders = new HashSet<>();
 
-  public DefaultCacheLoaderWriterProvider(DefaultCacheLoaderWriterProviderConfiguration configuration) {
-    super(configuration, DefaultCacheLoaderWriterConfiguration.class, true);
-  }
+    public DefaultCacheLoaderWriterProvider(
+            DefaultCacheLoaderWriterProviderConfiguration configuration) {
+        super(configuration, DefaultCacheLoaderWriterConfiguration.class, true);
+    }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public <K, V> CacheLoaderWriter<? super K, V> createCacheLoaderWriter(final String alias, final CacheConfiguration<K, V> cacheConfiguration) {
-    return (CacheLoaderWriter<? super K, V>) newInstance(alias, cacheConfiguration);
-  }
+    @SuppressWarnings("unchecked")
+    @Override
+    public <K, V> CacheLoaderWriter<? super K, V> createCacheLoaderWriter(
+            final String alias, final CacheConfiguration<K, V> cacheConfiguration) {
+        return (CacheLoaderWriter<? super K, V>) newInstance(alias, cacheConfiguration);
+    }
 
-  @Override
-  public void releaseCacheLoaderWriter(String alias, CacheLoaderWriter<?, ?> cacheLoaderWriter) throws Exception {
-    releaseInstance(cacheLoaderWriter);
-  }
+    @Override
+    public void releaseCacheLoaderWriter(String alias, CacheLoaderWriter<?, ?> cacheLoaderWriter)
+            throws Exception {
+        releaseInstance(cacheLoaderWriter);
+    }
 
-  @Override
-  public CacheLoaderWriterConfiguration<?> getPreConfiguredCacheLoaderWriterConfig(String alias) {
-    return getPreconfigured(alias);
-  }
+    @Override
+    public CacheLoaderWriterConfiguration<?> getPreConfiguredCacheLoaderWriterConfig(String alias) {
+        return getPreconfigured(alias);
+    }
 
-  @Override
-  public boolean isLoaderJsrProvided(String alias) {
-    return cachesWithJsrRegisteredLoaders.contains(alias);
-  }
+    @Override
+    public boolean isLoaderJsrProvided(String alias) {
+        return cachesWithJsrRegisteredLoaders.contains(alias);
+    }
 
-  protected void registerJsrLoaderForCache(String alias) {
-    cachesWithJsrRegisteredLoaders.add(alias);
-  }
+    protected void registerJsrLoaderForCache(String alias) {
+        cachesWithJsrRegisteredLoaders.add(alias);
+    }
 
-  protected void deregisterJsrLoaderForCache(String alias) {
-    cachesWithJsrRegisteredLoaders.remove(alias);
-  }
-
+    protected void deregisterJsrLoaderForCache(String alias) {
+        cachesWithJsrRegisteredLoaders.remove(alias);
+    }
 }

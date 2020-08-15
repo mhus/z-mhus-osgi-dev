@@ -20,73 +20,81 @@ import javax.cache.event.CacheEntryEvent;
 import javax.cache.event.EventType;
 import org.ehcache.event.CacheEvent;
 
-/**
- * @author teck
- */
+/** @author teck */
 abstract class Eh107CacheEntryEvent<K, V> extends CacheEntryEvent<K, V> {
 
-  private static final long serialVersionUID = 8460535666272347345L;
+    private static final long serialVersionUID = 8460535666272347345L;
 
-  private final CacheEvent<? extends K, ? extends V> ehEvent;
+    private final CacheEvent<? extends K, ? extends V> ehEvent;
 
-  private final boolean hasOldValue;
+    private final boolean hasOldValue;
 
-  Eh107CacheEntryEvent(Cache<K, V> source, EventType eventType, CacheEvent<? extends K, ? extends V> ehEvent,
-      boolean hasOldValue) {
-    super(source, eventType);
-    this.ehEvent = ehEvent;
-    this.hasOldValue = hasOldValue;
-  }
-
-  @Override
-  public K getKey() {
-    return ehEvent.getKey();
-  }
-
-  @Override
-  public abstract V getValue();
-
-  @Override
-  public <T> T unwrap(Class<T> clazz) {
-    return Unwrap.unwrap(clazz, this, ehEvent);
-  }
-
-  @Override
-  public V getOldValue() {
-    return ehEvent.getOldValue();
-  }
-
-  @Override
-  public boolean isOldValueAvailable() {
-    return hasOldValue;
-  }
-
-  static class NormalEvent<K, V> extends Eh107CacheEntryEvent<K, V> {
-
-    private static final long serialVersionUID = 1566947833363986792L;
-
-    public NormalEvent(Cache<K, V> source, EventType eventType, CacheEvent<? extends K, ? extends V> ehEvent, boolean hasOldValue) {
-      super(source, eventType, ehEvent, hasOldValue);
+    Eh107CacheEntryEvent(
+            Cache<K, V> source,
+            EventType eventType,
+            CacheEvent<? extends K, ? extends V> ehEvent,
+            boolean hasOldValue) {
+        super(source, eventType);
+        this.ehEvent = ehEvent;
+        this.hasOldValue = hasOldValue;
     }
 
     @Override
-    public V getValue() {
-      return super.ehEvent.getNewValue();
-    }
-  }
-
-  static class RemovingEvent<K, V> extends Eh107CacheEntryEvent<K, V> {
-
-    private static final long serialVersionUID = -1363817518693572909L;
-
-    public RemovingEvent(Cache<K, V> source, EventType eventType, CacheEvent<? extends K, ? extends V> ehEvent, boolean hasOldValue) {
-      super(source, eventType, ehEvent, hasOldValue);
+    public K getKey() {
+        return ehEvent.getKey();
     }
 
     @Override
-    public V getValue() {
-      return super.ehEvent.getOldValue();
+    public abstract V getValue();
+
+    @Override
+    public <T> T unwrap(Class<T> clazz) {
+        return Unwrap.unwrap(clazz, this, ehEvent);
     }
 
-  }
+    @Override
+    public V getOldValue() {
+        return ehEvent.getOldValue();
+    }
+
+    @Override
+    public boolean isOldValueAvailable() {
+        return hasOldValue;
+    }
+
+    static class NormalEvent<K, V> extends Eh107CacheEntryEvent<K, V> {
+
+        private static final long serialVersionUID = 1566947833363986792L;
+
+        public NormalEvent(
+                Cache<K, V> source,
+                EventType eventType,
+                CacheEvent<? extends K, ? extends V> ehEvent,
+                boolean hasOldValue) {
+            super(source, eventType, ehEvent, hasOldValue);
+        }
+
+        @Override
+        public V getValue() {
+            return super.ehEvent.getNewValue();
+        }
+    }
+
+    static class RemovingEvent<K, V> extends Eh107CacheEntryEvent<K, V> {
+
+        private static final long serialVersionUID = -1363817518693572909L;
+
+        public RemovingEvent(
+                Cache<K, V> source,
+                EventType eventType,
+                CacheEvent<? extends K, ? extends V> ehEvent,
+                boolean hasOldValue) {
+            super(source, eventType, ehEvent, hasOldValue);
+        }
+
+        @Override
+        public V getValue() {
+            return super.ehEvent.getOldValue();
+        }
+    }
 }

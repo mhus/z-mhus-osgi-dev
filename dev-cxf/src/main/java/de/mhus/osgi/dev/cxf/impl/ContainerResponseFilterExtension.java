@@ -9,9 +9,9 @@ import javax.ws.rs.container.ContainerResponseFilter;
 public class ContainerResponseFilterExtension implements ContainerResponseFilter {
 
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+    public void filter(
+            ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         System.out.println("ContainerResponseFilter");
     }
-
 }

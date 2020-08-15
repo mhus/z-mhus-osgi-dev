@@ -30,9 +30,7 @@ import io.kubernetes.client.util.Watch;
 import okhttp3.OkHttpClient;
 
 // https://github.com/kubernetes-client/java/blob/master/examples/src/main/java/io/kubernetes/client/examples/WatchExample.java
-/**
- * A simple example of how to use Watch API to watch changes in Namespace list.
- */
+/** A simple example of how to use Watch API to watch changes in Namespace list. */
 public class WatchExample {
 
     private Watch<V1Node> watchNode;
@@ -42,85 +40,110 @@ public class WatchExample {
     public WatchExample(String[] args) throws IOException, ApiException {
         ApiClient client = Config.defaultClient();
         // infinite timeout
-        OkHttpClient httpClient = client.getHttpClient().newBuilder().readTimeout(0, TimeUnit.SECONDS).build();
+        OkHttpClient httpClient =
+                client.getHttpClient().newBuilder().readTimeout(0, TimeUnit.SECONDS).build();
         client.setHttpClient(httpClient);
         Configuration.setDefaultApiClient(client);
 
         CoreV1Api api = new CoreV1Api();
 
-//    Watch<V1Namespace> watch =
-//        Watch.createWatch(
-//            client,
-//            api.listNamespaceCall(null, null, null, null, null, 5, null, null, Boolean.TRUE, null),
-//            new TypeToken<Watch.Response<V1Namespace>>() {}.getType());
-//
-//    try {
-//      for (Watch.Response<V1Namespace> item : watch) {
-//        System.out.printf("%s : %s%n", item.type, item.object.getMetadata().getName());
-//      }
-//    } finally {
-//      watch.close();
-//    }
+        //    Watch<V1Namespace> watch =
+        //        Watch.createWatch(
+        //            client,
+        //            api.listNamespaceCall(null, null, null, null, null, 5, null, null,
+        // Boolean.TRUE, null),
+        //            new TypeToken<Watch.Response<V1Namespace>>() {}.getType());
+        //
+        //    try {
+        //      for (Watch.Response<V1Namespace> item : watch) {
+        //        System.out.printf("%s : %s%n", item.type, item.object.getMetadata().getName());
+        //      }
+        //    } finally {
+        //      watch.close();
+        //    }
 
-        watchNode = Watch.createWatch(client,
-                api.listNodeCall(null,true, null, null, null, 5, null, null, Boolean.TRUE, null),
-                new TypeToken<Watch.Response<V1Node>>() {
-                }.getType());
+        watchNode =
+                Watch.createWatch(
+                        client,
+                        api.listNodeCall(
+                                null, true, null, null, null, 5, null, null, Boolean.TRUE, null),
+                        new TypeToken<Watch.Response<V1Node>>() {}.getType());
 
-        MThread.run(new Runnable() {
+        MThread.run(
+                new Runnable() {
 
-            @Override
-            public void run() {
-                for (Watch.Response<V1Node> item : watchNode) {
-                    System.out.println("WatchNode: " + item.type + " " + item.object.getKind() + " " + item.object.getMetadata().getName());
-                    System.out.println(item.object.getStatus());
-                }
-            }
-        });
+                    @Override
+                    public void run() {
+                        for (Watch.Response<V1Node> item : watchNode) {
+                            System.out.println(
+                                    "WatchNode: "
+                                            + item.type
+                                            + " "
+                                            + item.object.getKind()
+                                            + " "
+                                            + item.object.getMetadata().getName());
+                            System.out.println(item.object.getStatus());
+                        }
+                    }
+                });
 
-        watchPod = Watch.createWatch(client,
-                api.listPodForAllNamespacesCall(true, null, null, null, 5, null, null,null, Boolean.TRUE, null),
-                new TypeToken<Watch.Response<V1Pod>>() {
-                }.getType());
+        watchPod =
+                Watch.createWatch(
+                        client,
+                        api.listPodForAllNamespacesCall(
+                                true, null, null, null, 5, null, null, null, Boolean.TRUE, null),
+                        new TypeToken<Watch.Response<V1Pod>>() {}.getType());
 
-        MThread.run(new Runnable() {
+        MThread.run(
+                new Runnable() {
 
-            @Override
-            public void run() {
-                for (Watch.Response<V1Pod> item : watchPod) {
-                    System.out.println("WatchPod: " + item.type + " " + item.object.getKind() + " " + item.object.getMetadata().getName());
-                    System.out.println(item.object.getStatus());
-                }
-            }
-        });
-        
-        watchService = Watch.createWatch(client,
-                api.listServiceForAllNamespacesCall(true, null, null, null, 5, null, null,null, Boolean.TRUE, null),
-                new TypeToken<Watch.Response<V1Service>>() {
-                }.getType());
+                    @Override
+                    public void run() {
+                        for (Watch.Response<V1Pod> item : watchPod) {
+                            System.out.println(
+                                    "WatchPod: "
+                                            + item.type
+                                            + " "
+                                            + item.object.getKind()
+                                            + " "
+                                            + item.object.getMetadata().getName());
+                            System.out.println(item.object.getStatus());
+                        }
+                    }
+                });
 
-        MThread.run(new Runnable() {
+        watchService =
+                Watch.createWatch(
+                        client,
+                        api.listServiceForAllNamespacesCall(
+                                true, null, null, null, 5, null, null, null, Boolean.TRUE, null),
+                        new TypeToken<Watch.Response<V1Service>>() {}.getType());
 
-            @Override
-            public void run() {
-                for (Watch.Response<V1Service> item : watchService) {
-                    System.out.println("Watchervice: " + item.type + " " + item.object.getKind() + " " + item.object.getMetadata().getName());
-                    System.out.println(item.object.getStatus());
-                }
-            }
-        });
-        
+        MThread.run(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        for (Watch.Response<V1Service> item : watchService) {
+                            System.out.println(
+                                    "Watchervice: "
+                                            + item.type
+                                            + " "
+                                            + item.object.getKind()
+                                            + " "
+                                            + item.object.getMetadata().getName());
+                            System.out.println(item.object.getStatus());
+                        }
+                    }
+                });
     }
 
     public void close() throws IOException {
-        if (watchNode != null)
-            watchNode.close();
+        if (watchNode != null) watchNode.close();
         watchNode = null;
-        if (watchPod != null)
-            watchPod.close();
+        if (watchPod != null) watchPod.close();
         watchPod = null;
-        if (watchService != null)
-            watchService.close();
+        if (watchService != null) watchService.close();
         watchService = null;
     }
 }

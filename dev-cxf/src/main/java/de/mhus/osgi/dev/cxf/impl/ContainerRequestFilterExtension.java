@@ -11,5 +11,4 @@ public class ContainerRequestFilterExtension implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         System.out.println("ContainerRequestFilterExtension");
     }
-
 }

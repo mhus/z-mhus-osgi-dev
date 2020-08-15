@@ -22,49 +22,50 @@ import org.ehcache.spi.loaderwriter.CacheLoaderWriter;
 
 import java.util.Map;
 
-/**
- * WrappedCacheLoaderWriter
- */
+/** WrappedCacheLoaderWriter */
 public class WrappedCacheLoaderWriter<K, V> implements Jsr107CacheLoaderWriter<K, V> {
 
-  private final CacheLoaderWriter<K, V> delegate;
+    private final CacheLoaderWriter<K, V> delegate;
 
-  public WrappedCacheLoaderWriter(CacheLoaderWriter<K, V> delegate) {
-    this.delegate = delegate;
-  }
+    public WrappedCacheLoaderWriter(CacheLoaderWriter<K, V> delegate) {
+        this.delegate = delegate;
+    }
 
-  @Override
-  public Map<K, V> loadAllAlways(Iterable<? extends K> keys) throws BulkCacheLoadingException, Exception {
-    return delegate.loadAll(keys);
-  }
+    @Override
+    public Map<K, V> loadAllAlways(Iterable<? extends K> keys)
+            throws BulkCacheLoadingException, Exception {
+        return delegate.loadAll(keys);
+    }
 
-  @Override
-  public V load(K key) throws Exception {
-    return delegate.load(key);
-  }
+    @Override
+    public V load(K key) throws Exception {
+        return delegate.load(key);
+    }
 
-  @Override
-  public Map<K, V> loadAll(Iterable<? extends K> keys) throws BulkCacheLoadingException, Exception {
-    return delegate.loadAll(keys);
-  }
+    @Override
+    public Map<K, V> loadAll(Iterable<? extends K> keys)
+            throws BulkCacheLoadingException, Exception {
+        return delegate.loadAll(keys);
+    }
 
-  @Override
-  public void write(K key, V value) throws Exception {
-    delegate.write(key, value);
-  }
+    @Override
+    public void write(K key, V value) throws Exception {
+        delegate.write(key, value);
+    }
 
-  @Override
-  public void writeAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) throws BulkCacheWritingException, Exception {
-    delegate.writeAll(entries);
-  }
+    @Override
+    public void writeAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> entries)
+            throws BulkCacheWritingException, Exception {
+        delegate.writeAll(entries);
+    }
 
-  @Override
-  public void delete(K key) throws Exception {
-    delegate.delete(key);
-  }
+    @Override
+    public void delete(K key) throws Exception {
+        delegate.delete(key);
+    }
 
-  @Override
-  public void deleteAll(Iterable<? extends K> keys) throws BulkCacheWritingException, Exception {
-    delegate.deleteAll(keys);
-  }
+    @Override
+    public void deleteAll(Iterable<? extends K> keys) throws BulkCacheWritingException, Exception {
+        delegate.deleteAll(keys);
+    }
 }

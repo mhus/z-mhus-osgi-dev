@@ -45,7 +45,7 @@ public class StressShit implements ShitIfc {
     @Override
     public void printUsage() {
         System.out.println(
-                          " memkill [permanent=false]\n"
+                " memkill [permanent=false]\n"
                         + " stackkill\n"
                         + " stress [seconds=1] [threads=auto] [iterations=0] [sleep=1] [tolerance=5]\n"
                         + " parallel [interval=1] [lifetime=10] [silent=true]\n"
@@ -57,7 +57,7 @@ public class StressShit implements ShitIfc {
 
     long current = 0;
     long sum = 0;
-    
+
     @Override
     public Object doExecute(CmdShitYo base, String cmd, String[] parameters) throws Exception {
         if (cmd.equals("threads")) {
@@ -68,16 +68,18 @@ public class StressShit implements ShitIfc {
             current = 0;
             sum = 0;
             while (true) {
-                new Thread(new Runnable() {
-                    
-                    @Override
-                    public void run() {
-                        sum++;
-                        current++;
-                        MThread.sleepForSure(sleep);
-                        current--;
-                    }
-                }).start();
+                new Thread(
+                                new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        sum++;
+                                        current++;
+                                        MThread.sleepForSure(sleep);
+                                        current--;
+                                    }
+                                })
+                        .start();
                 MThread.sleepInLoop(next);
                 if (System.currentTimeMillis() > nextOutput) {
                     System.out.println("Current: " + current + " Sum: " + sum);
@@ -129,7 +131,8 @@ public class StressShit implements ShitIfc {
                         }
                     }
                     if (scenario == 5) {
-                        System.out.println("5: Wait for Ctrl-C - generateRsaKey and MThread.sleepInLoop");
+                        System.out.println(
+                                "5: Wait for Ctrl-C - generateRsaKey and MThread.sleepInLoop");
                         long start = System.currentTimeMillis();
                         while (!MPeriod.isTimeOut(start, sleep)) {
                             MBouncy.generateRsaKey(MBouncy.RSA_KEY_SIZE.B2048);
@@ -176,10 +179,9 @@ public class StressShit implements ShitIfc {
                 while (true) {
                     fos.write(buffer);
                     fos.flush();
-                    size+=buffer.length;
+                    size += buffer.length;
                     round++;
-                    if (round % 100 == 0)
-                        System.out.println("Size " + MCast.toByteUnit(size));
+                    if (round % 100 == 0) System.out.println("Size " + MCast.toByteUnit(size));
                     MThread.checkInterruptedException();
                 }
             } finally {
@@ -218,8 +220,7 @@ public class StressShit implements ShitIfc {
                             if (small != null) {
                                 small = small + small;
                                 kill = kill + small;
-                            } else
-                                kill = kill + kill;
+                            } else kill = kill + kill;
                             len = kill.length();
                             free = Runtime.getRuntime().freeMemory();
                             System.out.println(len + " " + free);
@@ -227,27 +228,29 @@ public class StressShit implements ShitIfc {
                         }
                     } catch (OutOfMemoryError e) {
                         free = Runtime.getRuntime().freeMemory();
-                        System.out.println("Buffer     : " + MCast.toUnit(len) + " Characters (" + len + ")");
-                        System.out.println("Memory lost: " + MCast.toByteUnit(freeStart - free) + "B");
+                        System.out.println(
+                                "Buffer     : " + MCast.toUnit(len) + " Characters (" + len + ")");
+                        System.out.println(
+                                "Memory lost: " + MCast.toByteUnit(freeStart - free) + "B");
                         MThread.checkInterruptedException();
                     }
-                    if (!p.getBoolean("permanent", false))
-                        break;
+                    if (!p.getBoolean("permanent", false)) break;
                     MThread.sleepInLoop(500);
                     small = "a";
                 }
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+            }
             small = "";
             kill = "";
             System.gc();
             System.out.println("Exit memkill, free memory");
-            
+
         } else if (cmd.equals("stackkill")) {
             cnt = 0;
             try {
                 doInfinity();
             } catch (Throwable t) {
-                System.out.println( t.getMessage() );
+                System.out.println(t.getMessage());
             }
             System.out.println("Depth: " + cnt);
         } else if (cmd.equals("stress")) {

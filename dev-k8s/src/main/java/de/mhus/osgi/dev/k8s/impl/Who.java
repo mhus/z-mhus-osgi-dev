@@ -14,11 +14,9 @@ public class Who {
         ApiClient client = Config.defaultClient();
         Configuration.setDefaultApiClient(client);
         CoreV1Api api = new CoreV1Api();
-        
-        System.out.println( client.getAuthentications() );
+
+        System.out.println(client.getAuthentications());
         ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentications().get("BearerToken");
-        System.out.println("key:"+auth.getApiKey());
-
+        System.out.println("key:" + auth.getApiKey());
     }
-
 }

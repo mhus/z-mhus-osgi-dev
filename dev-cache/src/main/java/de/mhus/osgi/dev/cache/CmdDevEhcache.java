@@ -31,11 +31,10 @@ public class CmdDevEhcache extends AbstractCmd {
             required = true,
             description =
                     "Command to execute\n"
-                    + "  basic\n"
-                    + "  clustered terracotta://tcserver:9410/clustered offheap-1 [key long] [value string] - set\n"
-                    + "  clustered terracotta://tcserver:9410/clustered offheap-1 [key long] - get\n"
-                    + ""
-            ,
+                            + "  basic\n"
+                            + "  clustered terracotta://tcserver:9410/clustered offheap-1 [key long] [value string] - set\n"
+                            + "  clustered terracotta://tcserver:9410/clustered offheap-1 [key long] - get\n"
+                            + "",
             multiValued = false)
     String cmd;
 
@@ -46,11 +45,10 @@ public class CmdDevEhcache extends AbstractCmd {
             description = "Parameters",
             multiValued = true)
     String[] parameters;
-    
+
     @SuppressWarnings("deprecation")
     @Override
     public Object execute2() throws Exception {
-
 
         if (cmd.equals("copier")) {
             OnHeapStoreByValueTest.main(parameters);
@@ -59,7 +57,7 @@ public class CmdDevEhcache extends AbstractCmd {
 
         if (cmd.equals("jsr107.base")) {
             if (parameters == null) parameters = new String[0];
-            
+
             CreateBasicJCacheProgrammatic.main(parameters);
 
             return null;
@@ -70,59 +68,65 @@ public class CmdDevEhcache extends AbstractCmd {
             // terracotta://tcserver:9410/clustered
             // default-resource
             URI uri = create(parameters[0]);
-            try (CacheManager cacheManager = newCacheManagerBuilder()
-                    .with(cluster(uri).autoCreate().defaultServerResource(parameters[1]))
-                    .withCache("basicCache",
-                            newCacheConfigurationBuilder(Long.class, String.class,
-                                    heap(100).offheap(1, MB).with(clusteredDedicated(5, MB))))
-                    .build(true)) {
-              Cache<Long, String> basicCache = cacheManager.getCache("basicCache", Long.class, String.class);
+            try (CacheManager cacheManager =
+                    newCacheManagerBuilder()
+                            .with(cluster(uri).autoCreate().defaultServerResource(parameters[1]))
+                            .withCache(
+                                    "basicCache",
+                                    newCacheConfigurationBuilder(
+                                            Long.class,
+                                            String.class,
+                                            heap(100)
+                                                    .offheap(1, MB)
+                                                    .with(clusteredDedicated(5, MB))))
+                            .build(true)) {
+                Cache<Long, String> basicCache =
+                        cacheManager.getCache("basicCache", Long.class, String.class);
 
-              log().i("Putting to cache");
-              basicCache.put(1L, "da one!");
+                log().i("Putting to cache");
+                basicCache.put(1L, "da one!");
 
-              System.out.println("1: " + basicCache.get(1L) );
-              if (parameters.length == 3) {
-                  long k = MCast.tolong(parameters[2], 0);
-                  System.out.println( k + ": " + basicCache.get(k) );
-              } else
-              if (parameters.length == 4) {
-                  long k = MCast.tolong(parameters[2], 0);
-                  String v = parameters[3];
-                  System.out.println("Set " + k + " to " + v);
-                  basicCache.put(k, v);
-              }
-              
-              log().i("Closing cache manager");
-            }
+                System.out.println("1: " + basicCache.get(1L));
+                if (parameters.length == 3) {
+                    long k = MCast.tolong(parameters[2], 0);
+                    System.out.println(k + ": " + basicCache.get(k));
+                } else if (parameters.length == 4) {
+                    long k = MCast.tolong(parameters[2], 0);
+                    String v = parameters[3];
+                    System.out.println("Set " + k + " to " + v);
+                    basicCache.put(k, v);
+                }
 
-            log().i("Exiting");        
-        }
-        
-        if (cmd.equals("basic")) {
-            
-            log().i("Creating cache manager programmatically");
-            try (CacheManager cacheManager = newCacheManagerBuilder()
-              .withCache("basicCache",
-                newCacheConfigurationBuilder(Long.class, String.class, heap(100).offheap(1, MB)))
-              .build(true)) {
-              Cache<Long, String> basicCache = cacheManager.getCache("basicCache", Long.class, String.class);
-
-              log().i("Putting to cache");
-              basicCache.put(1L, "da one!");
-              String value = basicCache.get(1L);
-              log().i("Retrieved '{}'", value);
-
-              log().i("Closing cache manager");
+                log().i("Closing cache manager");
             }
 
             log().i("Exiting");
-            
+        }
+
+        if (cmd.equals("basic")) {
+
+            log().i("Creating cache manager programmatically");
+            try (CacheManager cacheManager =
+                    newCacheManagerBuilder()
+                            .withCache(
+                                    "basicCache",
+                                    newCacheConfigurationBuilder(
+                                            Long.class, String.class, heap(100).offheap(1, MB)))
+                            .build(true)) {
+                Cache<Long, String> basicCache =
+                        cacheManager.getCache("basicCache", Long.class, String.class);
+
+                log().i("Putting to cache");
+                basicCache.put(1L, "da one!");
+                String value = basicCache.get(1L);
+                log().i("Retrieved '{}'", value);
+
+                log().i("Closing cache manager");
+            }
+
+            log().i("Exiting");
         }
 
         return null;
     }
-    
-
-    
 }

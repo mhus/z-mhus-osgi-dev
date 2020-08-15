@@ -18,9 +18,7 @@ public class CmdDevJpa extends AbstractCmd {
             index = 0,
             name = "cmd",
             required = true,
-            description =
-                    "Command to execute"
-            ,
+            description = "Command to execute",
             multiValued = false)
     String cmd;
 
@@ -31,18 +29,16 @@ public class CmdDevJpa extends AbstractCmd {
             description = "Parameters",
             multiValued = true)
     String[] parameters;
-    
-    
+
     @Option(name = "-p", description = "Provider Match")
     String provMatch;
-    
+
     @Override
     public Object execute2() throws Exception {
-    	
+
         if (cmd.equals("ds")) {
             DS_NAME = parameters[0];
-            if (parameters.length > 1)
-                TestPersistenceUnitInfo.HIBERNATE_DIALECT = parameters[1];
+            if (parameters.length > 1) TestPersistenceUnitInfo.HIBERNATE_DIALECT = parameters[1];
             System.out.println("DataSource: " + DS_NAME);
             System.out.println("Dialect: " + TestPersistenceUnitInfo.HIBERNATE_DIALECT);
             return null;
@@ -51,7 +47,7 @@ public class CmdDevJpa extends AbstractCmd {
             TestPersistenceUnitInfo.AUTOCOMMIT = MCast.toboolean(parameters[0], false);
             System.out.println("Autocommit: " + TestPersistenceUnitInfo.AUTOCOMMIT);
         }
-        
+
         if (cmd.equals("benchmark")) {
             Benchmark.benchmark(provMatch, parameters);
         }
@@ -59,12 +55,10 @@ public class CmdDevJpa extends AbstractCmd {
         if (cmd.equals("adb-test01")) {
             AdbTest01.test();
         }
-        
+
         if (cmd.equals("test01")) {
             Test01.test(provMatch, parameters);
         }
-    	return null;
+        return null;
     }
-
-    
 }

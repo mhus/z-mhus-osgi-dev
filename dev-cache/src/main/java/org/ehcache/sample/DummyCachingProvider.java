@@ -36,35 +36,54 @@ public class DummyCachingProvider extends EhcacheCachingProvider {
     public DummyCachingProvider(Configuration config) throws URISyntaxException {
         // from EhcacheCachingProvider
         uri = new URI(DEFAULT_URI_STRING);
-        
+
         this.properties = new Properties();
         this.cacheManager = createCacheManager(uri, config, properties);
     }
 
-    private Eh107CacheManager createCacheManager(URI uri, Configuration config, Properties properties) {
-        Collection<ServiceCreationConfiguration<?, ?>> serviceCreationConfigurations = config.getServiceCreationConfigurations();
+    private Eh107CacheManager createCacheManager(
+            URI uri, Configuration config, Properties properties) {
+        Collection<ServiceCreationConfiguration<?, ?>> serviceCreationConfigurations =
+                config.getServiceCreationConfigurations();
 
-        Jsr107Service jsr107Service = new DefaultJsr107Service(ServiceUtils.findSingletonAmongst(Jsr107Configuration.class, serviceCreationConfigurations));
-        Eh107CacheLoaderWriterProvider cacheLoaderWriterFactory = new Eh107CacheLoaderWriterProvider();
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        DefaultSerializationProviderConfiguration serializerConfiguration = new DefaultSerializationProviderConfiguration().addSerializerFor(Object.class, (Class) PlainJavaSerializer.class);
+        Jsr107Service jsr107Service =
+                new DefaultJsr107Service(
+                        ServiceUtils.findSingletonAmongst(
+                                Jsr107Configuration.class, serviceCreationConfigurations));
+        Eh107CacheLoaderWriterProvider cacheLoaderWriterFactory =
+                new Eh107CacheLoaderWriterProvider();
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        DefaultSerializationProviderConfiguration serializerConfiguration =
+                new DefaultSerializationProviderConfiguration()
+                        .addSerializerFor(Object.class, (Class) PlainJavaSerializer.class);
 
-        UnaryOperator<ServiceLocator.DependencySet> customization = dependencies -> {
-          ServiceLocator.DependencySet d = dependencies.with(jsr107Service).with(cacheLoaderWriterFactory);
-          if (ServiceUtils.findSingletonAmongst(DefaultSerializationProviderConfiguration.class, serviceCreationConfigurations) == null) {
-            d = d.with(serializerConfiguration);
-          }
-          return d;
-        };
+        UnaryOperator<ServiceLocator.DependencySet> customization =
+                dependencies -> {
+                    ServiceLocator.DependencySet d =
+                            dependencies.with(jsr107Service).with(cacheLoaderWriterFactory);
+                    if (ServiceUtils.findSingletonAmongst(
+                                    DefaultSerializationProviderConfiguration.class,
+                                    serviceCreationConfigurations)
+                            == null) {
+                        d = d.with(serializerConfiguration);
+                    }
+                    return d;
+                };
 
-        org.ehcache.CacheManager ehcacheManager = new EhcacheManager(config, customization, !jsr107Service.jsr107CompliantAtomics());
+        org.ehcache.CacheManager ehcacheManager =
+                new EhcacheManager(config, customization, !jsr107Service.jsr107CompliantAtomics());
         ehcacheManager.init();
 
-        return new Eh107CacheManager(this, ehcacheManager, jsr107Service, properties, config.getClassLoader(), uri,
+        return new Eh107CacheManager(
+                this,
+                ehcacheManager,
+                jsr107Service,
+                properties,
+                config.getClassLoader(),
+                uri,
                 new ConfigurationMerger(config, jsr107Service, cacheLoaderWriterFactory));
-      }
-    
-    
+    }
+
     @Override
     public CacheManager getCacheManager(URI uri, ClassLoader classLoader, Properties properties) {
         return cacheManager;
@@ -97,8 +116,7 @@ public class DummyCachingProvider extends EhcacheCachingProvider {
 
     @Override
     public void close() {
-        if (cacheManager != null)
-            cacheManager.close();
+        if (cacheManager != null) cacheManager.close();
         cacheManager = null;
     }
 
@@ -116,5 +134,4 @@ public class DummyCachingProvider extends EhcacheCachingProvider {
     public boolean isSupported(OptionalFeature optionalFeature) {
         return false;
     }
-
 }

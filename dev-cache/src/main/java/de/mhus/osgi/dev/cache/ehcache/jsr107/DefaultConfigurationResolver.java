@@ -24,40 +24,40 @@ import javax.cache.CacheException;
 
 class DefaultConfigurationResolver {
 
-  static final String DEFAULT_CONFIG_PROPERTY_NAME = "ehcache.jsr107.config.default";
+    static final String DEFAULT_CONFIG_PROPERTY_NAME = "ehcache.jsr107.config.default";
 
-  static URI resolveConfigURI(Properties cacheManagerProperties) {
-    Object config = cacheManagerProperties.get(DEFAULT_CONFIG_PROPERTY_NAME);
+    static URI resolveConfigURI(Properties cacheManagerProperties) {
+        Object config = cacheManagerProperties.get(DEFAULT_CONFIG_PROPERTY_NAME);
 
-    if (config == null) {
-      config = System.getProperties().get(DEFAULT_CONFIG_PROPERTY_NAME);
+        if (config == null) {
+            config = System.getProperties().get(DEFAULT_CONFIG_PROPERTY_NAME);
+        }
+
+        if (config == null) {
+            return null;
+        }
+
+        if (config instanceof URI) {
+            return (URI) config;
+        }
+
+        try {
+            if (config instanceof URL) {
+                return ((URL) config).toURI();
+            }
+
+            if (config instanceof String) {
+                return new URI((String) config);
+            }
+        } catch (URISyntaxException use) {
+            throw new CacheException(use);
+        }
+
+        throw new CacheException(
+                "Unsupported type for default config: " + config.getClass().getName());
     }
 
-    if (config == null) {
-      return null;
+    private DefaultConfigurationResolver() {
+        //
     }
-
-    if (config instanceof URI) {
-      return (URI) config;
-    }
-
-    try {
-      if (config instanceof URL) {
-        return ((URL) config).toURI();
-      }
-
-      if (config instanceof String) {
-        return new URI((String) config);
-      }
-    } catch (URISyntaxException use) {
-      throw new CacheException(use);
-    }
-
-    throw new CacheException("Unsupported type for default config: " + config.getClass().getName());
-  }
-
-  private DefaultConfigurationResolver() {
-    //
-  }
-
 }

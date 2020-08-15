@@ -21,46 +21,45 @@ import org.ehcache.spi.service.Service;
 
 import de.mhus.osgi.dev.cache.ehcache.jsr107.config.ConfigurationElementState;
 
-/**
- * {@link Service} interface for JSR-107 integration.
- */
+/** {@link Service} interface for JSR-107 integration. */
 public interface Jsr107Service extends Service {
 
-  /**
-   * Returns a template name matching the provided cache alias, if any is configured.
-   *
-   * @param cacheAlias the cache alias
-   * @return the template name or {@code null} if none configured.
-   */
-  String getTemplateNameForCache(String cacheAlias);
+    /**
+     * Returns a template name matching the provided cache alias, if any is configured.
+     *
+     * @param cacheAlias the cache alias
+     * @return the template name or {@code null} if none configured.
+     */
+    String getTemplateNameForCache(String cacheAlias);
 
-  /**
-   * Indicates the loader writer behavior in atomic methods.
-   * <p>
-   * If {@code true} then loader writer will <em>NOT</em> be used in atomic methods, if {@code false} it will be.
-   *
-   * @return {@code true} or {@code false} depending on configuration
-   */
-  boolean jsr107CompliantAtomics();
+    /**
+     * Indicates the loader writer behavior in atomic methods.
+     *
+     * <p>If {@code true} then loader writer will <em>NOT</em> be used in atomic methods, if {@code
+     * false} it will be.
+     *
+     * @return {@code true} or {@code false} depending on configuration
+     */
+    boolean jsr107CompliantAtomics();
 
-  /**
-   * Indicates if all created caches should have management enabled.
-   *
-   * @return {@code true} to enable management on all caches, {@code false} otherwise
-   */
-  ConfigurationElementState isManagementEnabledOnAllCaches();
+    /**
+     * Indicates if all created caches should have management enabled.
+     *
+     * @return {@code true} to enable management on all caches, {@code false} otherwise
+     */
+    ConfigurationElementState isManagementEnabledOnAllCaches();
 
-  /**
-   * Indicates if all created caches should have statistics enabled.
-   *
-   * @return {@code true} to enable management on all caches, {@code false} otherwise
-   */
-  ConfigurationElementState isStatisticsEnabledOnAllCaches();
+    /**
+     * Indicates if all created caches should have statistics enabled.
+     *
+     * @return {@code true} to enable management on all caches, {@code false} otherwise
+     */
+    ConfigurationElementState isStatisticsEnabledOnAllCaches();
 
-  /**
-   * Returns the statistics service associated with this JSR107 service.
-   *
-   * @return the statistics service
-   */
-  StatisticsService getStatistics();
+    /**
+     * Returns the statistics service associated with this JSR107 service.
+     *
+     * @return the statistics service
+     */
+    StatisticsService getStatistics();
 }

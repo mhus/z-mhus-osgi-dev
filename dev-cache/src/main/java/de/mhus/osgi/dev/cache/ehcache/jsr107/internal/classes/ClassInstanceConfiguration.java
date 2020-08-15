@@ -19,49 +19,47 @@ package de.mhus.osgi.dev.cache.ehcache.jsr107.internal.classes;
 import static java.util.Arrays.asList;
 import java.util.List;
 
-/**
- * @author Alex Snaps
- */
+/** @author Alex Snaps */
 public class ClassInstanceConfiguration<T> {
 
-  private final Class<? extends T> clazz;
-  private final List<Object> arguments;
+    private final Class<? extends T> clazz;
+    private final List<Object> arguments;
 
-  private final T instance;
+    private final T instance;
 
-  public ClassInstanceConfiguration(Class<? extends T> clazz, Object... arguments) {
-    this.clazz = clazz;
-    this.arguments = asList(arguments.clone());
-    this.instance = null;
-  }
-
-  public ClassInstanceConfiguration(T instance) {
-    this.instance = instance;
-    @SuppressWarnings("unchecked")
-    Class<? extends T> instanceClass = (Class<? extends T>) instance.getClass();
-    this.clazz = instanceClass;
-    this.arguments = null;
-  }
-
-  protected ClassInstanceConfiguration(ClassInstanceConfiguration<T> configuration) {
-    this.instance = configuration.getInstance();
-    this.clazz = configuration.getClazz();
-    if (instance == null) {
-      this.arguments = asList(configuration.getArguments());
-    } else {
-      this.arguments = null;
+    public ClassInstanceConfiguration(Class<? extends T> clazz, Object... arguments) {
+        this.clazz = clazz;
+        this.arguments = asList(arguments.clone());
+        this.instance = null;
     }
-  }
 
-  public Class<? extends T> getClazz() {
-    return clazz;
-  }
+    public ClassInstanceConfiguration(T instance) {
+        this.instance = instance;
+        @SuppressWarnings("unchecked")
+        Class<? extends T> instanceClass = (Class<? extends T>) instance.getClass();
+        this.clazz = instanceClass;
+        this.arguments = null;
+    }
 
-  public Object[] getArguments() {
-    return arguments.toArray();
-  }
+    protected ClassInstanceConfiguration(ClassInstanceConfiguration<T> configuration) {
+        this.instance = configuration.getInstance();
+        this.clazz = configuration.getClazz();
+        if (instance == null) {
+            this.arguments = asList(configuration.getArguments());
+        } else {
+            this.arguments = null;
+        }
+    }
 
-  public T getInstance() {
-    return instance;
-  }
+    public Class<? extends T> getClazz() {
+        return clazz;
+    }
+
+    public Object[] getArguments() {
+        return arguments.toArray();
+    }
+
+    public T getInstance() {
+        return instance;
+    }
 }

@@ -4,10 +4,9 @@ import java.util.List;
 
 public interface DevGrpcAdmin {
 
-	void doStart(int port) throws Exception;
+    void doStart(int port) throws Exception;
 
-	void doShutdown();
+    void doShutdown();
 
-	List<GrpcServer> list();
-
+    List<GrpcServer> list();
 }

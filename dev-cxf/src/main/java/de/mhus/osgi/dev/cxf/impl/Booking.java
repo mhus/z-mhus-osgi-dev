@@ -20,9 +20,7 @@ import java.util.Date;
 
 import de.mhus.lib.core.service.IdentUtil;
 
-/**
- * A regular POJO.
- */
+/** A regular POJO. */
 public class Booking {
 
     private Long id;
@@ -36,12 +34,12 @@ public class Booking {
         this.ident = "X" + IdentUtil.getServerIdent();
         created = new Date();
     }
-    
+
     public Booking(String ident) {
         this.ident = ident;
         created = new Date();
     }
-    
+
     public Long getId() {
         return id;
     }

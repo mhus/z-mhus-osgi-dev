@@ -19,50 +19,48 @@ import java.net.URI;
 
 import javax.cache.management.CacheMXBean;
 
-/**
- * @author teck
- */
+/** @author teck */
 class Eh107CacheMXBean extends Eh107MXBean implements CacheMXBean {
 
-  private final Eh107Configuration<?, ?> config;
+    private final Eh107Configuration<?, ?> config;
 
-  Eh107CacheMXBean(String cacheName, URI cacheManagerURI, Eh107Configuration<?, ?> config) {
-    super(cacheName, cacheManagerURI, "CacheConfiguration");
-    this.config = config;
-  }
+    Eh107CacheMXBean(String cacheName, URI cacheManagerURI, Eh107Configuration<?, ?> config) {
+        super(cacheName, cacheManagerURI, "CacheConfiguration");
+        this.config = config;
+    }
 
-  @Override
-  public String getKeyType() {
-    return config.getKeyType().getName();
-  }
+    @Override
+    public String getKeyType() {
+        return config.getKeyType().getName();
+    }
 
-  @Override
-  public String getValueType() {
-    return config.getValueType().getName();
-  }
+    @Override
+    public String getValueType() {
+        return config.getValueType().getName();
+    }
 
-  @Override
-  public boolean isReadThrough() {
-    return config.isReadThrough();
-  }
+    @Override
+    public boolean isReadThrough() {
+        return config.isReadThrough();
+    }
 
-  @Override
-  public boolean isWriteThrough() {
-    return config.isWriteThrough();
-  }
+    @Override
+    public boolean isWriteThrough() {
+        return config.isWriteThrough();
+    }
 
-  @Override
-  public boolean isStoreByValue() {
-    return config.isStoreByValue();
-  }
+    @Override
+    public boolean isStoreByValue() {
+        return config.isStoreByValue();
+    }
 
-  @Override
-  public boolean isStatisticsEnabled() {
-    return config.isStatisticsEnabled();
-  }
+    @Override
+    public boolean isStatisticsEnabled() {
+        return config.isStatisticsEnabled();
+    }
 
-  @Override
-  public boolean isManagementEnabled() {
-    return config.isManagementEnabled();
-  }
+    @Override
+    public boolean isManagementEnabled() {
+        return config.isManagementEnabled();
+    }
 }
