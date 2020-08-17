@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2020 Mike Hummel (mh@mhus.de)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.mhus.osgi.dev.k8s.impl;
 
 import java.io.IOException;
@@ -122,16 +137,16 @@ public class My {
         String pretty = "pretty_example"; // String | If 'true', then the output is pretty printed.
         String dryRun =
                 "dryRun_example"; // String | When present, indicates that modifications should not
-                                  // be persisted. An invalid or unrecognized dryRun directive will
-                                  // result in an error response and no further processing of the
-                                  // request. Valid values are: - All: all dry run stages will be
-                                  // processed
+        // be persisted. An invalid or unrecognized dryRun directive will
+        // result in an error response and no further processing of the
+        // request. Valid values are: - All: all dry run stages will be
+        // processed
         String fieldManager =
                 "fieldManager_example"; // String | fieldManager is a name associated with the actor
-                                        // or entity that is making these changes. The value must be
-                                        // less than or 128 characters long, and only contain
-                                        // printable characters, as defined by
-                                        // https://golang.org/pkg/unicode/#IsPrint.
+        // or entity that is making these changes. The value must be
+        // less than or 128 characters long, and only contain
+        // printable characters, as defined by
+        // https://golang.org/pkg/unicode/#IsPrint.
         try {
             V1Service result =
                     apiInstance.createNamespacedService(
