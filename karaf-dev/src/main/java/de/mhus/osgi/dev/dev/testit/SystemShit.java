@@ -17,6 +17,7 @@ package de.mhus.osgi.dev.dev.testit;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import de.mhus.lib.core.M;
@@ -31,6 +32,8 @@ public class SystemShit implements ShitIfc {
         System.out.println("myip - Print my Ip and hostname");
         System.out.println("env");
         System.out.println("properties");
+        System.out.println("locale");
+        System.out.println("setlocale <language> <country> <variant>");
     }
 
     @Override
@@ -67,6 +70,12 @@ public class SystemShit implements ShitIfc {
                         || parameters.length < 1
                         || String.valueOf(entry.getKey()).contains(parameters[0]))
                     System.out.println(entry.getKey() + "=" + entry.getValue());
+        } else if (cmd.equals("locale")) {
+            return Locale.getDefault();
+        } else if (cmd.equals("setlocale")) {
+            Locale l = new Locale(parameters[0], parameters[1], parameters[2]);
+            Locale.setDefault(l);
+            return Locale.getDefault();
         }
         return null;
     }
