@@ -39,7 +39,7 @@ public class HelloOperation2 extends AbstractOperation {
         }
         String msg = nextMsg;
         nextMsg = context.getParameters().getString("next", nextMsg);
-        return new Successful(this, "ok", "msg", msg, "version","2", "ident", IdentUtil.getServerIdent());
+        return new Successful(this, "ok", "msg", msg, "version","2", "ident", IdentUtil.getServerIdent(), "id", getDescription().getUuid().toString());
     }
 
 }

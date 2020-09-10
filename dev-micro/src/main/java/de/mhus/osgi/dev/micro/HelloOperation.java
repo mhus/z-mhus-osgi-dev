@@ -44,7 +44,7 @@ public class HelloOperation extends AbstractOperation implements IFormProvider {
         }
         String msg = nextMsg;
         nextMsg = context.getParameters().getString("next", nextMsg);
-        return new Successful(this, "ok", "msg", msg, "version","0", "ident", IdentUtil.getServerIdent());
+        return new Successful(this, "ok", "msg", msg, "version","0", "ident", IdentUtil.getServerIdent(), "id", getDescription().getUuid().toString());
     }
 
     @Override
