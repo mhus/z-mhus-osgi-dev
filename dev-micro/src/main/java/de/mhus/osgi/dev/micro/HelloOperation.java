@@ -31,7 +31,7 @@ import de.mhus.lib.form.definition.FaMandatory;
 import de.mhus.lib.form.definition.FmCheckbox;
 import de.mhus.lib.form.definition.FmText;
 
-@Component(service = Operation.class, property = "tags=acl=*")
+@Component(service = Operation.class)
 @OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",strictParameterCheck=true)
 public class HelloOperation extends AbstractOperation implements IFormProvider {
 

@@ -26,7 +26,7 @@ import de.mhus.lib.core.operation.Successful;
 import de.mhus.lib.core.operation.TaskContext;
 import de.mhus.lib.core.service.IdentUtil;
 
-@Component(service = Operation.class, property = "tags=acl=*")
+@Component(service = Operation.class)
 @OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",version="2.0.0")
 public class HelloOperation2 extends AbstractOperation {
 
