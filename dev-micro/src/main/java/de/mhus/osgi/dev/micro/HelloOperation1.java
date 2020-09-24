@@ -27,7 +27,7 @@ import de.mhus.lib.core.operation.TaskContext;
 import de.mhus.lib.core.service.IdentUtil;
 
 @Component(service = Operation.class)
-@OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",version="1.0.0")
+@OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",version="1.1.0")
 public class HelloOperation1 extends AbstractOperation {
 
     private String nextMsg = "Moin";
