@@ -25,6 +25,7 @@ import de.mhus.lib.core.operation.OperationResult;
 import de.mhus.lib.core.operation.Successful;
 import de.mhus.lib.core.operation.TaskContext;
 import de.mhus.lib.core.service.IdentUtil;
+import de.mhus.lib.core.shiro.AccessUtil;
 
 @Component(service = Operation.class)
 @OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",version="2.0.0")
@@ -39,7 +40,13 @@ public class HelloOperation2 extends AbstractOperation {
         }
         String msg = nextMsg;
         nextMsg = context.getParameters().getString("next", nextMsg);
-        return new Successful(this, "ok", "msg", msg, "version","2", "ident", IdentUtil.getServerIdent(), "id", getDescription().getUuid().toString());
+        return new Successful(this, "ok", 
+                "msg", msg, 
+                "version","2", 
+                "ident", IdentUtil.getServerIdent(), 
+                "id", getDescription().getUuid().toString(),
+                "principal", AccessUtil.toString(AccessUtil.getSubject())
+                );
     }
 
 }
