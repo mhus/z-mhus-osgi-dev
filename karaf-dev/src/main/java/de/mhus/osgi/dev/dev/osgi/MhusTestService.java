@@ -25,7 +25,7 @@ import de.mhus.lib.annotations.service.ServiceReference;
 import de.mhus.lib.core.MLog;
 import de.mhus.osgi.api.services.ISimpleService;
 
-// sb-create de.mhus.osgi.dev.dev.osgi.MhusTestService
+// blue-create de.mhus.osgi.dev.dev.osgi.MhusTestService
 @ServiceComponent(property = "test=test")
 public class MhusTestService extends MLog implements ISimpleService {
 
