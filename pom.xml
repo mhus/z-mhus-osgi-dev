@@ -41,6 +41,7 @@
         <netty.version>4.1.48.Final</netty.version><!-- 4.1.0.CR7 3.7.0.Final -->
         
     </properties>
+    <inceptionYear>2020</inceptionYear>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
