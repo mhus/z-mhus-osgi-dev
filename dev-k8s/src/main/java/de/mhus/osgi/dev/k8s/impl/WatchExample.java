@@ -81,7 +81,7 @@ public class WatchExample {
                 Watch.createWatch(
                         client,
                         api.listNodeCall(
-                                null, true, null, null, null, 5, null, null, Boolean.TRUE, null),
+                                null, true, null, null, null, 5, null, null, null, Boolean.TRUE, null),
                         new TypeToken<Watch.Response<V1Node>>() {}.getType());
 
         MThread.run(
@@ -106,7 +106,7 @@ public class WatchExample {
                 Watch.createWatch(
                         client,
                         api.listPodForAllNamespacesCall(
-                                true, null, null, null, 5, null, null, null, Boolean.TRUE, null),
+                                true, null, null, null, 5, null, null, null, null, Boolean.TRUE, null),
                         new TypeToken<Watch.Response<V1Pod>>() {}.getType());
 
         MThread.run(
@@ -131,7 +131,7 @@ public class WatchExample {
                 Watch.createWatch(
                         client,
                         api.listServiceForAllNamespacesCall(
-                                true, null, null, null, 5, null, null, null, Boolean.TRUE, null),
+                                true, null, null, null, 5, null, null, null, null, Boolean.TRUE, null),
                         new TypeToken<Watch.Response<V1Service>>() {}.getType());
 
         MThread.run(

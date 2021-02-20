@@ -24,8 +24,6 @@ import java.util.Map;
 import de.mhus.lib.core.IProperties;
 import de.mhus.lib.core.MProperties;
 import io.kubernetes.client.custom.IntOrString;
-import io.kubernetes.client.extended.generic.GenericKubernetesApi;
-import io.kubernetes.client.extended.generic.KubernetesApiResponse;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
@@ -38,6 +36,8 @@ import io.kubernetes.client.openapi.models.V1ServiceSpec;
 import io.kubernetes.client.openapi.models.V1Status;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.Config;
+import io.kubernetes.client.util.generic.GenericKubernetesApi;
+import io.kubernetes.client.util.generic.KubernetesApiResponse;
 
 public class My {
 

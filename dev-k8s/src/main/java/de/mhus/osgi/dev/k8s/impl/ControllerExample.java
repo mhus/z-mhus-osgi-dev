@@ -15,6 +15,10 @@
  */
 package de.mhus.osgi.dev.k8s.impl;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 import io.kubernetes.client.extended.controller.Controller;
 import io.kubernetes.client.extended.controller.ControllerManager;
 import io.kubernetes.client.extended.controller.LeaderElectingController;
@@ -38,9 +42,6 @@ import io.kubernetes.client.openapi.models.V1EventSource;
 import io.kubernetes.client.openapi.models.V1Node;
 import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.util.CallGeneratorParams;
-import java.io.IOException;
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
 public class ControllerExample {
@@ -60,6 +61,7 @@ public class ControllerExample {
                 informerFactory.sharedIndexInformerFor(
                         (CallGeneratorParams params) -> {
                             return coreV1Api.listNodeCall(
+                                    null,
                                     null,
                                     null,
                                     null,
