@@ -100,11 +100,15 @@ public class CmdDevResources extends AbstractCmd {
             }
             return null;
         } else if (cmd.equals("cp")) {
+
+            String bundleName = MString.beforeIndex(file, '/');
+            file = MString.afterIndex(file, '/');
+
             String in = "examples/" + file;
             if (target == null) {
                 target = MString.afterIndex(file, '/');
             }
-            Bundle bundle = findBundle(in);
+            Bundle bundle = findBundleForName(bundleName);
 
             Enumeration<String> list = bundle.getEntryPaths(in);
             if (list == null) copyFile(bundle, in, target);
@@ -206,6 +210,14 @@ public class CmdDevResources extends AbstractCmd {
         }
     }
 
+    private Bundle findBundleForName(String bundleName) {
+        for (Bundle bundle : MOsgi.getBundleContext().getBundles()) {
+            if (bundle.getSymbolicName().equals(bundleName))
+                return bundle;
+        }
+        return null;
+    }
+
     private Bundle findBundle(String path) {
         for (Bundle bundle : MOsgi.getBundleContext().getBundles()) {
             URL url = bundle.getEntry(path);
@@ -220,7 +232,7 @@ public class CmdDevResources extends AbstractCmd {
         while (list.hasMoreElements()) {
             String sub = list.nextElement();
             if (sub.endsWith("/")) showList(bundle, sub);
-            else System.out.println(bundle.getBundleId() + " " + sub.substring(9));
+            else System.out.println(bundle.getBundleId() + " " + bundle.getSymbolicName() + "/" + sub.substring(9));
         }
     }
 }

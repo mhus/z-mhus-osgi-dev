@@ -45,7 +45,7 @@ public class HelloOperation2 extends AbstractOperation {
                 "version","2", 
                 "ident", IdentUtil.getServerIdent(), 
                 "id", getDescription().getUuid().toString(),
-                "principal", AccessUtil.toString(AccessUtil.getSubject())
+                "principal", Aaa.toString(Aaa.getSubject())
                 );
     }
 
