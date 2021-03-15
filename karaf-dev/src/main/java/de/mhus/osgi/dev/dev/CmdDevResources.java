@@ -29,6 +29,7 @@ import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.osgi.framework.Bundle;
 
 import de.mhus.lib.core.IProperties;
+import de.mhus.lib.core.MCollection;
 import de.mhus.lib.core.MFile;
 import de.mhus.lib.core.MProperties;
 import de.mhus.lib.core.MString;
@@ -91,6 +92,24 @@ public class CmdDevResources extends AbstractCmd {
             multiValued = false)
     boolean overwrite;
 
+    @Option(
+            name = "-e",
+            aliases = "--env",
+            required = false,
+            description = "Substitute environment parameter values",
+            multiValued = false)
+    boolean env;
+    
+    @Option(
+            name = "-x",
+            aliases = "--extensions",
+            required = false,
+            description = "File extensions to substitute: xml,txt,cfg,properties",
+            multiValued = false)
+    String substituteExtensions = "xml,txt,cfg,properties";
+
+    private MProperties p;
+
     @Override
     public Object execute2() throws Exception {
 
@@ -101,6 +120,13 @@ public class CmdDevResources extends AbstractCmd {
             return null;
         } else if (cmd.equals("cp")) {
 
+            p = new MProperties();
+            if (env) {
+                p.putAll( System.getenv() );
+            }
+            if (parameters != null) {
+                p.putReadProperties(IProperties.explodeToMProperties(parameters));
+            }
             String bundleName = MString.beforeIndex(file, '/');
             file = MString.afterIndex(file, '/');
 
@@ -159,44 +185,44 @@ public class CmdDevResources extends AbstractCmd {
             File out = new File(to);
             if (out.exists() && !overwrite) System.out.println("- file already exists");
             else {
+                if (!out.getParentFile().exists())
+                    out.getParentFile().mkdirs();
                 long size = -1;
-                if (parameters == null) {
+                if (p.size() == 0 || !substituteFileExtension(out)) {
                     if (!test) {
                         try (FileOutputStream os = new FileOutputStream(out)) {
                             size = MFile.copyFile(is, os);
                         }
                     }
                 } else {
-                    MProperties p = IProperties.explodeToMProperties(parameters);
+                    System.out.println("- substitute");
                     String content = MFile.readFile(is);
                     int pos = 0;
                     while (true) {
-                        pos = content.indexOf("#{", pos);
+                        pos = content.indexOf("{{", pos);
                         if (pos < 0) break;
-                        if (pos > 0 && content.charAt(pos - 1) == '#') {
-                            content = content.substring(0, pos) + content.substring(pos + 1);
-                            pos = pos + 1;
-                            continue;
-                        }
-                        int end = content.indexOf("}", pos);
+//                        if (pos > 0 && content.charAt(pos - 1) == '#') {
+//                            content = content.substring(0, pos) + content.substring(pos + 1);
+//                            pos = pos + 1;
+//                            continue;
+//                        }
+                        int end = content.indexOf("}}", pos);
                         if (end < 0) {
                             System.out.println("- Error: Open parameter definition");
                             break;
                         }
                         String key = content.substring(pos + 2, end);
-                        String def = null;
-                        int pos2 = key.indexOf(':');
-                        if (pos2 > 0) {
-                            def = key.substring(pos2 + 1);
-                            key = key.substring(0, pos2);
+                        String[] parts = key.split(":",3);
+                        String value = null;
+                        if (parts[0].equals("env")) {
+                            value = p.getString(parts[1], parts.length > 2 ? parts[2] : null);
                         }
-                        String value = p.getString(key, def);
                         if (value == null) {
-                            System.out.println("- Parameter not defined for " + key + " - leave");
-                            pos = end + 1;
-                            continue;
-                        } else if (test) System.out.println("- Set " + key + " to " + value);
-                        content = content.substring(0, pos) + value + content.substring(end + 1);
+                            System.out.println("- Parameter not defined for " + key + " - set to empty");
+                            value = "";
+                        } else 
+                            System.out.println("- Set: " + key + " -> " + value);
+                        content = content.substring(0, pos) + value + content.substring(end + 2);
                         pos = pos + value.length();
                     }
                     if (!test) {
@@ -208,6 +234,11 @@ public class CmdDevResources extends AbstractCmd {
                 System.out.println("- " + size + " bytes");
             }
         }
+    }
+
+    private boolean substituteFileExtension(File file) {
+        String ext = MFile.getFileExtension(file).toLowerCase();
+        return MCollection.contains(substituteExtensions, ',', ext);
     }
 
     private Bundle findBundleForName(String bundleName) {
