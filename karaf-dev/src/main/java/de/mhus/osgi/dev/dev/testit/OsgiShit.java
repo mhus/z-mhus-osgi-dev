@@ -20,6 +20,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
@@ -42,6 +43,7 @@ public class OsgiShit implements ShitIfc {
                 "registerEventHandler <topic>*  - register/unregister event handler, use *, e.g. com/acme/reportgenerator/*");
         System.out.println(
                 "blacklist [starts with]*       - set event handler blacklist, e.g. org/osgi/service/log/LogEntry");
+        System.out.println("services <ifc>");
     }
 
     @SuppressWarnings("unchecked")
@@ -68,6 +70,15 @@ public class OsgiShit implements ShitIfc {
             }
         } else if (cmd.equals("sessionid")) {
             System.out.println(MSystem.getObjectId(base.getSession()));
+        } else if (cmd.equals("services")) {
+            BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+            ServiceReference<?>[] refs =
+                    context.getServiceReferences(parameters[0], null);
+            if (refs != null)
+                for (ServiceReference<?> ref : refs)
+                    System.out.println(ref.getBundle().getSymbolicName() + " " + ref.getBundle().getBundleId() + " " + context.getService(ref).getClass().getCanonicalName());
+            else
+                System.out.println("Not found");
         }
 
         return null;
