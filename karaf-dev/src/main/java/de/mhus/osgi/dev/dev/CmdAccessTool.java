@@ -16,12 +16,15 @@
 package de.mhus.osgi.dev.dev;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
@@ -32,6 +35,7 @@ import de.mhus.lib.core.M;
 import de.mhus.lib.core.aaa.Aaa;
 import de.mhus.lib.core.aaa.AccessApi;
 import de.mhus.lib.core.aaa.SubjectEnvironment;
+import de.mhus.lib.core.aaa.TrustedToken;
 import de.mhus.osgi.api.MOsgi;
 import de.mhus.osgi.api.aaa.RealmServiceProvider;
 import de.mhus.osgi.api.karaf.AbstractCmd;
@@ -63,6 +67,57 @@ public class CmdAccessTool extends AbstractCmd {
     @Override
     public Object execute2() throws Exception {
 
+        if (cmd.equals("role")) {
+            Subject subject = Aaa.createSubjectWithoutCheck(parameters[0]);
+            try (SubjectEnvironment access = Aaa.asSubject(subject)) {
+                System.out.println(Aaa.getPrincipal());
+                boolean res = subject.hasRole(parameters[1]);
+                System.out.println("Role: " + res );
+            }
+        } else
+        if (cmd.equals("access")) {
+            Subject subject = Aaa.createSubjectWithoutCheck(parameters[0]);
+            try (SubjectEnvironment access = Aaa.asSubject(subject)) {
+                System.out.println(Aaa.getPrincipal());
+                boolean res = subject.isPermitted(parameters[1]);
+                System.out.println("Permission: " + res );
+            }
+        } else
+        if (cmd.equals("roles")) {
+
+            Collection<Realm> realms = ((DefaultSecurityManager)SecurityUtils.getSecurityManager()).getRealms();
+            for (Realm realm : realms) {
+                System.out.println("Realm  : " + realm);
+                try {
+                    AuthenticationInfo info = realm.getAuthenticationInfo(new TrustedToken(parameters[0]));
+                    if (info != null && info instanceof SimpleAccount) {
+                        System.out.println("Account: " + info);
+                        System.out.println("Roles  : " +  ((SimpleAccount)info).getRoles() );
+                        return null;
+                    }
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+        } else
+        if (cmd.equals("perms")) {
+
+            Collection<Realm> realms = ((DefaultSecurityManager)SecurityUtils.getSecurityManager()).getRealms();
+            for (Realm realm : realms) {
+                System.out.println("Realm  : " + realm);
+                try {
+                    AuthenticationInfo info = realm.getAuthenticationInfo(new TrustedToken(parameters[0]));
+                    if (info != null && info instanceof SimpleAccount) {
+                        System.out.println("Account: " + info);
+                        System.out.println("Perms  : " +  ((SimpleAccount)info).getObjectPermissions() );
+                        System.out.println("Perms  : " +  ((SimpleAccount)info).getStringPermissions() );
+                        return null;
+                    }
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+        } else
         if (cmd.equals("info")) {
             AccessApi api = M.l(AccessApi.class);
             System.out.println("API: " + api.getClass().getCanonicalName());
