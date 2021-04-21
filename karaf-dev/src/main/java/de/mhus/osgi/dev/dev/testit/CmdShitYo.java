@@ -72,6 +72,7 @@ public class CmdShitYo extends AbstractCmd {
         shortcuts.put("jdbcmeta", JdbcMetaShit.class);
         shortcuts.put("threadlocal", ThreadLocalShit.class);
         shortcuts.put("osgi", OsgiShit.class);
+        shortcuts.put("log", LogShit.class);
     }
 
     @Override
