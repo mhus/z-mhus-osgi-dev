@@ -36,6 +36,7 @@ import de.mhus.lib.core.aaa.Aaa;
 import de.mhus.lib.core.aaa.AccessApi;
 import de.mhus.lib.core.aaa.SubjectEnvironment;
 import de.mhus.lib.core.aaa.TrustedToken;
+import de.mhus.lib.core.util.Value;
 import de.mhus.osgi.api.MOsgi;
 import de.mhus.osgi.api.aaa.RealmServiceProvider;
 import de.mhus.osgi.api.karaf.AbstractCmd;
@@ -52,7 +53,17 @@ public class CmdAccessTool extends AbstractCmd {
             name = "cmd",
             required = true,
             description =
-                    "Command to execute\n",
+                    "Command to execute\n"
+                    + " role <account> <role> - check if user has role\n"
+                    + " access <account> <perm> - check if user has permission\n"
+                    + " roles <account> - rint all roles for the account\n"
+                    + " perms <account> - print all perms for the user\n"
+                    + " info - print informations about AAA\n"
+                    + " admininfo - print infos about the admin user\n"
+                    + " guestinfo - print infos about the guest user\n"
+                    + " resetrealms\n"
+                    + " reloadrealms\n"
+                    + " login <user> <pass> - test login as user",
             multiValued = false)
     String cmd;
 
@@ -67,6 +78,20 @@ public class CmdAccessTool extends AbstractCmd {
     @Override
     public Object execute2() throws Exception {
 
+        if (cmd.equals("admininfo")) {
+            SimpleAccount info = Aaa.ADMIN;
+            System.out.println("Account: " + info);
+            System.out.println("Perms  : " +  info.getObjectPermissions() );
+            System.out.println("Perms  : " +  info.getStringPermissions() );
+            System.out.println("Roles  : " +  info.getRoles() );
+        } else
+        if (cmd.equals("guestinfo")) {
+            SimpleAccount info = Aaa.GUEST;
+            System.out.println("Account: " + info);
+            System.out.println("Perms  : " +  info.getObjectPermissions() );
+            System.out.println("Perms  : " +  info.getStringPermissions() );
+            System.out.println("Roles  : " +  info.getRoles() );
+        } else
         if (cmd.equals("role")) {
             Subject subject = Aaa.createSubjectWithoutCheck(parameters[0]);
             try (SubjectEnvironment access = Aaa.asSubject(subject)) {
@@ -123,12 +148,25 @@ public class CmdAccessTool extends AbstractCmd {
             System.out.println("API: " + api.getClass().getCanonicalName());
             SecurityManager manager = api.getSecurityManager();
             System.out.println("Manager: " + manager.getClass().getCanonicalName());
+            String principal = Aaa.getPrincipal();
+            Value<SimpleAccount> info = new Value<>();
             if (manager instanceof DefaultSecurityManager) {
                 DefaultSecurityManager def = (DefaultSecurityManager)manager;
                 System.out.println("Realms:");
-                def.getRealms().forEach(r -> System.out.println("  " + r.getName() + " " + r.getClass().getCanonicalName()));
+                def.getRealms().forEach(r -> {
+                    System.out.println("  " + r.getName() + " " + r.getClass().getCanonicalName());
+                    AuthenticationInfo i = r.getAuthenticationInfo(new TrustedToken(principal) );
+                    if (i instanceof SimpleAccount)
+                        info.value = (SimpleAccount) i;
+                });
                 //TODO more ...
             }
+            System.out.println("Account: " + info.value);
+            if (info != null) {
+                System.out.println("Perms  : " +  info.value.getObjectPermissions() );
+                System.out.println("Perms  : " +  info.value.getStringPermissions() );
+                System.out.println("Roles  : " +  info.value.getRoles() );
+            }    
         } else
         if (cmd.equals("resetrealms")) {
             List<Realm> realms = new ArrayList<>();
