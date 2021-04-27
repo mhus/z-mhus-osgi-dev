@@ -106,7 +106,7 @@ https://raw.githubusercontent.com/pentaho/pentaho-karaf-assembly/master/pentaho-
         <dependency>
            <groupId>de.mhus.osgi</groupId>
            <artifactId>dev-features</artifactId>
-           <version>${mhus-parent.version}</version>
+           <version>${mhus-osgi-dev.version}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
