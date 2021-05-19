@@ -69,7 +69,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
 			<modules>
-				<module>karaf-dev</module>
 		        <module>dev-cache</module>
 		        <module>dev-jpa</module>
 		        <!-- 
