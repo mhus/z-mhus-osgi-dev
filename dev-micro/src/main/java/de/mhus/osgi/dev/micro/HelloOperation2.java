@@ -17,7 +17,7 @@ package de.mhus.osgi.dev.micro;
 
 import org.osgi.service.component.annotations.Component;
 
-import de.mhus.lib.annotations.strategy.OperationService;
+import de.mhus.lib.annotations.strategy.OperationDescription;
 import de.mhus.lib.core.operation.AbstractOperation;
 import de.mhus.lib.core.operation.NotSuccessful;
 import de.mhus.lib.core.operation.Operation;
@@ -28,7 +28,7 @@ import de.mhus.lib.core.service.IdentUtil;
 import de.mhus.lib.core.aaa.Aaa;
 
 @Component(service = Operation.class)
-@OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",version="2.0.0")
+@OperationDescription(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",version="2.0.0")
 public class HelloOperation2 extends AbstractOperation {
 
     private String nextMsg = "Moin";

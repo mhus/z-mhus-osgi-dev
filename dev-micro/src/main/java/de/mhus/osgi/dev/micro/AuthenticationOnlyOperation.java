@@ -18,7 +18,7 @@ package de.mhus.osgi.dev.micro;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.osgi.service.component.annotations.Component;
 
-import de.mhus.lib.annotations.strategy.OperationService;
+import de.mhus.lib.annotations.strategy.OperationDescription;
 import de.mhus.lib.core.operation.AbstractOperation;
 import de.mhus.lib.core.operation.Operation;
 import de.mhus.lib.core.operation.OperationResult;
@@ -26,7 +26,7 @@ import de.mhus.lib.core.operation.Successful;
 import de.mhus.lib.core.operation.TaskContext;
 
 @Component(service = Operation.class)
-@OperationService(title = "Authenticated Only",version="1.0.0")
+@OperationDescription(title = "Authenticated Only",version="1.0.0")
 @RequiresAuthentication
 public class AuthenticationOnlyOperation extends AbstractOperation {
 

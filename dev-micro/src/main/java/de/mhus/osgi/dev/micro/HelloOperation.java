@@ -17,7 +17,7 @@ package de.mhus.osgi.dev.micro;
 
 import org.osgi.service.component.annotations.Component;
 
-import de.mhus.lib.annotations.strategy.OperationService;
+import de.mhus.lib.annotations.strategy.OperationDescription;
 import de.mhus.lib.core.definition.DefRoot;
 import de.mhus.lib.core.operation.AbstractOperation;
 import de.mhus.lib.core.operation.NotSuccessful;
@@ -32,7 +32,7 @@ import de.mhus.lib.form.definition.FmCheckbox;
 import de.mhus.lib.form.definition.FmText;
 
 @Component(service = Operation.class)
-@OperationService(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",strictParameterCheck=true)
+@OperationDescription(title = "Hello", path="de.mhus.osgi.dev.critical.micro.Hello",strictParameterCheck=true)
 public class HelloOperation extends AbstractOperation implements IFormProvider {
 
     private String nextMsg = "Moin";
